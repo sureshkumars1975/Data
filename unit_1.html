@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 1 - Data Privacy, Governance & Security</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .breadcrumb {
+            background: #f4f4f4;
+            padding: 15px 40px;
+            border-bottom: 2px solid #667eea;
+        }
+        
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        .nav-tabs {
+            background: #f9f9f9;
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 3px solid #667eea;
+            padding: 0;
+            margin: 0;
+            gap: 0;
+        }
+        
+        .nav-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            background: #f9f9f9;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .nav-tab:hover {
+            background: #efefef;
+            color: #667eea;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        
+        .box {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .highlight-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #17a2b8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .back-btn {
+            background: #6c757d;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .list-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: #f0f0f0;
+            border-left: 4px solid #764ba2;
+            border-radius: 3px;
+        }
+        
+        @media (max-width: 968px) {
+            .nav-tab {
+                flex: 1;
+                min-width: 120px;
+                padding: 12px 10px;
+                font-size: 0.9em;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            main { padding: 20px; }
+            button { padding: 12px 30px; }
+            .nav-tab { min-width: 100px; padding: 10px 8px; }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Unit 1: Data Privacy, Governance & Security</h1>
+            <p>Complete Learning Material - AIDS Program Even Semester</p>
+        </header>
+        
+        <div class="breadcrumb">
+            <a href="index.html">← Back to Overview</a>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('governance')">1. Data Governance</button>
+            <button class="nav-tab" onclick="showTab('privacy')">2. Privacy Approaches</button>
+            <button class="nav-tab" onclick="showTab('documentation')">3. Data Documentation</button>
+            <button class="nav-tab" onclick="showTab('diff-privacy')">4. Differential Privacy</button>
+            <button class="nav-tab" onclick="showTab('real-world')">5. Real-World DP</button>
+            <button class="nav-tab" onclick="showTab('cia')">6. CIA Triad</button>
+            <button class="nav-tab" onclick="showTab('relationship')">7. Relationships</button>
+        </div>
+        
+        <main>
+            <!-- Tab 1: Data Governance -->
+            <div id="governance" class="tab-content active">
+                <h2>1. Data Governance</h2>
+                
+                <h3>Definition</h3>
+                <div class="info-box">
+                    <p>Data Governance refers to the framework of policies, rules, processes, and responsibilities that ensure high-quality, secure, compliant, and properly managed data across an organization.</p>
+                </div>
+                
+                <h3>Objectives of Data Governance</h3>
+                <ul>
+                    <li>Ensure data accuracy and consistency</li>
+                    <li>Maintain data security and privacy</li>
+                    <li>Enable regulatory compliance</li>
+                    <li>Improve decision-making</li>
+                    <li>Define ownership and accountability</li>
+                </ul>
+                
+                <h3>Key Components of Data Governance</h3>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Policies</strong></td>
+                        <td>Rules for data usage and access</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Stewardship</strong></td>
+                        <td>Responsible persons for data quality</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Standards</strong></td>
+                        <td>Naming conventions, formats</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Quality Management</strong></td>
+                        <td>Accuracy, completeness</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Security</strong></td>
+                        <td>Protection from unauthorized access</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Compliance</strong></td>
+                        <td>GDPR, HIPAA, IT Act, etc.</td>
+                    </tr>
+                </table>
+                
+                <h3>Benefits of Data Governance</h3>
+                <div class="success-box">
+                    <ul>
+                        <li>Reduced data errors</li>
+                        <li>Better trust in data</li>
+                        <li>Enhanced security</li>
+                        <li>Legal compliance</li>
+                        <li>Efficient operations</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 2: Privacy Approaches -->
+            <div id="privacy" class="tab-content">
+                <h2>2. Simple Privacy Approaches</h2>
+                
+                <h3>Overview</h3>
+                <p>Privacy approaches aim to protect personal and sensitive data from misuse. These techniques provide practical methods to safeguard individual information in various contexts.</p>
+                
+                <h3>Common Simple Privacy Techniques</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🔒 Data Masking</h4>
+                        <p>Hides original data (e.g., ****5678). Shows only necessary information while concealing sensitive details.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>👤 Anonymization</h4>
+                        <p>Removes identity (name, Aadhaar, phone). Completely strips personally identifiable information.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🎭 Pseudonymization</h4>
+                        <p>Replaces personal data with artificial identifiers. Allows reversal with additional information.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔑 Access Control</h4>
+                        <p>Role-based permissions. Controls who can view, modify, or delete data.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔐 Encryption</h4>
+                        <p>Converts plaintext into ciphertext. Makes data unreadable without proper decryption keys.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>✓ Consent Management</h4>
+                        <p>User permission for data usage. Ensures compliance with privacy regulations.</p>
+                    </div>
+                </div>
+                
+                <h3>Importance of Privacy</h3>
+                <div class="highlight-box">
+                    <ul>
+                        <li>Protects user identity</li>
+                        <li>Prevents data breaches</li>
+                        <li>Builds customer trust</li>
+                        <li>Required by law (GDPR, DPDP Act)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 3: Documenting Data for Use -->
+            <div id="documentation" class="tab-content">
+                <h2>3. Documenting Data for Use</h2>
+                
+                <h3>Meaning</h3>
+                <div class="info-box">
+                    <p>It refers to the process of recording complete details about datasets so that users can understand and use them correctly. Proper documentation ensures data quality, clarity, and appropriate usage.</p>
+                </div>
+                
+                <h3>What Should Be Documented</h3>
+                <table>
+                    <tr>
+                        <th>Element</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Source</strong></td>
+                        <td>Where data is collected from</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Format</strong></td>
+                        <td>CSV, JSON, SQL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Field Description</strong></td>
+                        <td>Meaning of each column</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Type</strong></td>
+                        <td>Integer, String, Date</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Size</strong></td>
+                        <td>Volume of data</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Update Frequency</strong></td>
+                        <td>Daily, Weekly, Monthly</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Missing Values</strong></td>
+                        <td>How handled (nulls, default values)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Usage Limitations</strong></td>
+                        <td>Restrictions and guidelines</td>
+                    </tr>
+                </table>
+                
+                <h3>Benefits of Data Documentation</h3>
+                <div class="success-box">
+                    <ul>
+                        <li>Avoids misuse of data</li>
+                        <li>Improves data quality</li>
+                        <li>Helps new users understand data quickly</li>
+                        <li>Ensures transparency</li>
+                        <li>Facilitates knowledge transfer</li>
+                        <li>Supports compliance requirements</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Differential Privacy -->
+            <div id="diff-privacy" class="tab-content">
+                <h2>4. Defining Differential Privacy (DP)</h2>
+                
+                <h3>Definition</h3>
+                <div class="info-box">
+                    <p>Differential Privacy is a mathematical privacy technique that ensures no individual's data can be identified, even after analysis. It provides formal, quantifiable privacy guarantees.</p>
+                </div>
+                
+                <h3>Formal Definition (Simple Form)</h3>
+                <div class="highlight-box">
+                    <p><strong>A system is differentially private if the inclusion or exclusion of a single record does not significantly affect the result.</strong></p>
+                </div>
+                
+                <h3>Key Idea</h3>
+                <ul class="list-item">
+                    <li>Add controlled random noise to data or query results</li>
+                    <li>Protects individual identity</li>
+                    <li>Allows useful data analysis</li>
+                </ul>
+                
+                <h3>Core Concepts</h3>
+                <div class="box">
+                    <h4>Privacy Budget (ε - Epsilon)</h4>
+                    <p>Quantifies the level of privacy protection. Smaller ε means stronger privacy but less utility.</p>
+                </div>
+                
+                <div class="box">
+                    <h4>Sensitivity</h4>
+                    <p>The maximum possible change in a query result when one record changes. Determines how much noise is needed.</p>
+                </div>
+                
+                <div class="box">
+                    <h4>Noise Addition</h4>
+                    <p>Random noise added to query results prevents exact inference about individuals.</p>
+                </div>
+                
+                <h3>Objective</h3>
+                <div class="success-box">
+                    <p>To share useful information while ensuring strong privacy protection for individuals in datasets.</p>
+                </div>
+            </div>
+            
+            <!-- Tab 5: Real-World Differential Privacy -->
+            <div id="real-world" class="tab-content">
+                <h2>5. Real-World Differential Privacy</h2>
+                
+                <h3>Used By Major Organizations</h3>
+                <table>
+                    <tr>
+                        <th>Organization</th>
+                        <th>Application</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Google</strong></td>
+                        <td>User activity statistics and analytics</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Apple</strong></td>
+                        <td>Keyboard typing behavior and Siri improvements</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Microsoft</strong></td>
+                        <td>Telemetry data collection from Windows</td>
+                    </tr>
+                    <tr>
+                        <td><strong>US Census Bureau</strong></td>
+                        <td>Population data (2020 Census)</td>
+                    </tr>
+                </table>
+                
+                <h3>Benefits in Real World</h3>
+                <div class="success-box">
+                    <ul>
+                        <li>Protects sensitive user data</li>
+                        <li>Prevents data re-identification attacks</li>
+                        <li>Allows safe data sharing between organizations</li>
+                        <li>Maintains data utility for analysis</li>
+                        <li>Enables innovation while protecting privacy</li>
+                    </ul>
+                </div>
+                
+                <h3>Practical Example</h3>
+                <div class="info-box">
+                    <p><strong>Scenario:</strong> Publishing income statistics</p>
+                    <p><strong>Without DP:</strong> Exact average income = $50,000 (risky - individuals can be identified)</p>
+                    <p><strong>With DP:</strong> Noisy average income = $49,875 (safe - individual records cannot be identified)</p>
+                </div>
+            </div>
+            
+            <!-- Tab 6: CIA Triad -->
+            <div id="cia" class="tab-content">
+                <h2>6. CIA Triad – Key Concepts</h2>
+                
+                <h3>Overview</h3>
+                <p>The CIA Triad (Confidentiality, Integrity, Availability) is the foundation of information security, providing a comprehensive framework for protecting systems and data.</p>
+                
+                <h3>A. Confidentiality 🔐</h3>
+                <div class="highlight-box">
+                    <h4>Definition</h4>
+                    <p>Confidentiality ensures that data is accessible only to authorized users.</p>
+                </div>
+                
+                <h4>Methods to Maintain Confidentiality</h4>
+                <ul>
+                    <li>Passwords and authentication</li>
+                    <li>Encryption of sensitive data</li>
+                    <li>Role-Based Access Control (RBAC)</li>
+                    <li>Data classification and labeling</li>
+                </ul>
+                
+                <div class="info-box">
+                    <p><strong>Example:</strong> Only HR can access employee salary data. This ensures financial information remains confidential.</p>
+                </div>
+                
+                <h3>B. Integrity ✓</h3>
+                <div class="highlight-box">
+                    <h4>Definition</h4>
+                    <p>Integrity ensures that data is accurate, complete, and not altered improperly.</p>
+                </div>
+                
+                <h4>Methods to Maintain Integrity</h4>
+                <ol>
+                    <li>Hashing for data verification</li>
+                    <li>Checksums to detect corruption</li>
+                    <li>Digital signatures for authentication</li>
+                    <li>Version control systems</li>
+                    <li>Access logs and audit trails</li>
+                </ol>
+                
+                <div class="info-box">
+                    <p><strong>Example:</strong> Bank transaction records must not be modified illegally. Hash values ensure any tampering is immediately detected.</p>
+                </div>
+                
+                <h3>C. Availability ⚡</h3>
+                <div class="highlight-box">
+                    <h4>Definition</h4>
+                    <p>Availability ensures that data and systems are accessible when needed by authorized users.</p>
+                </div>
+                
+                <h4>Methods to Maintain Availability</h4>
+                <ul>
+                    <li>Regular backups and disaster recovery</li>
+                    <li>Load balancing and redundancy</li>
+                    <li>Fault tolerance mechanisms</li>
+                    <li>UPS systems and power redundancy</li>
+                    <li>DDoS protection</li>
+                    <li>Service monitoring and alerting</li>
+                </ul>
+                
+                <div class="info-box">
+                    <p><strong>Example:</strong> Online banking system must be available 24/7. Multiple data centers and failover systems ensure users can always access their accounts.</p>
+                </div>
+            </div>
+            
+            <!-- Tab 7: Relationships -->
+            <div id="relationship" class="tab-content">
+                <h2>7. Relationship Between Data Governance, Privacy & CIA Triad</h2>
+                
+                <h3>Integration of Concepts</h3>
+                <p>Data Governance, Privacy Approaches, and the CIA Triad work together to create a comprehensive information security and management framework.</p>
+                
+                <table>
+                    <tr>
+                        <th>Concept</th>
+                        <th>Relationship with CIA Triad</th>
+                        <th>Primary Focus</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Governance</strong></td>
+                        <td>Supports all three (C, I, A)</td>
+                        <td>Framework and policies</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Privacy Approaches</strong></td>
+                        <td>Mainly Confidentiality</td>
+                        <td>Individual data protection</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Differential Privacy</strong></td>
+                        <td>Confidentiality with math guarantees</td>
+                        <td>Quantified privacy protection</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Data Documentation</strong></td>
+                        <td>Integrity</td>
+                        <td>Data accuracy and quality</td>
+                    </tr>
+                    <tr>
+                        <td><strong>System Backups</strong></td>
+                        <td>Availability & Integrity</td>
+                        <td>Service continuity</td>
+                    </tr>
+                </table>
+                
+                <h3>How They Work Together</h3>
+                <div class="box">
+                    <h4>Complete Security Framework</h4>
+                    <ul>
+                        <li><strong>Data Governance</strong> provides the overall framework and policies</li>
+                        <li><strong>Privacy Approaches</strong> protect individual information (Confidentiality)</li>
+                        <li><strong>Differential Privacy</strong> adds mathematical guarantees to privacy</li>
+                        <li><strong>CIA Triad</strong> ensures comprehensive security across all dimensions</li>
+                        <li><strong>Data Documentation</strong> ensures information quality and proper usage</li>
+                    </ul>
+                </div>
+                
+                <h3>Practical Implementation</h3>
+                <div class="success-box">
+                    <h4>Example: Healthcare Organization</h4>
+                    <ul>
+                        <li><strong>Governance:</strong> Establish HIPAA-compliant policies for patient data</li>
+                        <li><strong>Confidentiality:</strong> Encrypt patient records and limit access to authorized personnel</li>
+                        <li><strong>Integrity:</strong> Use digital signatures for medical records and maintain audit logs</li>
+                        <li><strong>Availability:</strong> Deploy redundant systems ensuring 24/7 access to critical patient data</li>
+                        <li><strong>Privacy:</strong> Use anonymization when sharing data for research</li>
+                        <li><strong>Differential Privacy:</strong> Apply DP when publishing aggregate health statistics</li>
+                    </ul>
+                </div>
+                
+                <h3>Key Takeaways</h3>
+                <div class="highlight-box">
+                    <ul>
+                        <li>All seven concepts are interdependent</li>
+                        <li>Data Governance is the overarching framework</li>
+                        <li>CIA Triad provides security across three dimensions</li>
+                        <li>Privacy techniques protect individual information</li>
+                        <li>Differential Privacy offers mathematical guarantees</li>
+                        <li>Documentation ensures proper data usage</li>
+                        <li>Together, they create a holistic security approach</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+        
+        <div class="button-container">
+            <button class="back-btn" onclick="goBack()">← Back to Overview</button>
+        </div>
+        
+        <footer>
+            <p>&copy; 2026 Data Privacy & Security Course | Rajalakshmi Engineering College</p>
+            <p>Advanced Information Disclosure Systems (AIDS) Program | Even Semester</p>
+        </footer>
+    </div>
+    
+    <script>
+        function showTab(tabId) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.nav-tab');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            const selectedTab = document.getElementById(tabId);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            // Highlight clicked button
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+        
+        // Initialize first tab
+        document.addEventListener('DOMContentLoaded', function() {
+            showTab('governance');
+        });
+    </script>
+</body>
+</html>
