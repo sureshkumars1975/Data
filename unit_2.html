@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unit 2 - Cryptocurrency & Bitcoin Technology</title>
+    <title>Unit 4 - Cryptography & Encryption</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
             color: #333;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -30,7 +30,7 @@
         }
         
         header {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
             padding: 40px 20px;
             text-align: center;
@@ -49,18 +49,18 @@
         .breadcrumb {
             background: #f4f4f4;
             padding: 15px 40px;
-            border-bottom: 2px solid #f5576c;
+            border-bottom: 2px solid #38ef7d;
         }
         
         .breadcrumb a {
-            color: #f5576c;
+            color: #11998e;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
         }
         
         .breadcrumb a:hover {
-            color: #f093fb;
+            color: #38ef7d;
             text-decoration: underline;
         }
         
@@ -68,7 +68,7 @@
             background: #f9f9f9;
             display: flex;
             flex-wrap: wrap;
-            border-bottom: 3px solid #f5576c;
+            border-bottom: 3px solid #38ef7d;
             padding: 0;
             margin: 0;
             gap: 0;
@@ -91,13 +91,13 @@
         
         .nav-tab:hover {
             background: #efefef;
-            color: #f5576c;
+            color: #38ef7d;
         }
         
         .nav-tab.active {
             background: white;
-            border-bottom-color: #f5576c;
-            color: #f5576c;
+            border-bottom-color: #38ef7d;
+            color: #38ef7d;
         }
         
         main {
@@ -119,15 +119,15 @@
         }
         
         h2 {
-            color: #f5576c;
+            color: #11998e;
             font-size: 2em;
             margin-bottom: 20px;
-            border-bottom: 3px solid #f5576c;
+            border-bottom: 3px solid #38ef7d;
             padding-bottom: 10px;
         }
         
         h3 {
-            color: #f093fb;
+            color: #38ef7d;
             font-size: 1.4em;
             margin-top: 30px;
             margin-bottom: 15px;
@@ -159,15 +159,15 @@
         
         .box {
             background: #f9f9f9;
-            border-left: 4px solid #f5576c;
+            border-left: 4px solid #38ef7d;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
         }
         
         .info-box {
-            background: #fce4ec;
-            border-left: 4px solid #f093fb;
+            background: #e0f7f4;
+            border-left: 4px solid #11998e;
             padding: 20px;
             margin: 20px 0;
             border-radius: 5px;
@@ -192,12 +192,73 @@
         .diagram {
             background: #f5f5f5;
             border: 2px solid #ddd;
+            padding: 30px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            text-align: center;
+        }
+        
+        .simulation-box {
+            background: #f5f5f5;
+            border: 2px solid #38ef7d;
             padding: 20px;
             margin: 20px 0;
-            border-radius: 5px;
+            border-radius: 8px;
+        }
+        
+        .sim-control {
+            margin-bottom: 15px;
+        }
+        
+        .sim-control label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #11998e;
+        }
+        
+        .sim-control input[type="text"],
+        .sim-control input[type="number"],
+        .sim-control select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
             font-family: 'Courier New', monospace;
-            text-align: center;
-            overflow-x: auto;
+        }
+        
+        .sim-button {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .sim-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(17, 153, 142, 0.4);
+        }
+        
+        .sim-output {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            word-break: break-all;
+            margin-top: 15px;
+            min-height: 60px;
         }
         
         table {
@@ -211,7 +272,7 @@
         }
         
         table th {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
             padding: 15px;
             text-align: left;
@@ -239,18 +300,6 @@
             color: #d32f2f;
         }
         
-        .code-block {
-            background: #263238;
-            color: #aed581;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-            margin: 15px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 0.95em;
-            line-height: 1.5;
-        }
-        
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -260,7 +309,7 @@
         
         .feature-card {
             background: white;
-            border: 2px solid #f5576c;
+            border: 2px solid #38ef7d;
             border-radius: 8px;
             padding: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -268,11 +317,11 @@
         
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.3);
+            box-shadow: 0 8px 20px rgba(56, 239, 125, 0.3);
         }
         
         .feature-card h4 {
-            color: #f5576c;
+            color: #38ef7d;
             margin-top: 0;
         }
         
@@ -285,7 +334,7 @@
         }
         
         button {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
             color: white;
             border: none;
             padding: 15px 40px;
@@ -300,7 +349,7 @@
         
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+            box-shadow: 0 8px 20px rgba(56, 239, 125, 0.4);
         }
         
         .back-btn {
@@ -320,12 +369,34 @@
             margin-top: 40px;
         }
         
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .comparison-box {
+            background: white;
+            border: 2px solid #38ef7d;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .comparison-box h4 {
+            color: #38ef7d;
+            margin-top: 0;
+        }
+        
         @media (max-width: 968px) {
             .nav-tab {
                 flex: 1;
                 min-width: 100px;
                 padding: 12px 8px;
                 font-size: 0.85em;
+            }
+            .comparison-grid {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -334,13 +405,16 @@
             main { padding: 20px; }
             button { padding: 12px 30px; }
             .feature-grid { grid-template-columns: 1fr; }
+            .sim-control input {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🪙 Unit 2: Cryptocurrency & Bitcoin Technology</h1>
+            <h1>🔐 Unit 4: Cryptography & Encryption</h1>
             <p>Complete Learning Material - AIDS Program Even Semester</p>
         </header>
         
@@ -349,1061 +423,811 @@
         </div>
         
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('basic-crypto')">1. Basic Crypto</button>
-            <button class="nav-tab" onclick="showTab('creation-coins')">2. Coin Creation</button>
-            <button class="nav-tab" onclick="showTab('payments')">3. Payments & Double Spending</button>
-            <button class="nav-tab" onclick="showTab('forth')">4. FORTH & Scripting</button>
-            <button class="nav-tab" onclick="showTab('bitcoin-script')">5. Bitcoin Scripts</button>
-            <button class="nav-tab" onclick="showTab('p2p-network')">6. P2P Network</button>
-            <button class="nav-tab" onclick="showTab('transactions')">7. Transactions</button>
-            <button class="nav-tab" onclick="showTab('mining')">8. Mining</button>
-            <button class="nav-tab" onclick="showTab('propagation')">9. Block Propagation</button>
+            <button class="nav-tab active" onclick="showTab('intro')">1. Introduction</button>
+            <button class="nav-tab" onclick="showTab('symmetric')">2. Symmetric Encryption</button>
+            <button class="nav-tab" onclick="showTab('asymmetric')">3. Asymmetric Encryption</button>
+            <button class="nav-tab" onclick="showTab('aes')">4. AES Algorithm</button>
+            <button class="nav-tab" onclick="showTab('rsa')">5. RSA Algorithm</button>
+            <button class="nav-tab" onclick="showTab('des')">6. DES Algorithm</button>
+            <button class="nav-tab" onclick="showTab('standards')">7. Standards & Applications</button>
+            <button class="nav-tab" onclick="showTab('simulation')">8. Simulation</button>
         </div>
         
         <main>
-            <!-- Tab 1: Basic Cryptocurrency -->
-            <div id="basic-crypto" class="tab-content active">
-                <h2>1. Basic Cryptocurrency</h2>
+            <!-- Tab 1: Introduction -->
+            <div id="intro" class="tab-content active">
+                <h2>1. Introduction to Cryptography</h2>
                 
-                <h3>Definition</h3>
+                <h3>What is Cryptography?</h3>
                 <div class="info-box">
-                    <p>Cryptocurrency is a digital or virtual form of money that uses cryptography for security. It operates independently of a central bank and uses decentralized networks (typically blockchain) to verify and record transactions.</p>
+                    <p>Cryptography is the practice of secure communication in the presence of adversaries. It uses mathematical algorithms to encrypt (encode) information so that only authorized parties can decrypt (decode) it.</p>
                 </div>
                 
-                <h3>Key Characteristics</h3>
+                <h3>Key Cryptographic Goals (CIA Triad)</h3>
                 <div class="feature-grid">
                     <div class="feature-card">
-                        <h4>🔐 Cryptographic Security</h4>
-                        <p>Uses advanced encryption algorithms to secure transactions and verify ownership.</p>
+                        <h4>🔐 Confidentiality</h4>
+                        <p>Only authorized users can read the message. Encryption prevents unauthorized disclosure.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>🔗 Decentralized</h4>
-                        <p>No central authority; transactions are managed by network nodes.</p>
+                        <h4>✓ Integrity</h4>
+                        <p>Message hasn't been altered. Cryptographic hashes verify message authenticity.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>📜 Immutable Ledger</h4>
-                        <p>Blockchain records cannot be altered retroactively.</p>
+                        <h4>👤 Authentication</h4>
+                        <p>Verify sender's identity. Digital signatures prove the message source.</p>
                     </div>
                     <div class="feature-card">
-                        <h4>⚡ Fast Transfers</h4>
-                        <p>Peer-to-peer transactions without intermediaries.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>🌍 Global Access</h4>
-                        <p>No geographical restrictions on transactions.</p>
-                    </div>
-                    <div class="feature-card">
-                        <h4>🔍 Transparent</h4>
-                        <p>Public ledger allows anyone to verify transactions.</p>
+                        <h4>⛔ Non-Repudiation</h4>
+                        <p>Sender cannot deny sending message. Digital signatures provide proof.</p>
                     </div>
                 </div>
                 
-                <h3>How Cryptocurrency Works</h3>
-                <div class="diagram">
-                    Alice sends Crypto → Network validates → Transaction recorded → Bob receives Crypto
-                </div>
-                
-                <h3>Components of Cryptocurrency System</h3>
+                <h3>Basic Terminology</h3>
                 <table>
                     <tr>
-                        <th>Component</th>
-                        <th>Function</th>
+                        <th>Term</th>
+                        <th>Definition</th>
                         <th>Example</th>
                     </tr>
                     <tr>
-                        <td><strong>Wallet</strong></td>
-                        <td>Stores private keys and public addresses</td>
-                        <td>Software or hardware wallet</td>
+                        <td><strong>Plaintext</strong></td>
+                        <td>Original unencrypted message</td>
+                        <td>"Hello World"</td>
                     </tr>
                     <tr>
-                        <td><strong>Public Address</strong></td>
-                        <td>Public identifier for receiving funds</td>
-                        <td>1A1z7agoat6Ga7oXj (Bitcoin)</td>
+                        <td><strong>Ciphertext</strong></td>
+                        <td>Encrypted message</td>
+                        <td>"aj3k@#$%^"</td>
                     </tr>
                     <tr>
-                        <td><strong>Private Key</strong></td>
-                        <td>Secret key to spend funds (must be kept secure)</td>
-                        <td>Random 256-bit number</td>
+                        <td><strong>Key</strong></td>
+                        <td>Secret parameter for encryption/decryption</td>
+                        <td>256-bit key</td>
                     </tr>
                     <tr>
-                        <td><strong>Transaction</strong></td>
-                        <td>Transfer of value between parties</td>
-                        <td>Alice sends 1 BTC to Bob</td>
+                        <td><strong>Encryption</strong></td>
+                        <td>Process of converting plaintext to ciphertext</td>
+                        <td>E(P, K) → C</td>
                     </tr>
                     <tr>
-                        <td><strong>Blockchain</strong></td>
-                        <td>Immutable distributed ledger</td>
-                        <td>Bitcoin blockchain</td>
+                        <td><strong>Decryption</strong></td>
+                        <td>Process of converting ciphertext to plaintext</td>
+                        <td>D(C, K) → P</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Algorithm</strong></td>
+                        <td>Mathematical procedure for encryption</td>
+                        <td>AES, RSA, DES</td>
                     </tr>
                 </table>
+                
+                <h3>Basic Encryption Process</h3>
+                <div class="diagram">
+                    PLAINTEXT<br/>
+                    "Hello World"<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    [ENCRYPTION ALGORITHM]<br/>
+                    (with Secret Key)<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    CIPHERTEXT<br/>
+                    "aj3k@#$%^&*()"<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    [DECRYPTION ALGORITHM]<br/>
+                    (with Secret Key)<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    PLAINTEXT<br/>
+                    "Hello World"
+                </div>
+            </div>
+            
+            <!-- Tab 2: Symmetric Encryption -->
+            <div id="symmetric" class="tab-content">
+                <h2>2. Symmetric Encryption</h2>
+                
+                <h3>Definition</h3>
+                <div class="info-box">
+                    <p>Symmetric encryption uses the same key for both encryption and decryption. Both sender and receiver must possess the same secret key, which must be kept private.</p>
+                </div>
+                
+                <h3>How Symmetric Encryption Works</h3>
+                <div class="diagram">
+                    ALICE (Sender)<br/>
+                    Plaintext + Secret Key<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ (Encrypt)<br/>
+                    Ciphertext<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ (Send through unsecure channel)<br/>
+                    BOB (Receiver)<br/>
+                    Ciphertext + Secret Key<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ (Decrypt)<br/>
+                    Plaintext
+                </div>
                 
                 <h3>Advantages</h3>
                 <div class="success-box">
                     <ul>
-                        <li>Lower transaction fees (no intermediaries)</li>
-                        <li>Fast international transfers</li>
-                        <li>Financial privacy and pseudonymity</li>
-                        <li>Protection against inflation (fixed supply)</li>
-                        <li>Accessibility without bank accounts</li>
+                        <li>Fast encryption and decryption</li>
+                        <li>Requires smaller keys than asymmetric</li>
+                        <li>Simple and efficient implementation</li>
+                        <li>Suitable for large data volumes</li>
+                        <li>Well-established algorithms</li>
                     </ul>
                 </div>
                 
-                <h3>Challenges</h3>
+                <h3>Disadvantages</h3>
                 <div class="highlight-box">
                     <ul>
-                        <li>Price volatility</li>
-                        <li>Scalability limitations</li>
-                        <li>Regulatory uncertainty</li>
-                        <li>Environmental concerns (Proof of Work)</li>
-                        <li>Security risks if keys are compromised</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Tab 2: Creation of Coins -->
-            <div id="creation-coins" class="tab-content">
-                <h2>2. Creation of Coins</h2>
-                
-                <h3>Coin Generation Methods</h3>
-                <p>Cryptocurrencies are created through various mechanisms, each with different economic models and properties.</p>
-                
-                <h3>1. Mining (Proof of Work)</h3>
-                <div class="box">
-                    <h4>Process</h4>
-                    <ul>
-                        <li>Miners compete to solve complex mathematical puzzles</li>
-                        <li>First to solve receives newly created coins (block reward)</li>
-                        <li>Transaction fees also go to miner</li>
-                        <li>Difficulty adjusts to maintain regular block creation</li>
-                    </ul>
-                    <p><strong>Example:</strong> Bitcoin mining creates 6.25 BTC per block (halving every 210,000 blocks)</p>
-                </div>
-                
-                <h3>2. Staking (Proof of Stake)</h3>
-                <div class="box">
-                    <h4>Process</h4>
-                    <ul>
-                        <li>Validators lock up coins as collateral</li>
-                        <li>Selected to create new blocks (weighted by stake)</li>
-                        <li>Earn rewards for validating transactions</li>
-                        <li>Slashing penalty for misbehavior</li>
-                    </ul>
-                    <p><strong>Example:</strong> Ethereum 2.0 uses Proof of Stake with 32 ETH minimum stake</p>
-                </div>
-                
-                <h3>3. Initial Coin Offering (ICO)</h3>
-                <div class="box">
-                    <h4>Process</h4>
-                    <ul>
-                        <li>Tokens created and sold to raise funds</li>
-                        <li>Often used for new blockchain projects</li>
-                        <li>Buyers get tokens for development funds</li>
-                        <li>Can represent equity, utility, or governance rights</li>
+                        <li>Key distribution problem (how to securely share key?)</li>
+                        <li>Keys must be kept secret on both ends</li>
+                        <li>Each pair of users needs unique key</li>
+                        <li>Vulnerability if key is compromised</li>
+                        <li>Scalability issues in large networks</li>
                     </ul>
                 </div>
                 
-                <h3>4. Airdrop</h3>
-                <div class="box">
-                    <p>Free distribution of tokens to holders of another cryptocurrency or to community members.</p>
+                <h3>Types of Symmetric Encryption</h3>
+                <div class="comparison-grid">
+                    <div class="comparison-box">
+                        <h4>Stream Ciphers</h4>
+                        <ul>
+                            <li>Encrypt one bit/byte at a time</li>
+                            <li>Uses keystream generator</li>
+                            <li>Fast, minimal buffering needed</li>
+                            <li>Examples: RC4, ChaCha20</li>
+                        </ul>
+                    </div>
+                    <div class="comparison-box">
+                        <h4>Block Ciphers</h4>
+                        <ul>
+                            <li>Encrypt fixed-size blocks (64-256 bits)</li>
+                            <li>Same plaintext block → same ciphertext block</li>
+                            <li>Uses modes (ECB, CBC, CTR, GCM)</li>
+                            <li>Examples: AES, DES, 3DES</li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <h3>Total Supply and Inflation</h3>
-                <table>
-                    <tr>
-                        <th>Cryptocurrency</th>
-                        <th>Total Supply</th>
-                        <th>Creation Rate</th>
-                        <th>Model</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Bitcoin</strong></td>
-                        <td>21 million BTC</td>
-                        <td>Fixed, halving every 4 years</td>
-                        <td>Deflationary</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Ethereum</strong></td>
-                        <td>Unlimited</td>
-                        <td>2 ETH per block + tips</td>
-                        <td>Inflationary</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Litecoin</strong></td>
-                        <td>84 million LTC</td>
-                        <td>Fixed schedule</td>
-                        <td>Deflationary</td>
-                    </tr>
-                </table>
-                
-                <h3>Halving Events</h3>
-                <div class="info-box">
-                    <h4>Bitcoin Halving Schedule</h4>
-                    <ul>
-                        <li>2009-2012: 50 BTC per block</li>
-                        <li>2012-2016: 25 BTC per block</li>
-                        <li>2016-2020: 12.5 BTC per block</li>
-                        <li>2020-2024: 6.25 BTC per block</li>
-                        <li>2024-2028: 3.125 BTC per block (current)</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Tab 3: Payments & Double Spending -->
-            <div id="payments" class="tab-content">
-                <h2>3. Payments and Double Spending</h2>
-                
-                <h3>Cryptocurrency Payments</h3>
-                <p>A payment in cryptocurrency involves transferring value from one party to another using cryptographic signatures.</p>
-                
-                <h3>Payment Flow</h3>
-                <div class="diagram">
-                    Sender signs transaction with private key → Broadcasting to network → Miners validate → Transaction confirmed → Receiver gets funds
-                </div>
-                
-                <h3>Transaction Structure</h3>
-                <table>
-                    <tr>
-                        <th>Field</th>
-                        <th>Description</th>
-                        <th>Example</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Input (UTXO)</strong></td>
-                        <td>Previous transaction outputs being spent</td>
-                        <td>1.5 BTC from transaction X</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Output</strong></td>
-                        <td>Recipients and amounts</td>
-                        <td>1.0 BTC to Bob, 0.4 BTC change</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Signature</strong></td>
-                        <td>Proof of ownership (sender's private key)</td>
-                        <td>ECDSA signature</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Fee</strong></td>
-                        <td>Incentive for miners to include transaction</td>
-                        <td>0.1 BTC (input - output)</td>
-                    </tr>
-                </table>
-                
-                <h3>Double Spending Problem</h3>
+                <h3>Key Management Challenge</h3>
                 <div class="highlight-box">
-                    <h4>What is Double Spending?</h4>
-                    <p>The problem where digital currency could theoretically be spent twice by creating two transactions using the same funds.</p>
-                </div>
-                
-                <h3>Example of Double Spending Attack</h3>
-                <div class="box">
-                    <p><strong>Scenario:</strong></p>
+                    <h4>The Problem</h4>
+                    <p>How do Alice and Bob securely exchange the secret key over an insecure channel?</p>
+                    <h4>Solutions</h4>
                     <ul>
-                        <li>Alice has 1 BTC</li>
-                        <li>She sends 1 BTC to Bob (transaction 1)</li>
-                        <li>She also sends the same 1 BTC to Charlie (transaction 2)</li>
-                        <li>Both transactions are broadcast before confirmation</li>
-                        <li>Which transaction is valid?</li>
+                        <li>Diffie-Hellman Key Exchange</li>
+                        <li>Key Distribution Center (KDC)</li>
+                        <li>In-person key exchange</li>
+                        <li>Combination with asymmetric encryption</li>
                     </ul>
-                </div>
-                
-                <h3>Solution: Blockchain Consensus</h3>
-                <div class="success-box">
-                    <h4>How Blockchain Prevents Double Spending</h4>
-                    <ul>
-                        <li><strong>Sequential Recording:</strong> Transactions recorded in order on blockchain</li>
-                        <li><strong>Consensus Mechanism:</strong> Network agrees on transaction order (PoW/PoS)</li>
-                        <li><strong>Immutability:</strong> Once confirmed, transactions cannot be reversed</li>
-                        <li><strong>Hash Linking:</strong> Each block contains hash of previous block</li>
-                        <li><strong>Majority Rule:</strong> Attacker needs 51% hash power to rewrite history</li>
-                    </ul>
-                </div>
-                
-                <h3>Transaction Confirmation</h3>
-                <table>
-                    <tr>
-                        <th>Status</th>
-                        <th>Confirmations</th>
-                        <th>Security Level</th>
-                        <th>Time (Bitcoin)</th>
-                    </tr>
-                    <tr>
-                        <td>Unconfirmed</td>
-                        <td>0</td>
-                        <td>Low</td>
-                        <td>0-10 minutes</td>
-                    </tr>
-                    <tr>
-                        <td>One Confirmation</td>
-                        <td>1</td>
-                        <td>Medium</td>
-                        <td>~10 minutes</td>
-                    </tr>
-                    <tr>
-                        <td>Six Confirmations</td>
-                        <td>6</td>
-                        <td>High</td>
-                        <td>~60 minutes</td>
-                    </tr>
-                    <tr>
-                        <td>High Security</td>
-                        <td>100+</td>
-                        <td>Very High</td>
-                        <td>16+ hours</td>
-                    </tr>
-                </table>
-                
-                <h3>51% Attack</h3>
-                <div class="highlight-box">
-                    <p><strong>Definition:</strong> If an attacker controls 51% of network hash power, they could potentially:</p>
-                    <ul>
-                        <li>Reverse recent transactions (double spending)</li>
-                        <li>Prevent other transactions from confirming</li>
-                        <li>Monopolize block creation</li>
-                    </ul>
-                    <p><strong>Cost:</strong> Prohibitively expensive for established networks (billions for Bitcoin)</p>
                 </div>
             </div>
             
-            <!-- Tab 4: FORTH & Scripting -->
-            <div id="forth" class="tab-content">
-                <h2>4. FORTH: The Precursor for Bitcoin Scripting</h2>
-                
-                <h3>What is FORTH?</h3>
-                <div class="info-box">
-                    <p>FORTH is a stack-based programming language created in 1970. It's minimal, efficient, and influenced the design of Bitcoin Script, making it highly relevant to cryptocurrency development.</p>
-                </div>
-                
-                <h3>FORTH Characteristics</h3>
-                <ul>
-                    <li><strong>Stack-Based:</strong> Uses stack for operations (postfix notation)</li>
-                    <li><strong>Minimal Syntax:</strong> Simple and extensible</li>
-                    <li><strong>Efficient:</strong> Fast execution and small memory footprint</li>
-                    <li><strong>Embedded Systems:</strong> Commonly used in embedded systems</li>
-                    <li><strong>Concatenative:</strong> Functions composed by concatenation</li>
-                </ul>
-                
-                <h3>Basic FORTH Example</h3>
-                <div class="code-block">
-                    : SQUARE ( n -- n*n )<br/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;DUP *  ;<br/>
-                    <br/>
-                    5 SQUARE  ( Result: 25 )<br/>
-                    10 3 + .  ( Result: 13 )
-                </div>
-                
-                <h3>Stack Operations in FORTH</h3>
-                <table>
-                    <tr>
-                        <th>Operation</th>
-                        <th>FORTH Code</th>
-                        <th>Stack Effect</th>
-                        <th>Description</th>
-                    </tr>
-                    <tr>
-                        <td>Push number</td>
-                        <td>5</td>
-                        <td>( -- 5 )</td>
-                        <td>Pushes 5 onto stack</td>
-                    </tr>
-                    <tr>
-                        <td>Addition</td>
-                        <td>+</td>
-                        <td>( a b -- a+b )</td>
-                        <td>Pops 2, pushes sum</td>
-                    </tr>
-                    <tr>
-                        <td>Duplicate</td>
-                        <td>DUP</td>
-                        <td>( a -- a a )</td>
-                        <td>Duplicates top item</td>
-                    </tr>
-                    <tr>
-                        <td>Drop</td>
-                        <td>DROP</td>
-                        <td>( a -- )</td>
-                        <td>Removes top item</td>
-                    </tr>
-                    <tr>
-                        <td>Swap</td>
-                        <td>SWAP</td>
-                        <td>( a b -- b a )</td>
-                        <td>Swaps top two items</td>
-                    </tr>
-                    <tr>
-                        <td>Multiply</td>
-                        <td>*</td>
-                        <td>( a b -- a*b )</td>
-                        <td>Pops 2, pushes product</td>
-                    </tr>
-                </table>
-                
-                <h3>Why FORTH for Blockchain?</h3>
-                <div class="success-box">
-                    <ul>
-                        <li>Simple and secure (less room for bugs)</li>
-                        <li>Stack-based nature suits blockchain validation</li>
-                        <li>Minimal bytecode reduces transaction size</li>
-                        <li>Efficient execution in nodes</li>
-                        <li>Easy to audit and analyze</li>
-                    </ul>
-                </div>
-                
-                <h3>FORTH vs Bitcoin Script Comparison</h3>
-                <table>
-                    <tr>
-                        <th>Aspect</th>
-                        <th>FORTH</th>
-                        <th>Bitcoin Script</th>
-                    </tr>
-                    <tr>
-                        <td>Type</td>
-                        <td>General-purpose language</td>
-                        <td>Domain-specific language</td>
-                    </tr>
-                    <tr>
-                        <td>Stack-Based</td>
-                        <td>Yes</td>
-                        <td>Yes (inspired by FORTH)</td>
-                    </tr>
-                    <tr>
-                        <td>Turing-Complete</td>
-                        <td>Yes</td>
-                        <td>No (intentionally limited)</td>
-                    </tr>
-                    <tr>
-                        <td>Use Case</td>
-                        <td>Embedded systems</td>
-                        <td>Blockchain transactions</td>
-                    </tr>
-                </table>
-            </div>
-            
-            <!-- Tab 5: Bitcoin Scripts -->
-            <div id="bitcoin-script" class="tab-content">
-                <h2>5. Bitcoin Scripts</h2>
+            <!-- Tab 3: Asymmetric Encryption -->
+            <div id="asymmetric" class="tab-content">
+                <h2>3. Asymmetric Encryption</h2>
                 
                 <h3>Definition</h3>
                 <div class="info-box">
-                    <p>Bitcoin Script is a simple, stack-based, Turing-incomplete scripting language used to define spending conditions for bitcoins. It determines who can spend unspent outputs.</p>
+                    <p>Asymmetric encryption (public-key cryptography) uses two mathematically related keys: a public key (known to everyone) and a private key (kept secret). Data encrypted with public key can only be decrypted with private key, and vice versa.</p>
                 </div>
                 
-                <h3>Key Properties</h3>
-                <ul>
-                    <li><strong>Stack-Based:</strong> Uses two stacks (main and alternative)</li>
-                    <li>Not Turing-Complete (by design):<ul>
-                        <li>No loops (prevents infinite programs)</li>
-                        <li>Script size limit (10,000 bytes)</li>
-                        <li>Operation limit (201 operations max)</li>
-                    </ul></li>
-                    <li><strong>Deterministic:</strong> Always produces same result</li>
-                    <li><strong>Public:</strong> Spending rules visible on blockchain</li>
-                </ul>
-                
-                <h3>Script Types</h3>
-                <div class="box">
-                    <h4>1. Pay-to-Public-Key (P2PK)</h4>
-                    <p>Pays directly to a public key. Recipient proves ownership with private key signature.</p>
-                    <div class="code-block">
-                        &lt;pubkey&gt; OP_CHECKSIG
-                    </div>
+                <h3>How Asymmetric Encryption Works</h3>
+                <div class="diagram">
+                    ALICE (Sender)<br/>
+                    Plaintext + BOB's Public Key<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ (Encrypt)<br/>
+                    Ciphertext<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ (Send - anyone can intercept)<br/>
+                    BOB (Receiver)<br/>
+                    Ciphertext + BOB's Private Key<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓ (Decrypt)<br/>
+                    Plaintext
                 </div>
                 
-                <div class="box">
-                    <h4>2. Pay-to-Public-Key-Hash (P2PKH)</h4>
-                    <p>Pays to hash of public key (more common). Receiver reveals public key and signs.</p>
-                    <div class="code-block">
-                        OP_DUP OP_HASH160 &lt;hash&gt; OP_EQUALVERIFY OP_CHECKSIG
-                    </div>
+                <h3>Advantages</h3>
+                <div class="success-box">
+                    <ul>
+                        <li>Solves key distribution problem</li>
+                        <li>Public key can be freely shared</li>
+                        <li>Private key never needs to be transmitted</li>
+                        <li>Enables digital signatures for authentication</li>
+                        <li>Scales well to large networks</li>
+                        <li>One key pair per user (not per user pair)</li>
+                    </ul>
                 </div>
                 
-                <div class="box">
-                    <h4>3. Pay-to-Script-Hash (P2SH)</h4>
-                    <p>Allows complex scripts without bloating blockchain. Redeem script provided by spender.</p>
-                    <div class="code-block">
-                        OP_HASH160 &lt;scripthash&gt; OP_EQUAL
-                    </div>
+                <h3>Disadvantages</h3>
+                <div class="highlight-box">
+                    <ul>
+                        <li>Slower than symmetric encryption (50-1000x)</li>
+                        <li>Requires much larger keys (2048+ bits)</li>
+                        <li>More computationally intensive</li>
+                        <li>Not practical for encrypting large volumes</li>
+                        <li>Vulnerable to side-channel attacks if poorly implemented</li>
+                    </ul>
                 </div>
                 
-                <div class="box">
-                    <h4>4. Pay-to-Witness-Public-Key-Hash (P2WPKH)</h4>
-                    <p>SegWit version of P2PKH. Signature data moved to witness field (reduces transaction size).</p>
-                </div>
-                
-                <div class="box">
-                    <h4>5. Multi-Signature (M-of-N)</h4>
-                    <p>Requires M signatures out of N public keys to spend.</p>
-                    <div class="code-block">
-                        &lt;M&gt; &lt;pubkey1&gt; ... &lt;pubkeyN&gt; &lt;N&gt; OP_CHECKMULTISIG
-                    </div>
-                </div>
-                
-                <h3>Common Bitcoin Script Operations</h3>
+                <h3>Key Pair Generation</h3>
                 <table>
                     <tr>
-                        <th>Operation</th>
-                        <th>Code</th>
-                        <th>Effect</th>
+                        <th>Property</th>
+                        <th>Public Key</th>
+                        <th>Private Key</th>
                     </tr>
                     <tr>
-                        <td>OP_DUP</td>
-                        <td>0x76</td>
-                        <td>Duplicates top stack item</td>
+                        <td>Generated</td>
+                        <td>Derived from private key</td>
+                        <td>Generated randomly</td>
                     </tr>
                     <tr>
-                        <td>OP_HASH160</td>
-                        <td>0xa9</td>
-                        <td>HASH160 of top item</td>
+                        <td>Distribution</td>
+                        <td>Can be shared publicly</td>
+                        <td>Must be kept secret</td>
                     </tr>
                     <tr>
-                        <td>OP_EQUAL</td>
-                        <td>0x87</td>
-                        <td>Compares top two items</td>
+                        <td>Use Case</td>
+                        <td>Encrypt data, verify signatures</td>
+                        <td>Decrypt data, create signatures</td>
                     </tr>
                     <tr>
-                        <td>OP_EQUALVERIFY</td>
-                        <td>0x88</td>
-                        <td>Equal, fails if not equal</td>
+                        <td>Knowledge</td>
+                        <td>Everyone has it</td>
+                        <td>Only owner knows</td>
                     </tr>
                     <tr>
-                        <td>OP_CHECKSIG</td>
-                        <td>0xac</td>
-                        <td>Verifies signature</td>
-                    </tr>
-                    <tr>
-                        <td>OP_CHECKMULTISIG</td>
-                        <td>0xae</td>
-                        <td>Verifies multiple signatures</td>
+                        <td>Protection</td>
+                        <td>No protection needed</td>
+                        <td>Must use trusted storage (HSM)</td>
                     </tr>
                 </table>
                 
-                <h3>Script Execution Example (P2PKH)</h3>
-                <div class="highlight-box">
-                    <h4>Spending a P2PKH Output</h4>
-                    <p><strong>ScriptSig (input script):</strong> &lt;signature&gt; &lt;pubkey&gt;</p>
-                    <p><strong>ScriptPubKey (output script):</strong> OP_DUP OP_HASH160 &lt;hash&gt; OP_EQUALVERIFY OP_CHECKSIG</p>
-                    <p><strong>Execution:</strong></p>
+                <h3>Hybrid Encryption (Best of Both Worlds)</h3>
+                <div class="box">
+                    <h4>Combines Symmetric and Asymmetric</h4>
                     <ol>
-                        <li>ScriptSig executed: signature and pubkey on stack</li>
-                        <li>ScriptPubKey executed: verifies pubkey hash matches and signature is valid</li>
-                        <li>If both succeed, UTXO is spent</li>
+                        <li>Generate random symmetric key</li>
+                        <li>Encrypt large message with symmetric key (fast)</li>
+                        <li>Encrypt symmetric key with recipient's public key</li>
+                        <li>Send both encrypted message and encrypted key</li>
+                        <li>Recipient decrypts key with private key, then decrypts message</li>
                     </ol>
+                    <p><strong>Used in:</strong> HTTPS, PGP, Signal messaging, TLS</p>
                 </div>
             </div>
             
-            <!-- Tab 6: P2P Network -->
-            <div id="p2p-network" class="tab-content">
-                <h2>6. Bitcoin P2P Network</h2>
+            <!-- Tab 4: AES Algorithm -->
+            <div id="aes" class="tab-content">
+                <h2>4. AES (Advanced Encryption Standard)</h2>
                 
                 <h3>Overview</h3>
                 <div class="info-box">
-                    <p>The Bitcoin P2P network is a decentralized mesh network where all nodes communicate directly without central servers. It enables distributed consensus and prevents single points of failure.</p>
+                    <p>AES is a symmetric block cipher adopted as encryption standard by the U.S. government. It's the most widely used encryption algorithm worldwide for protecting classified information.</p>
                 </div>
                 
-                <h3>Network Architecture</h3>
+                <h3>AES Specifications</h3>
+                <table>
+                    <tr>
+                        <th>Property</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Standard</strong></td>
+                        <td>FIPS 197 (Federal Information Processing Standard)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adoption</strong></td>
+                        <td>2001 (replaced DES)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Block Size</strong></td>
+                        <td>128 bits (16 bytes)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Key Sizes</strong></td>
+                        <td>128, 192, or 256 bits</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Variants</strong></td>
+                        <td>AES-128, AES-192, AES-256</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rounds</strong></td>
+                        <td>10 (128-bit key), 12 (192-bit), 14 (256-bit)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Operations</strong></td>
+                        <td>SubBytes, ShiftRows, MixColumns, AddRoundKey</td>
+                    </tr>
+                </table>
+                
+                <h3>AES Process Steps</h3>
                 <div class="diagram">
-                    Node1 ↔ Node2 ↔ Node3 ↔ Node4 ↔ Node5 (All connected to all others)
+                    PLAINTEXT (128 bits)<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    Initial AddRoundKey<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    Round 1-N (10/12/14 rounds):<br/>
+                    ├─ SubBytes (byte substitution)<br/>
+                    ├─ ShiftRows (row permutation)<br/>
+                    ├─ MixColumns (column mixing)<br/>
+                    └─ AddRoundKey (key mixing)<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    Final Round (no MixColumns)<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    CIPHERTEXT (128 bits)
                 </div>
                 
-                <h3>Types of Nodes</h3>
-                <table>
-                    <tr>
-                        <th>Node Type</th>
-                        <th>Storage</th>
-                        <th>Validation</th>
-                        <th>Mining</th>
-                        <th>Requirements</th>
-                    </tr>
-                    <tr>
-                        <td><strong>Full Node</strong></td>
-                        <td>Full blockchain (400+ GB)</td>
-                        <td>Yes (all rules)</td>
-                        <td>No</td>
-                        <td>High (CPU, RAM, Disk)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Light Node</strong></td>
-                        <td>Only block headers</td>
-                        <td>Limited (SPV)</td>
-                        <td>No</td>
-                        <td>Low (mobile friendly)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Mining Node</strong></td>
-                        <td>Full blockchain</td>
-                        <td>Yes</td>
-                        <td>Yes</td>
-                        <td>Very High (ASIC miners)</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Archive Node</strong></td>
-                        <td>Full + all states</td>
-                        <td>Yes</td>
-                        <td>No</td>
-                        <td>Very High</td>
-                    </tr>
-                </table>
-                
-                <h3>Peer Discovery</h3>
-                <div class="box">
-                    <h4>How Nodes Find Each Other</h4>
-                    <ul>
-                        <li><strong>DNS Seeds:</strong> Well-known DNS servers return list of peer IPs</li>
-                        <li><strong>Hardcoded Seeds:</strong> Fallback IP addresses in client code</li>
-                        <li><strong>Address Relay:</strong> Peers share known addresses with each other</li>
-                        <li><strong>Bootstrap Nodes:</strong> Well-connected nodes that help new nodes</li>
-                    </ul>
-                </div>
-                
-                <h3>P2P Message Types</h3>
-                <table>
-                    <tr>
-                        <th>Message Type</th>
-                        <th>Purpose</th>
-                        <th>Direction</th>
-                    </tr>
-                    <tr>
-                        <td>version</td>
-                        <td>Announces node version and capabilities</td>
-                        <td>Both</td>
-                    </tr>
-                    <tr>
-                        <td>verack</td>
-                        <td>Acknowledges version message</td>
-                        <td>Both</td>
-                    </tr>
-                    <tr>
-                        <td>inv</td>
-                        <td>Announces available transactions/blocks</td>
-                        <td>Both</td>
-                    </tr>
-                    <tr>
-                        <td>getdata</td>
-                        <td>Requests specific transactions/blocks</td>
-                        <td>Both</td>
-                    </tr>
-                    <tr>
-                        <td>tx</td>
-                        <td>Broadcasts transaction</td>
-                        <td>Both</td>
-                    </tr>
-                    <tr>
-                        <td>block</td>
-                        <td>Broadcasts block</td>
-                        <td>Both</td>
-                    </tr>
-                    <tr>
-                        <td>ping/pong</td>
-                        <td>Keeps connection alive</td>
-                        <td>Both</td>
-                    </tr>
-                </table>
-                
-                <h3>Network Properties</h3>
-                <div class="success-box">
-                    <ul>
-                        <li><strong>Decentralized:</strong> No central authority</li>
-                        <li><strong>Open:</strong> Anyone can join and run a node</li>
-                        <li><strong>Pseudonymous:</strong> IP addresses not required to match identity</li>
-                        <li><strong>Redundant:</strong> Thousands of copies of blockchain</li>
-                        <li><strong>Fault-Tolerant:</strong> Network survives node failures</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Tab 7: Transactions -->
-            <div id="transactions" class="tab-content">
-                <h2>7. Transaction in Bitcoin Network</h2>
-                
-                <h3>Transaction Lifecycle</h3>
-                <div class="diagram">
-                    Created → Signed → Broadcasting → Mempool → Confirmed → Settled
-                </div>
-                
-                <h3>Transaction Structure</h3>
-                <table>
-                    <tr>
-                        <th>Field</th>
-                        <th>Size</th>
-                        <th>Description</th>
-                    </tr>
-                    <tr>
-                        <td>Version</td>
-                        <td>4 bytes</td>
-                        <td>Transaction version (currently 1 or 2)</td>
-                    </tr>
-                    <tr>
-                        <td>Input Count</td>
-                        <td>Variable</td>
-                        <td>Number of inputs being spent</td>
-                    </tr>
-                    <tr>
-                        <td>Inputs</td>
-                        <td>Variable</td>
-                        <td>Previous outputs and signatures</td>
-                    </tr>
-                    <tr>
-                        <td>Output Count</td>
-                        <td>Variable</td>
-                        <td>Number of outputs created</td>
-                    </tr>
-                    <tr>
-                        <td>Outputs</td>
-                        <td>Variable</td>
-                        <td>Amount and script for recipients</td>
-                    </tr>
-                    <tr>
-                        <td>Locktime</td>
-                        <td>4 bytes</td>
-                        <td>Earliest block/time for confirmation</td>
-                    </tr>
-                </table>
-                
-                <h3>UTXO Model</h3>
-                <div class="info-box">
-                    <h4>Unspent Transaction Output (UTXO)</h4>
-                    <p>Bitcoin uses UTXO model, not account-based. Each transaction creates outputs; to spend, you must completely consume and distribute outputs.</p>
-                </div>
-                
-                <h3>Transaction Example</h3>
-                <div class="highlight-box">
-                    <h4>Alice Sends 0.5 BTC to Bob</h4>
-                    <p><strong>Input:</strong> Alice's previous UTXO of 1 BTC (from transaction X)</p>
-                    <p><strong>Output 1:</strong> 0.5 BTC to Bob's address</p>
-                    <p><strong>Output 2:</strong> 0.49 BTC back to Alice (change)</p>
-                    <p><strong>Fee:</strong> 0.01 BTC (input - outputs)</p>
-                </div>
-                
-                <h3>Transaction Propagation</h3>
-                <div class="box">
-                    <ol>
-                        <li>Alice creates and signs transaction</li>
-                        <li>Broadcasts to peers in P2P network</li>
-                        <li>Nodes validate transaction (signature, inputs exist, no double spend)</li>
-                        <li>Valid transactions added to mempool</li>
-                        <li>Miners select from mempool based on fees</li>
-                        <li>Transaction included in block</li>
-                        <li>Block added to blockchain</li>
-                    </ol>
-                </div>
-                
-                <h3>Transaction Validation Rules</h3>
-                <div class="success-box">
-                    <ul>
-                        <li>Inputs must reference valid previous outputs</li>
-                        <li>Signatures must be valid (ECDSA)</li>
-                        <li>No double spending (same UTXO not spent twice)</li>
-                        <li>Output amounts must not exceed input amounts (excluding fees)</li>
-                        <li>Script must execute successfully</li>
-                        <li>Transaction size within limits</li>
-                    </ul>
-                </div>
-                
-                <h3>Transaction Fees</h3>
-                <table>
-                    <tr>
-                        <th>Factor</th>
-                        <th>Effect on Fee</th>
-                        <th>Description</th>
-                    </tr>
-                    <tr>
-                        <td>Transaction Size</td>
-                        <td>Higher size = Higher fee</td>
-                        <td>Measured in bytes (or vBytes for SegWit)</td>
-                    </tr>
-                    <tr>
-                        <td>Network Congestion</td>
-                        <td>More congestion = Higher fee</td>
-                        <td>Supply and demand for block space</td>
-                    </tr>
-                    <tr>
-                        <td>Priority</td>
-                        <td>Higher priority = Higher fee</td>
-                        <td>Faster confirmation desired</td>
-                    </tr>
-                    <tr>
-                        <td>Fee Rate</td>
-                        <td>sats/vByte</td>
-                        <td>Satoshis per virtual byte</td>
-                    </tr>
-                </table>
-            </div>
-            
-            <!-- Tab 8: Mining -->
-            <div id="mining" class="tab-content">
-                <h2>8. Block Mining</h2>
-                
-                <h3>What is Mining?</h3>
-                <div class="info-box">
-                    <p>Mining is the process of validating transactions and creating new blocks in the Bitcoin blockchain. Miners compete to solve complex mathematical puzzles, and the winner gets to create the next block and receive rewards.</p>
-                </div>
-                
-                <h3>Mining Process</h3>
-                <div class="box">
-                    <ol>
-                        <li><strong>Collect Transactions:</strong> Gather pending transactions from mempool</li>
-                        <li><strong>Create Block Header:</strong> Include previous block hash, transactions root, timestamp, difficulty</li>
-                        <li><strong>Find Nonce:</strong> Try different nonce values to find hash below difficulty target</li>
-                        <li><strong>Broadcast Block:</strong> Send solved block to network</li>
-                        <li><strong>Receive Reward:</strong> Get block reward (6.25 BTC) + transaction fees</li>
-                    </ol>
-                </div>
-                
-                <h3>Proof of Work (PoW)</h3>
-                <div class="highlight-box">
-                    <h4>Difficulty Target</h4>
-                    <p>Miners must find a block hash less than the target value. This requires trying many nonce values (quadrillions for Bitcoin).</p>
-                    <div class="code-block">
-                        Hash = SHA256(SHA256(block_header))<br/>
-                        Hash < Target → Valid block<br/>
-                        Otherwise → Try next nonce
+                <h3>AES Characteristics</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🔒 Secure</h4>
+                        <p>No practical attacks known. 256-bit AES considered secure for decades.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚡ Fast</h4>
+                        <p>Efficient software and hardware implementations. Gigabytes per second.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>✓ Standardized</h4>
+                        <p>Adopted worldwide. Supported by all major cryptographic libraries.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏗️ Flexible</h4>
+                        <p>Three key sizes. Various modes (CBC, GCM, CTR).</p>
                     </div>
                 </div>
                 
-                <h3>Mining Hardware Evolution</h3>
+                <h3>AES Applications</h3>
+                <div class="success-box">
+                    <ul>
+                        <li>HTTPS/TLS encryption</li>
+                        <li>Disk and file encryption (BitLocker, FileVault)</li>
+                        <li>Password managers and vaults</li>
+                        <li>Cloud storage encryption (AWS, Azure, Google Cloud)</li>
+                        <li>Cryptocurrency wallets</li>
+                        <li>Government classified information</li>
+                        <li>Banking and financial systems</li>
+                    </ul>
+                </div>
+                
+                <h3>AES Modes of Operation</h3>
                 <table>
                     <tr>
-                        <th>Hardware</th>
-                        <th>Era</th>
-                        <th>Hash Rate</th>
-                        <th>Power Usage</th>
+                        <th>Mode</th>
+                        <th>Full Name</th>
+                        <th>Best For</th>
+                        <th>Parallelizable</th>
+                    </tr>
+                    <tr>
+                        <td><strong>ECB</strong></td>
+                        <td>Electronic Code Book</td>
+                        <td>NOT recommended (unsafe)</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CBC</strong></td>
+                        <td>Cipher Block Chaining</td>
+                        <td>General purpose encryption</td>
+                        <td>No (decryption only)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CTR</strong></td>
+                        <td>Counter</td>
+                        <td>Streaming, parallelizable</td>
+                        <td>Yes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>GCM</strong></td>
+                        <td>Galois/Counter Mode</td>
+                        <td>AEAD (authenticated encryption)</td>
+                        <td>Yes</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Tab 5: RSA Algorithm -->
+            <div id="rsa" class="tab-content">
+                <h2>5. RSA Algorithm</h2>
+                
+                <h3>Overview</h3>
+                <div class="info-box">
+                    <p>RSA (Rivest–Shamir–Adleman) is the first practical asymmetric cryptography algorithm. It's based on the difficulty of factoring large numbers and is widely used for key exchange, digital signatures, and encryption.</p>
+                </div>
+                
+                <h3>RSA Specifications</h3>
+                <table>
+                    <tr>
+                        <th>Property</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Invented</strong></td>
+                        <td>1977 (Rivest, Shamir, Adleman)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Key Sizes</strong></td>
+                        <td>512 to 4096 bits (recommended: 2048+)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security Basis</strong></td>
+                        <td>Factorization of large primes (hard problem)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Speed</strong></td>
+                        <td>Slow (50-1000x slower than AES)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Use Case</strong></td>
+                        <td>Key exchange, digital signatures, encryption (small data)</td>
+                    </tr>
+                </table>
+                
+                <h3>RSA Key Generation</h3>
+                <div class="box">
+                    <ol>
+                        <li><strong>Choose Two Primes:</strong> Select large random primes p and q</li>
+                        <li><strong>Calculate Modulus:</strong> n = p × q</li>
+                        <li><strong>Calculate Phi:</strong> φ(n) = (p-1) × (q-1)</li>
+                        <li><strong>Choose Public Exponent:</strong> e (typically 65537)</li>
+                        <li><strong>Calculate Private Exponent:</strong> d = e⁻¹ mod φ(n)</li>
+                        <li><strong>Public Key:</strong> (n, e)</li>
+                        <li><strong>Private Key:</strong> (n, d)</li>
+                    </ol>
+                </div>
+                
+                <h3>RSA Encryption/Decryption</h3>
+                <div class="diagram">
+                    ENCRYPTION:<br/>
+                    C = M^e mod n<br/>
+                    (M = message, e = public exponent, n = modulus)<br/>
+                    <br/>
+                    DECRYPTION:<br/>
+                    M = C^d mod n<br/>
+                    (C = ciphertext, d = private exponent, n = modulus)
+                </div>
+                
+                <h3>RSA Digital Signatures</h3>
+                <div class="box">
+                    <h4>Signing</h4>
+                    <ul>
+                        <li>Hash message: h = Hash(message)</li>
+                        <li>Sign with private key: s = h^d mod n</li>
+                        <li>Send message + signature</li>
+                    </ul>
+                    <h4>Verification</h4>
+                    <ul>
+                        <li>Receive message + signature</li>
+                        <li>Hash message: h' = Hash(message)</li>
+                        <li>Verify: h' == (s^e mod n)</li>
+                        <li>If equal, signature is valid and authentic</li>
+                    </ul>
+                </div>
+                
+                <h3>RSA Applications</h3>
+                <div class="success-box">
+                    <ul>
+                        <li>HTTPS/TLS handshake (key exchange)</li>
+                        <li>Email encryption and signing (PGP/GPG)</li>
+                        <li>SSH key-based authentication</li>
+                        <li>Code signing and verification</li>
+                        <li>Certificate authorities (X.509 certificates)</li>
+                        <li>Cryptocurrency key pair generation</li>
+                    </ul>
+                </div>
+                
+                <h3>RSA Security</h3>
+                <div class="highlight-box">
+                    <h4>Strengths</h4>
+                    <ul>
+                        <li>Well-studied mathematical foundation</li>
+                        <li>No known efficient algorithm to factor large numbers</li>
+                        <li>Quantum-resistant for 2048+ bits currently</li>
+                    </ul>
+                    <h4>Weaknesses</h4>
+                    <ul>
+                        <li>Vulnerable to quantum computers (Shor's algorithm)</li>
+                        <li>Slow compared to symmetric encryption</li>
+                        <li>Limited data size (max = key size - padding)</li>
+                        <li>Vulnerable to padding oracle attacks if poorly implemented</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 6: DES Algorithm -->
+            <div id="des" class="tab-content">
+                <h2>6. DES Algorithm</h2>
+                
+                <h3>Overview</h3>
+                <div class="info-box">
+                    <p>DES (Data Encryption Standard) was the primary encryption standard before AES. Though now deprecated, it's historically important and still used in legacy systems and 3DES variant.</p>
+                </div>
+                
+                <h3>DES Specifications</h3>
+                <table>
+                    <tr>
+                        <th>Property</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Invented</strong></td>
+                        <td>1975 (IBM)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Adoption</strong></td>
+                        <td>1977 (FIPS 46)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Retired</strong></td>
+                        <td>2005 (officially deprecated)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Block Size</strong></td>
+                        <td>64 bits</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Key Size</strong></td>
+                        <td>56 bits (effective) / 64 bits (with parity)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rounds</strong></td>
+                        <td>16</td>
+                    </tr>
+                </table>
+                
+                <h3>DES Process</h3>
+                <div class="diagram">
+                    PLAINTEXT (64 bits)<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    Initial Permutation<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    Split into L0 and R0 (32 bits each)<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    16 Rounds of Feistel Network:<br/>
+                    (Expansion, S-Box Substitution, Permutation, XOR)<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    Final Permutation<br/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;↓<br/>
+                    CIPHERTEXT (64 bits)
+                </div>
+                
+                <h3>Why DES is No Longer Secure</h3>
+                <div class="highlight-box">
+                    <ul>
+                        <li><strong>Small Key:</strong> 56-bit key can be brute-forced in days/hours</li>
+                        <li><strong>Small Block:</strong> 64-bit blocks cause birthday attacks</li>
+                        <li><strong>Weak S-Boxes:</strong> Some non-linear operations are weak</li>
+                        <li><strong>Known Attacks:</strong> Meet-in-the-middle, differential cryptanalysis</li>
+                    </ul>
+                </div>
+                
+                <h3>3DES (Triple DES)</h3>
+                <div class="box">
+                    <h4>Solution to DES Weakness</h4>
+                    <p>Apply DES three times with different keys:</p>
+                    <div class="diagram">
+                        Ciphertext = DES_encrypt(DES_decrypt(DES_encrypt(Plaintext, K1), K2), K3)<br/>
+                        <br/>
+                        Key Variants:<br/>
+                        - 3DES with 3 keys: 168-bit effective security<br/>
+                        - 3DES with 2 keys: 112-bit effective security
+                    </div>
+                    <p><strong>Still in use but deprecated:</strong> Slower than AES, only 112-bit security.</p>
+                </div>
+                
+                <h3>Historical Significance</h3>
+                <div class="success-box">
+                    <ul>
+                        <li>First standardized encryption algorithm</li>
+                        <li>Used to secure banking and government communications for 30+ years</li>
+                        <li>Influenced design of all modern block ciphers</li>
+                        <li>Demonstrated importance of key length (56 bits inadequate)</li>
+                        <li>Led to development of AES as replacement</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 7: Standards & Applications -->
+            <div id="standards" class="tab-content">
+                <h2>7. Encryption Standards & Applications</h2>
+                
+                <h3>Cryptography Standards</h3>
+                <table>
+                    <tr>
+                        <th>Standard</th>
+                        <th>Organization</th>
+                        <th>Purpose</th>
                         <th>Status</th>
                     </tr>
                     <tr>
-                        <td>CPU</td>
-                        <td>2009</td>
-                        <td>MHz</td>
-                        <td>100W</td>
-                        <td>Obsolete</td>
+                        <td><strong>FIPS 197 (AES)</strong></td>
+                        <td>NIST</td>
+                        <td>Symmetric encryption</td>
+                        <td>Active</td>
                     </tr>
                     <tr>
-                        <td>GPU</td>
-                        <td>2010-2011</td>
-                        <td>GHz</td>
-                        <td>300W</td>
-                        <td>Obsolete</td>
+                        <td><strong>FIPS 46 (DES)</strong></td>
+                        <td>NIST</td>
+                        <td>Symmetric encryption</td>
+                        <td>Withdrawn (2005)</td>
                     </tr>
                     <tr>
-                        <td>FPGA</td>
-                        <td>2011-2012</td>
-                        <td>THz</td>
-                        <td>500W</td>
-                        <td>Obsolete</td>
+                        <td><strong>FIPS 186 (DSS)</strong></td>
+                        <td>NIST</td>
+                        <td>Digital signatures</td>
+                        <td>Active (DSA/ECDSA)</td>
                     </tr>
                     <tr>
-                        <td>ASIC</td>
-                        <td>2013-Present</td>
-                        <td>EH/s (Exahash)</td>
-                        <td>1-3 kW</td>
-                        <td>Current Standard</td>
+                        <td><strong>PKCS #1</strong></td>
+                        <td>RSA Labs</td>
+                        <td>RSA encryption & signatures</td>
+                        <td>Active</td>
+                    </tr>
+                    <tr>
+                        <td><strong>TLS 1.3</strong></td>
+                        <td>IETF</td>
+                        <td>Secure communication protocol</td>
+                        <td>Active (2018)</td>
                     </tr>
                 </table>
                 
-                <h3>Difficulty Adjustment</h3>
-                <div class="box">
-                    <h4>How Bitcoin Maintains 10-Minute Blocks</h4>
-                    <ul>
-                        <li>Every 2,016 blocks (~2 weeks): Difficulty recalculated</li>
-                        <li>If blocks found faster: Difficulty increases</li>
-                        <li>If blocks found slower: Difficulty decreases</li>
-                        <li>Formula adjusts target to maintain ~10 minute average</li>
-                    </ul>
+                <h3>Real-World Applications</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🌐 HTTPS/TLS</h4>
+                        <p><strong>Uses:</strong> RSA (key exchange), AES/ChaCha20 (data), SHA-256 (integrity)</p>
+                        <p>Secures all web communication. Every website uses TLS 1.2+.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💳 Banking & Finance</h4>
+                        <p><strong>Uses:</strong> AES (data), RSA (key exchange), HMAC-SHA256 (authentication)</p>
+                        <p>ATMs, wire transfers, online banking all use cryptography.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📧 Email Security</h4>
+                        <p><strong>Uses:</strong> PGP/GPG (RSA + AES), Digital signatures (RSA)</p>
+                        <p>S/MIME and OpenPGP enable encrypted email communication.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔐 Password Storage</h4>
+                        <p><strong>Uses:</strong> Hash functions (bcrypt, scrypt, Argon2)</p>
+                        <p>Modern systems never store plaintext passwords, only hashes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>💰 Cryptocurrency</h4>
+                        <p><strong>Uses:</strong> ECDSA (signing), SHA-256 (hashing)</p>
+                        <p>Bitcoin and Ethereum use elliptic curve cryptography.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔒 File Encryption</h4>
+                        <p><strong>Uses:</strong> AES-256 (BitLocker, FileVault, VeraCrypt)</p>
+                        <p>Protect sensitive files and entire disk volumes.</p>
+                    </div>
                 </div>
                 
-                <h3>Mining Pool</h3>
-                <div class="success-box">
-                    <h4>Why Pools?</h4>
-                    <p>Individual miners have negligible chance of finding block. Pools combine hash power and share rewards.</p>
-                    <h4>How Pools Work</h4>
-                    <ul>
-                        <li>Pool operator manages merged mining</li>
-                        <li>Miners submit shares (partial solutions)</li>
-                        <li>Pool pays based on shares contributed</li>
-                        <li>Pool submits winning block to network</li>
-                    </ul>
-                </div>
-                
-                <h3>Mining Economics</h3>
+                <h3>Encryption in Different Scenarios</h3>
                 <table>
                     <tr>
-                        <th>Factor</th>
-                        <th>Calculation</th>
-                        <th>Importance</th>
+                        <th>Scenario</th>
+                        <th>Encryption Type</th>
+                        <th>Algorithm</th>
+                        <th>Key Characteristics</th>
                     </tr>
                     <tr>
-                        <td>Hash Rate</td>
-                        <td>TH/s or PH/s</td>
-                        <td>Determines mining power</td>
+                        <td>Web Traffic (HTTPS)</td>
+                        <td>Hybrid</td>
+                        <td>RSA + AES-256-GCM</td>
+                        <td>Fast, secure, authenticated</td>
                     </tr>
                     <tr>
-                        <td>Power Efficiency</td>
-                        <td>J/GH</td>
-                        <td>Affects operational cost</td>
+                        <td>File Storage</td>
+                        <td>Symmetric</td>
+                        <td>AES-256-CBC</td>
+                        <td>Fast, suitable for large files</td>
                     </tr>
                     <tr>
-                        <td>Break-Even Price</td>
-                        <td>Cost/block ÷ Reward</td>
-                        <td>Minimum BTC price to profit</td>
+                        <td>Key Exchange</td>
+                        <td>Asymmetric</td>
+                        <td>RSA, ECDH</td>
+                        <td>Enables secure key sharing</td>
                     </tr>
                     <tr>
-                        <td>ROI</td>
-                        <td>Annual profit ÷ Equipment cost</td>
-                        <td>Return on investment period</td>
+                        <td>Digital Signatures</td>
+                        <td>Asymmetric</td>
+                        <td>RSA, ECDSA</td>
+                        <td>Authentication, non-repudiation</td>
+                    </tr>
+                    <tr>
+                        <td>Blockchain</td>
+                        <td>Asymmetric</td>
+                        <td>ECDSA</td>
+                        <td>Transaction signing</td>
                     </tr>
                 </table>
+                
+                <h3>Modern Cryptographic Practices</h3>
+                <div class="success-box">
+                    <h4>Recommended Algorithms</h4>
+                    <ul>
+                        <li><strong>Symmetric:</strong> AES-256 (any mode except ECB)</li>
+                        <li><strong>Asymmetric:</strong> RSA-2048+ or ECDP-256+</li>
+                        <li><strong>Hashing:</strong> SHA-256, SHA-512, or Blake2</li>
+                        <li><strong>Key Exchange:</strong> ECDH or post-quantum alternatives</li>
+                    </ul>
+                </div>
             </div>
             
-            <!-- Tab 9: Block Propagation -->
-            <div id="propagation" class="tab-content">
-                <h2>9. Block Propagation and Relay</h2>
+            <!-- Tab 8: Simulation -->
+            <div id="simulation" class="tab-content">
+                <h2>8. Encryption Algorithm Simulation</h2>
                 
-                <h3>Overview</h3>
+                <h3>Caesar Cipher Simulation</h3>
+                <div class="simulation-box">
+                    <h4>Simple Substitution Cipher (Educational Purpose)</h4>
+                    <div class="sim-control">
+                        <label for="plaintext">Plaintext:</label>
+                        <input type="text" id="plaintext" placeholder="Enter text to encrypt" value="HELLO">
+                    </div>
+                    <div class="sim-control">
+                        <label for="shift">Shift Value (1-25):</label>
+                        <input type="number" id="shift" min="1" max="25" value="3">
+                    </div>
+                    <button class="sim-button" onclick="caesarEncrypt()">Encrypt</button>
+                    <button class="sim-button" onclick="caesarDecrypt()">Decrypt</button>
+                    <div class="sim-output" id="caesarOutput">Output will appear here...</div>
+                </div>
+                
+                <h3>SHA-256 Hash Simulation</h3>
+                <div class="simulation-box">
+                    <h4>Cryptographic Hash Function</h4>
+                    <div class="sim-control">
+                        <label for="hashInput">Input Text:</label>
+                        <input type="text" id="hashInput" placeholder="Enter text to hash" value="Hello World">
+                    </div>
+                    <button class="sim-button" onclick="sha256Simulate()">Generate SHA-256 Hash</button>
+                    <div class="sim-output" id="hashOutput">Hash will appear here...</div>
+                    <p style="margin-top: 10px; font-size: 0.95em;">
+                        <strong>Note:</strong> This is a simulated SHA-256 (not cryptographically secure). Real SHA-256 uses: NIST FIPS 180-4 standard.
+                    </p>
+                </div>
+                
+                <h3>RSA Key Pair Simulation</h3>
+                <div class="simulation-box">
+                    <h4>Generate RSA Key Pair (with small numbers for demo)</h4>
+                    <button class="sim-button" onclick="generateRSAKeys()">Generate 128-bit RSA Keys</button>
+                    <div class="sim-output" id="rsaOutput">
+                        Keys will be generated here...
+                    </div>
+                </div>
+                
+                <h3>Understanding Encryption</h3>
                 <div class="info-box">
-                    <p>Block propagation is the process of distributing newly mined blocks across the P2P network. Efficient propagation is critical for blockchain security and prevents unnecessary forks.</p>
+                    <h4>Caesar Cipher Analysis</h4>
+                    <ul>
+                        <li>Shift each letter by fixed amount</li>
+                        <li>Easy to understand but insecure (only 26 possibilities)</li>
+                        <li>Used in historical communications</li>
+                        <li>Modern encryption is infinitely more complex</li>
+                    </ul>
                 </div>
                 
-                <h3>Block Propagation Flow</h3>
-                <div class="diagram">
-                    Miner finds block → Broadcasts inv message → Nodes request block → Receives block data → Validates → Relays to peers
-                </div>
-                
-                <h3>Propagation Timeline</h3>
-                <table>
-                    <tr>
-                        <th>Stage</th>
-                        <th>Time</th>
-                        <th>Description</th>
-                    </tr>
-                    <tr>
-                        <td>Mining</td>
-                        <td>0-10 min</td>
-                        <td>Miner finds solution</td>
-                    </tr>
-                    <tr>
-                        <td>Announcement</td>
-                        <td>0 sec</td>
-                        <td>Broadcasts inv (inventory) message</td>
-                    </tr>
-                    <tr>
-                        <td>Download</td>
-                        <td>0-2 sec</td>
-                        <td>Nodes request and receive block</td>
-                    </tr>
-                    <tr>
-                        <td>Validation</td>
-                        <td>0-1 sec</td>
-                        <td>Verify all transactions and signatures</td>
-                    </tr>
-                    <tr>
-                        <td>Relay</td>
-                        <td>1-5 sec</td>
-                        <td>Forward to connected peers</td>
-                    </tr>
-                    <tr>
-                        <td>Network Coverage</td>
-                        <td>~20 sec</td>
-                        <td>Reaches 90% of network</td>
-                    </tr>
-                </table>
-                
-                <h3>Network Propagation Challenges</h3>
                 <div class="highlight-box">
-                    <h4>Challenges</h4>
+                    <h4>Why These Simulations?</h4>
                     <ul>
-                        <li><strong>Network Latency:</strong> Messages take time to reach all nodes</li>
-                        <li><strong>Bandwidth Constraints:</strong> Block size vs network capacity</li>
-                        <li><strong>Validation Overhead:</strong> Full validation is computationally intensive</li>
-                        <li><strong>Orphan Blocks:</strong> Blocks received before parents</li>
-                        <li><strong>Network Partitions:</strong> Temporary disconnections cause forks</li>
-                    </ul>
-                </div>
-                
-                <h3>Optimizations for Fast Propagation</h3>
-                <div class="success-box">
-                    <h4>Compact Blocks (BIP 152)</h4>
-                    <ul>
-                        <li>Send only transaction IDs instead of full transactions</li>
-                        <li>Receiver reconstructs from mempool</li>
-                        <li>Reduces block size by 80-90%</li>
-                        <li>Faster propagation across network</li>
+                        <li><strong>Caesar:</strong> Demonstrates basic encryption principle (substitution)</li>
+                        <li><strong>SHA-256:</strong> Shows how small changes produce completely different hashes</li>
+                        <li><strong>RSA:</strong> Illustrates public/private key generation</li>
+                        <li><strong>Educational:</strong> Helps understand cryptographic concepts</li>
                     </ul>
                 </div>
                 
                 <div class="success-box">
-                    <h4>FIBRE (Fast Internet Bitcoin Relay Engine)</h4>
+                    <h4>Real-World Security</h4>
+                    <p>Production systems use:</p>
                     <ul>
-                        <li>Relay network for low-latency block distribution</li>
-                        <li>Uses erasure coding for efficient transmission</li>
-                        <li>Private network separate from P2P network</li>
-                        <li>Minimizes mining orphan rate</li>
-                    </ul>
-                </div>
-                
-                <h3>Block Relay Messages</h3>
-                <table>
-                    <tr>
-                        <th>Message</th>
-                        <th>Direction</th>
-                        <th>Purpose</th>
-                        <th>Size</th>
-                    </tr>
-                    <tr>
-                        <td>inv</td>
-                        <td>→</td>
-                        <td>Announce block availability</td>
-                        <td>~36 bytes</td>
-                    </tr>
-                    <tr>
-                        <td>getdata</td>
-                        <td>←</td>
-                        <td>Request block</td>
-                        <td>~36 bytes</td>
-                    </tr>
-                    <tr>
-                        <td>block</td>
-                        <td>→</td>
-                        <td>Send full block</td>
-                        <td>1-4 MB</td>
-                    </tr>
-                    <tr>
-                        <td>cmpctblock</td>
-                        <td>→</td>
-                        <td>Send compact block</td>
-                        <td>0.2-0.5 MB</td>
-                    </tr>
-                    <tr>
-                        <td>blocktxn</td>
-                        <td>←→</td>
-                        <td>Request/send missing txs</td>
-                        <td>Variable</td>
-                    </tr>
-                </table>
-                
-                <h3>Fork Resolution</h3>
-                <div class="box">
-                    <h4>What is a Fork?</h4>
-                    <p>When two blocks at same height are mined nearly simultaneously, nodes may differ on which block came first. The network automatically resolves by following the longest chain.</p>
-                    <h4>Resolution Process</h4>
-                    <ul>
-                        <li>Node receives competing block</li>
-                        <li>Compares chain difficulty (cumulative PoW)</li>
-                        <li>Reorg to longest valid chain if needed</li>
-                        <li>Typically resolved in next block</li>
-                        <li>Minority fork's transactions revert to mempool</li>
-                    </ul>
-                </div>
-                
-                <h3>Summary of Unit 2</h3>
-                <div class="info-box">
-                    <h4>Key Takeaways</h4>
-                    <ul>
-                        <li>Cryptocurrencies use cryptography for secure, decentralized money</li>
-                        <li>Coins created through mining, staking, or ICOs</li>
-                        <li>Blockchain prevents double spending through consensus</li>
-                        <li>Bitcoin Script enables programmable spending conditions</li>
-                        <li>P2P network distributes blockchain and reaches consensus</li>
-                        <li>Mining secures network through Proof of Work</li>
-                        <li>Block propagation requires efficient network protocols</li>
+                        <li>OpenSSL, BoringSSL, libsodium for cryptography</li>
+                        <li>Hardware acceleration (AES-NI, SHA-NI)</li>
+                        <li>Secure random number generators</li>
+                        <li>Key management services (AWS KMS, Azure Key Vault)</li>
+                        <li>Hardware security modules (HSMs) for key storage</li>
                     </ul>
                 </div>
             </div>
@@ -1414,41 +1238,107 @@
         </div>
         
         <footer>
-            <p>&copy; 2026 Cryptocurrency & Bitcoin Course | Rajalakshmi Engineering College</p>
+            <p>&copy; 2026 Cryptography & Encryption Course | Rajalakshmi Engineering College</p>
             <p>Advanced Information Disclosure Systems (AIDS) Program | Even Semester</p>
         </footer>
     </div>
     
     <script>
         function showTab(tabId) {
-            // Hide all tabs
             const tabs = document.querySelectorAll('.tab-content');
             tabs.forEach(tab => tab.classList.remove('active'));
             
-            // Remove active class from all buttons
             const buttons = document.querySelectorAll('.nav-tab');
             buttons.forEach(btn => btn.classList.remove('active'));
             
-            // Show selected tab
             const selectedTab = document.getElementById(tabId);
             if (selectedTab) {
                 selectedTab.classList.add('active');
             }
             
-            // Highlight clicked button
             event.target.classList.add('active');
-            
-            // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function caesarEncrypt() {
+            const plaintext = document.getElementById('plaintext').value.toUpperCase();
+            const shift = parseInt(document.getElementById('shift').value);
+            let ciphertext = '';
+            
+            for (let i = 0; i < plaintext.length; i++) {
+                const char = plaintext[i];
+                if (char >= 'A' && char <= 'Z') {
+                    const code = ((char.charCodeAt(0) - 65 + shift) % 26) + 65;
+                    ciphertext += String.fromCharCode(code);
+                } else {
+                    ciphertext += char;
+                }
+            }
+            
+            document.getElementById('caesarOutput').textContent = 'Ciphertext: ' + ciphertext;
+        }
+        
+        function caesarDecrypt() {
+            const plaintext = document.getElementById('plaintext').value.toUpperCase();
+            const shift = parseInt(document.getElementById('shift').value);
+            let ciphertext = '';
+            
+            for (let i = 0; i < plaintext.length; i++) {
+                const char = plaintext[i];
+                if (char >= 'A' && char <= 'Z') {
+                    const code = ((char.charCodeAt(0) - 65 - shift + 26) % 26) + 65;
+                    ciphertext += String.fromCharCode(code);
+                } else {
+                    ciphertext += char;
+                }
+            }
+            
+            document.getElementById('caesarOutput').textContent = 'Decrypted: ' + ciphertext;
+        }
+        
+        function sha256Simulate() {
+            const input = document.getElementById('hashInput').value;
+            let hash = '';
+            for (let i = 0; i < 64; i++) {
+                const charCode = input.charCodeAt(i % input.length) || 0;
+                const val = (charCode * 31 + i * 17) & 0xff;
+                hash += val.toString(16).padStart(2, '0');
+            }
+            document.getElementById('hashOutput').textContent = 'SHA-256: ' + hash;
+        }
+        
+        function generateRSAKeys() {
+            const p = 61, q = 53;
+            const n = p * q;
+            const phi = (p - 1) * (q - 1);
+            const e = 17;
+            let d = 1;
+            while ((e * d) % phi !== 1) {
+                d++;
+            }
+            
+            document.getElementById('rsaOutput').innerHTML = `
+                <strong>RSA Key Generation Demo (Educational - Small Numbers)</strong><br/>
+                Prime 1 (p): ${p}<br/>
+                Prime 2 (q): ${q}<br/>
+                Modulus (n): ${n}<br/>
+                Phi (n): ${phi}<br/>
+                Public Exponent (e): ${e}<br/>
+                Private Exponent (d): ${d}<br/>
+                <br/>
+                <strong>Public Key:</strong> (${n}, ${e})<br/>
+                <strong>Private Key:</strong> (${n}, ${d})<br/>
+                <br/>
+                <em>Real RSA uses 2048+ bit numbers. This demo uses 8-bit primes for speed.</em>
+            `;
         }
         
         function goBack() {
             window.location.href = 'index.html';
         }
         
-        // Initialize first tab
         document.addEventListener('DOMContentLoaded', function() {
-            showTab('basic-crypto');
+            showTab('intro');
         });
     </script>
 </body>
