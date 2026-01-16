@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES Creation Demo - Key & Block Generation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .breadcrumb {
+            background: #f4f4f4;
+            padding: 15px 40px;
+            border-bottom: 2px solid #764ba2;
+        }
+        
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+        
+        .breadcrumb a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.1em;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .demo-section {
+            background: #f9f9f9;
+            border: 2px solid #764ba2;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+        
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .output-box {
+            background: white;
+            border: 2px solid #764ba2;
+            padding: 20px;
+            margin-top: 15px;
+            border-radius: 4px;
+        }
+        
+        .byte-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+        
+        .byte-cell {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 0.9em;
+            word-break: break-all;
+        }
+        
+        .byte-cell.key {
+            border-color: #ff9800;
+            background: #fff3e0;
+        }
+        
+        .byte-cell.data {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+        
+        .byte-cell.block {
+            border-color: #2196f3;
+            background: #e3f2fd;
+        }
+        
+        .info-box {
+            background: #e8eaf6;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .diagram {
+            background: #f5f5f5;
+            border: 2px solid #764ba2;
+            padding: 30px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            text-align: center;
+        }
+        
+        .step-box {
+            background: white;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+        }
+        
+        table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .matrix {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            overflow-x: auto;
+        }
+        
+        .footer-btn {
+            background: #6c757d;
+            display: block;
+            text-align: center;
+            margin: 40px auto 0;
+            text-decoration: none;
+        }
+        
+        .footer-btn:hover {
+            background: #5a6268;
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 968px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            main { padding: 20px; }
+            button { padding: 12px 20px; font-size: 0.95em; }
+            .byte-grid { grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔑 AES Creation Demo</h1>
+            <p>Key Generation & Block Creation Visualizer</p>
+        </header>
+        
+        <div class="breadcrumb">
+            <a href="index.html">← Home</a>
+            <a href="unit_4.html">← Unit 4</a>
+            <a href="aes_basic.html">← AES Basics</a>
+        </div>
+        
+        <main>
+            <h2>AES Key & Block Creation</h2>
+            
+            <div class="info-box">
+                <h3>What This Demo Shows</h3>
+                <p>This tool demonstrates how AES creates keys from passwords and how messages are divided into 128-bit (16-byte) blocks for encryption. You'll see the step-by-step process of key generation and block creation.</p>
+            </div>
+            
+            <h3>1. Key Creation from Password</h3>
+            <div class="demo-section">
+                <h4>Generate AES Key from Your Password</h4>
+                
+                <div class="form-group">
+                    <label for="password">Password (any length):</label>
+                    <input type="text" id="password" placeholder="Enter your password" value="MySecretPassword123">
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="generateAES128Key()">Generate AES-128 Key (16 bytes)</button>
+                    <button onclick="generateAES256Key()">Generate AES-256 Key (32 bytes)</button>
+                    <button onclick="clearKey()">Clear</button>
+                </div>
+                
+                <div class="output-box" id="keyOutput"></div>
+            </div>
+            
+            <h3>2. Key Derivation Process</h3>
+            <div class="info-box">
+                <h4>How AES Creates Keys from Passwords</h4>
+                <div class="diagram">
+PASSWORD:          "MySecretPassword123"
+                          ↓
+                  [HASHING FUNCTION]
+                   (SHA-256 or PBKDF2)
+                          ↓
+                   256-bit HASH VALUE
+                          ↓
+         [TRUNCATE or EXPAND TO DESIRED KEY SIZE]
+                          ↓
+AES-128 KEY:       16 bytes (128 bits)
+AES-256 KEY:       32 bytes (256 bits)
+                </div>
+                <p><strong>In Real Systems:</strong> Key derivation uses functions like PBKDF2, bcrypt, or Argon2 with salt to prevent dictionary attacks.</p>
+            </div>
+            
+            <h3>3. Message to Blocks Conversion</h3>
+            <div class="demo-section">
+                <h4>Divide Message into 16-Byte AES Blocks</h4>
+                
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" placeholder="Enter any text...">The quick brown fox jumps over the lazy dog</textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="createBlocks()">Create Blocks</button>
+                    <button onclick="clearBlocks()">Clear</button>
+                </div>
+                
+                <div class="output-box" id="blocksOutput"></div>
+            </div>
+            
+            <h3>4. Block Padding Demonstration</h3>
+            <div class="success-box">
+                <h4>Understanding PKCS#7 Padding</h4>
+                <p>If a message doesn't divide evenly into 16-byte blocks, it's padded. The most common padding scheme is PKCS#7:</p>
+                <ul>
+                    <li>If last block needs 5 bytes of padding → add 5 bytes, each with value 0x05</li>
+                    <li>If last block needs 1 byte of padding → add 1 byte with value 0x01</li>
+                    <li>If message is exactly 16 bytes → add entire new block of 16 bytes (0x10)</li>
+                </ul>
+            </div>
+            
+            <div class="demo-section">
+                <h4>See Padding in Action</h4>
+                
+                <div class="form-group">
+                    <label for="shortMsg">Short Message:</label>
+                    <input type="text" id="shortMsg" placeholder="e.g., 'Hello'" value="Hello">
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="showPadding()">Show Padding</button>
+                    <button onclick="clearPadding()">Clear</button>
+                </div>
+                
+                <div class="output-box" id="paddingOutput"></div>
+            </div>
+            
+            <h3>5. AES Round Key Generation</h3>
+            <div class="demo-section">
+                <h4>Expand Master Key into Round Keys</h4>
+                
+                <div class="form-group">
+                    <label for="roundKeyInput">Master Key (paste a 16-byte hex key):</label>
+                    <input type="text" id="roundKeyInput" placeholder="e.g., 2b7e15... (32 hex chars)" value="2b7e1516284905533708e61a7c4d3f2f">
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="generateRoundKeys()">Generate Round Keys</button>
+                    <button onclick="clearRoundKeys()">Clear</button>
+                </div>
+                
+                <div class="output-box" id="roundKeyOutput"></div>
+            </div>
+            
+            <h3>6. Key Expansion Algorithm</h3>
+            <div class="diagram">
+MASTER KEY (16 bytes)
+    ↓
+[KEY EXPANSION ALGORITHM]
+    ├─ Apply RotWord
+    ├─ SubWord (S-box)
+    ├─ XOR with Round Constant (Rcon)
+    ├─ XOR with previous key
+    ├─ Repeat for each 4-byte word
+    ↓
+ROUND KEY 1 (16 bytes)
+    ↓
+ROUND KEY 2 (16 bytes)
+    ↓
+... (Total 11 round keys for AES-128)
+    ↓
+ROUND KEY 10 (16 bytes)
+            </div>
+            
+            <h3>7. Block Structure Visualization</h3>
+            <div class="demo-section">
+                <h4>Visualize 16-Byte Block as 4x4 Matrix</h4>
+                
+                <div class="form-group">
+                    <label for="blockText">Block Text (1-16 characters):</label>
+                    <input type="text" id="blockText" placeholder="Enter text for 1 block" value="HELLO WORLD 1234" maxlength="16">
+                </div>
+                
+                <div class="button-group">
+                    <button onclick="visualizeBlockMatrix()">Show as Matrix</button>
+                    <button onclick="clearBlockMatrix()">Clear</button>
+                </div>
+                
+                <div class="output-box" id="matrixOutput"></div>
+            </div>
+            
+            <h3>8. Complete AES Key Schedule</h3>
+            <div class="step-box">
+                <h4>AES-128 Round Keys (11 total: 1 initial + 10 rounds)</h4>
+                <table>
+                    <tr>
+                        <th>Round</th>
+                        <th>Key (16 bytes)</th>
+                        <th>Hex Value</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Initial</strong></td>
+                        <td>Master Key</td>
+                        <td>2b7e1516 28490553 3708e61a 7c4d3f2f</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Round 1</strong></td>
+                        <td>Expanded Key 1</td>
+                        <td>a0fafe17 88542cb1 23a33939 452b6811</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Round 2</strong></td>
+                        <td>Expanded Key 2</td>
+                        <td>18fcf568 cd87ac78 3a3f1e2c 3bb4f4e2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>...</strong></td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Round 10</strong></td>
+                        <td>Expanded Key 10</td>
+                        <td>d014f9a8 c9ee2589 e13f0cc8 b6630ca6</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h3>9. Key Sizes and Round Count</h3>
+            <table>
+                <tr>
+                    <th>AES Variant</th>
+                    <th>Key Size</th>
+                    <th>Block Size</th>
+                    <th>Number of Rounds</th>
+                    <th>Round Keys Generated</th>
+                </tr>
+                <tr>
+                    <td><strong>AES-128</strong></td>
+                    <td>128 bits (16 bytes)</td>
+                    <td>128 bits (16 bytes)</td>
+                    <td>10</td>
+                    <td>11 (1 initial + 10)</td>
+                </tr>
+                <tr>
+                    <td><strong>AES-192</strong></td>
+                    <td>192 bits (24 bytes)</td>
+                    <td>128 bits (16 bytes)</td>
+                    <td>12</td>
+                    <td>13 (1 initial + 12)</td>
+                </tr>
+                <tr>
+                    <td><strong>AES-256</strong></td>
+                    <td>256 bits (32 bytes)</td>
+                    <td>128 bits (16 bytes)</td>
+                    <td>14</td>
+                    <td>15 (1 initial + 14)</td>
+                </tr>
+            </table>
+            
+            <h3>10. Summary: AES Creation Process</h3>
+            <div class="success-box">
+                <h4>Step-by-Step Overview</h4>
+                <ol>
+                    <li><strong>User enters password:</strong> "MySecretPassword123"</li>
+                    <li><strong>Key derivation:</strong> Hash password using PBKDF2 or similar</li>
+                    <li><strong>Key expansion:</strong> Expand master key into round keys (11 keys for AES-128)</li>
+                    <li><strong>Message input:</strong> User provides plaintext message</li>
+                    <li><strong>Padding:</strong> Pad message to multiple of 16 bytes (PKCS#7)</li>
+                    <li><strong>Block division:</strong> Split padded message into 16-byte blocks</li>
+                    <li><strong>Encryption:</strong> For each block, apply 10 AES rounds using round keys</li>
+                    <li><strong>Ciphertext output:</strong> Concatenate encrypted blocks</li>
+                </ol>
+            </div>
+            
+            <button class="footer-btn" onclick="goHome()">← Back to Home</button>
+        </main>
+        
+        <footer>
+            <p>&copy; 2026 AES Creation Demo | Rajalakshmi Engineering College</p>
+            <p>Advanced Information Disclosure Systems (AIDS) Program | Even Semester</p>
+        </footer>
+    </div>
+    
+    <script>
+        function generateAES128Key() {
+            const password = document.getElementById('password').value;
+            const key = simpleHash(password, 16); // 16 bytes for AES-128
+            
+            const html = `
+                <h4>AES-128 Key Generated</h4>
+                <p><strong>Password:</strong> "${password}"</p>
+                <p><strong>Key Size:</strong> 128 bits (16 bytes)</p>
+                
+                <h4>Key in Byte Form:</h4>
+                <div class="byte-grid">
+                    ${key.map(b => `<div class="byte-cell key">${b.toString(16).padStart(2, '0')}</div>`).join('')}
+                </div>
+                
+                <h4>Key in Hexadecimal:</h4>
+                <p style="font-family: 'Courier New', monospace; background: #f0f0f0; padding: 10px; border-radius: 4px;">
+                    ${key.map(b => b.toString(16).padStart(2, '0')).join(' ')}
+                </p>
+                
+                <h4>Key in ASCII (where possible):</h4>
+                <p style="font-family: 'Courier New', monospace; background: #f0f0f0; padding: 10px; border-radius: 4px;">
+                    ${key.map(b => (b >= 32 && b < 127) ? String.fromCharCode(b) : '·').join('')}
+                </p>
+            `;
+            
+            document.getElementById('keyOutput').innerHTML = html;
+        }
+        
+        function generateAES256Key() {
+            const password = document.getElementById('password').value;
+            const key = simpleHash(password, 32); // 32 bytes for AES-256
+            
+            const html = `
+                <h4>AES-256 Key Generated</h4>
+                <p><strong>Password:</strong> "${password}"</p>
+                <p><strong>Key Size:</strong> 256 bits (32 bytes)</p>
+                
+                <h4>Key in Byte Form:</h4>
+                <div class="byte-grid">
+                    ${key.map(b => `<div class="byte-cell key">${b.toString(16).padStart(2, '0')}</div>`).join('')}
+                </div>
+                
+                <h4>Key in Hexadecimal:</h4>
+                <p style="font-family: 'Courier New', monospace; background: #f0f0f0; padding: 10px; border-radius: 4px; word-break: break-all;">
+                    ${key.map(b => b.toString(16).padStart(2, '0')).join(' ')}
+                </p>
+            `;
+            
+            document.getElementById('keyOutput').innerHTML = html;
+        }
+        
+        function createBlocks() {
+            const message = document.getElementById('message').value;
+            const blockSize = 16;
+            let blocks = [];
+            
+            for (let i = 0; i < message.length; i += blockSize) {
+                blocks.push(message.substr(i, blockSize));
+            }
+            
+            let html = `<h4>Message Blocks (Block Size: 16 bytes)</h4>`;
+            html += `<p><strong>Original Message Length:</strong> ${message.length} characters</p>`;
+            html += `<p><strong>Number of Blocks:</strong> ${blocks.length}</p><br/>`;
+            
+            blocks.forEach((block, idx) => {
+                const bytes = stringToBytes(block);
+                html += `<div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border-radius: 4px;">`;
+                html += `<h5 style="color: #667eea;">Block ${idx + 1}: "${block}"</h5>`;
+                html += `<p><strong>Length:</strong> ${block.length} bytes</p>`;
+                html += `<strong>Bytes:</strong>`;
+                html += `<div class="byte-grid">`;
+                bytes.forEach(b => {
+                    const char = (b >= 32 && b < 127) ? String.fromCharCode(b) : '·';
+                    html += `<div class="byte-cell data">${char}<br/>${b.toString(16).padStart(2, '0')}</div>`;
+                });
+                html += `</div></div>`;
+            });
+            
+            document.getElementById('blocksOutput').innerHTML = html;
+        }
+        
+        function showPadding() {
+            const message = document.getElementById('shortMsg').value;
+            const blockSize = 16;
+            const remainingBytes = blockSize - (message.length % blockSize);
+            
+            let paddedMsg = message;
+            for (let i = 0; i < remainingBytes; i++) {
+                paddedMsg += String.fromCharCode(remainingBytes);
+            }
+            
+            const bytes = stringToBytes(paddedMsg);
+            
+            let html = `<h4>PKCS#7 Padding Applied</h4>`;
+            html += `<p><strong>Original Message:</strong> "${message}" (${message.length} bytes)</p>`;
+            html += `<p><strong>Padding Needed:</strong> ${remainingBytes} byte(s)</p>`;
+            html += `<p><strong>Padding Value:</strong> 0x${remainingBytes.toString(16).padStart(2, '0')} (${remainingBytes})</p>`;
+            html += `<p><strong>Padded Message Length:</strong> ${paddedMsg.length} bytes</p><br/>`;
+            
+            html += `<strong>Padded Message Bytes:</strong>`;
+            html += `<div class="byte-grid">`;
+            bytes.forEach((b, idx) => {
+                const isOriginal = idx < message.length;
+                const char = (b >= 32 && b < 127) ? String.fromCharCode(b) : '·';
+                const cellClass = isOriginal ? 'data' : 'block';
+                html += `<div class="byte-cell ${cellClass}">${char}<br/>${b.toString(16).padStart(2, '0')}</div>`;
+            });
+            html += `</div>`;
+            
+            html += `<p style="margin-top: 15px; font-size: 0.95em;">`;
+            html += `<strong>Green cells:</strong> Original message | `;
+            html += `<strong>Blue cells:</strong> Padding bytes`;
+            html += `</p>`;
+            
+            document.getElementById('paddingOutput').innerHTML = html;
+        }
+        
+        function generateRoundKeys() {
+            const keyInput = document.getElementById('roundKeyInput').value;
+            
+            if (keyInput.length !== 32) {
+                alert('Please enter a 32-character hex key (16 bytes)');
+                return;
+            }
+            
+            let html = `<h4>AES-128 Round Keys (Key Schedule)</h4>`;
+            html += `<p><strong>Master Key (Hex):</strong> ${keyInput}</p><br/>`;
+            
+            html += `<table style="width: 100%; margin-top: 15px;">`;
+            html += `<tr style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">`;
+            html += `<th style="padding: 10px; text-align: left;">Round</th>`;
+            html += `<th style="padding: 10px; text-align: left;">Round Key (Hex)</th>`;
+            html += `</tr>`;
+            
+            // Initial key
+            html += `<tr style="border-bottom: 1px solid #ddd;">`;
+            html += `<td style="padding: 10px;"><strong>Initial (0)</strong></td>`;
+            html += `<td style="padding: 10px; font-family: 'Courier New', monospace; font-size: 0.9em;">${keyInput}</td>`;
+            html += `</tr>`;
+            
+            // Generate 10 round keys (simplified simulation)
+            let currentKey = keyInput;
+            for (let round = 1; round <= 10; round++) {
+                const nextKey = simpleKeyExpansion(currentKey);
+                html += `<tr style="border-bottom: 1px solid #ddd;">`;
+                html += `<td style="padding: 10px;"><strong>Round ${round}</strong></td>`;
+                html += `<td style="padding: 10px; font-family: 'Courier New', monospace; font-size: 0.9em;">${nextKey}</td>`;
+                html += `</tr>`;
+                currentKey = nextKey;
+            }
+            
+            html += `</table>`;
+            html += `<p style="margin-top: 15px; font-size: 0.95em;"><strong>Total:</strong> 11 round keys (1 initial + 10 rounds)</p>`;
+            
+            document.getElementById('roundKeyOutput').innerHTML = html;
+        }
+        
+        function visualizeBlockMatrix() {
+            const blockText = document.getElementById('blockText').value;
+            
+            if (blockText.length === 0) {
+                alert('Please enter some text');
+                return;
+            }
+            
+            // Pad to 16 bytes
+            let block = blockText.padEnd(16, ' ');
+            const bytes = stringToBytes(block);
+            
+            let html = `<h4>16-Byte Block as 4×4 Matrix (Column-Major Order)</h4>`;
+            html += `<p><strong>Block Text:</strong> "${block}"</p><br/>`;
+            
+            // Create 4x4 matrix
+            html += `<div style="background: #f5f5f5; padding: 20px; border-radius: 4px; overflow-x: auto;">`;
+            html += `<table style="margin: 0 auto; border-collapse: collapse; background: white;">`;
+            
+            for (let row = 0; row < 4; row++) {
+                html += `<tr>`;
+                for (let col = 0; col < 4; col++) {
+                    const idx = col * 4 + row; // Column-major
+                    const byte = bytes[idx];
+                    const char = (byte >= 32 && byte < 127) ? String.fromCharCode(byte) : '·';
+                    html += `<td style="border: 2px solid #667eea; padding: 15px; text-align: center;">`;
+                    html += `<div style="font-weight: bold; font-size: 1.2em;">${char}</div>`;
+                    html += `<div style="font-size: 0.8em; color: #666; font-family: 'Courier New';">${byte.toString(16).padStart(2, '0')}</div>`;
+                    html += `</td>`;
+                }
+                html += `</tr>`;
+            }
+            
+            html += `</table>`;
+            html += `</div>`;
+            
+            html += `<p style="margin-top: 15px;"><strong>Column-Major Order:</strong> Bytes fill columns first (top-to-bottom, left-to-right)</p>`;
+            
+            document.getElementById('matrixOutput').innerHTML = html;
+        }
+        
+        // Helper functions
+        function stringToBytes(str) {
+            const bytes = [];
+            for (let i = 0; i < str.length; i++) {
+                bytes.push(str.charCodeAt(i) & 0xff);
+            }
+            return bytes;
+        }
+        
+        function simpleHash(str, length) {
+            const bytes = [];
+            let hash = 5381;
+            
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) + hash) ^ str.charCodeAt(i);
+            }
+            
+            for (let i = 0; i < length; i++) {
+                const val = Math.abs((hash * (i + 1)) % 256);
+                bytes.push(val);
+                hash = (hash * 31 + val) % 0xFFFFFFFF;
+            }
+            
+            return bytes;
+        }
+        
+        function simpleKeyExpansion(keyHex) {
+            let result = '';
+            for (let i = 0; i < keyHex.length; i += 2) {
+                const byte = parseInt(keyHex.substr(i, 2), 16);
+                const xored = ((byte + (i / 2)) * 73) & 0xFF;
+                result += xored.toString(16).padStart(2, '0');
+            }
+            return result;
+        }
+        
+        // Clear functions
+        function clearKey() {
+            document.getElementById('keyOutput').innerHTML = '';
+        }
+        
+        function clearBlocks() {
+            document.getElementById('blocksOutput').innerHTML = '';
+        }
+        
+        function clearPadding() {
+            document.getElementById('paddingOutput').innerHTML = '';
+        }
+        
+        function clearRoundKeys() {
+            document.getElementById('roundKeyOutput').innerHTML = '';
+        }
+        
+        function clearBlockMatrix() {
+            document.getElementById('matrixOutput').innerHTML = '';
+        }
+        
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
