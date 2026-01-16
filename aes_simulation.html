@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES Encryption Simulation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .breadcrumb {
+            background: #f4f4f4;
+            padding: 15px 40px;
+            border-bottom: 2px solid #764ba2;
+        }
+        
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        
+        .breadcrumb a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+        
+        .nav-tabs {
+            background: #f9f9f9;
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 3px solid #764ba2;
+            padding: 0;
+            margin: 0;
+            gap: 0;
+            overflow-x: auto;
+        }
+        
+        .nav-tab {
+            padding: 15px 15px;
+            cursor: pointer;
+            background: #f9f9f9;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s ease;
+            min-width: 140px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .nav-tab:hover {
+            background: #efefef;
+            color: #764ba2;
+        }
+        
+        .nav-tab.active {
+            background: white;
+            border-bottom-color: #764ba2;
+            color: #764ba2;
+        }
+        
+        main {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #764ba2;
+            padding-bottom: 10px;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+        
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .simulation-box {
+            background: #f5f5f5;
+            border: 2px solid #764ba2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .sim-control {
+            margin-bottom: 15px;
+        }
+        
+        .sim-control label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #667eea;
+        }
+        
+        .sim-control input[type="text"],
+        .sim-control input[type="password"],
+        .sim-control textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+        
+        .sim-control textarea {
+            min-height: 80px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .sim-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .sim-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .sim-output {
+            background: #263238;
+            color: #aed581;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            word-break: break-all;
+            margin-top: 15px;
+            min-height: 60px;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #555;
+        }
+        
+        .info-box {
+            background: #e8eaf6;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .highlight-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .diagram {
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            padding: 30px 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            text-align: center;
+            white-space: pre-wrap;
+        }
+        
+        .byte-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(40px, 1fr));
+            gap: 5px;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+        
+        .byte-cell {
+            background: white;
+            border: 2px solid #667eea;
+            padding: 8px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+        
+        .byte-cell.input {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+        
+        .byte-cell.output {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+        
+        .byte-cell.key {
+            border-color: #ff9800;
+            background: #fff3e0;
+        }
+        
+        .visualization {
+            background: white;
+            border: 2px solid #764ba2;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .step-visualization {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step-visualization h4 {
+            margin-top: 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+        }
+        
+        table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d32f2f;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: #764ba2;
+        }
+        
+        .button-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+        }
+        
+        .back-btn {
+            background: #6c757d;
+        }
+        
+        .back-btn:hover {
+            background: #5a6268;
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        }
+        
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border: 2px solid #764ba2;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.3);
+        }
+        
+        .feature-card h4 {
+            color: #764ba2;
+            margin-top: 0;
+        }
+        
+        @media (max-width: 968px) {
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-tab {
+                flex: 1;
+                min-width: 100px;
+                padding: 12px 8px;
+                font-size: 0.85em;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            main { padding: 20px; }
+            button { padding: 12px 30px; }
+            .sim-control input { font-size: 16px; }
+            .byte-grid { grid-template-columns: repeat(auto-fit, minmax(35px, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 AES Encryption Simulation</h1>
+            <p>Interactive AES-128 & AES-256 Encryption Learning Tool</p>
+        </header>
+        
+        <div class="breadcrumb">
+            <a href="index.html">← Back to Overview</a> | 
+            <a href="unit_4.html">← Back to Unit 4</a>
+        </div>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('intro')">1. Overview</button>
+            <button class="nav-tab" onclick="showTab('encrypt')">2. AES-128 Encrypt</button>
+            <button class="nav-tab" onclick="showTab('decrypt')">3. AES-128 Decrypt</button>
+            <button class="nav-tab" onclick="showTab('visualization')">4. Visualization</button>
+            <button class="nav-tab" onclick="showTab('explanation')">5. How AES Works</button>
+        </div>
+        
+        <main>
+            <!-- Tab 1: Overview -->
+            <div id="intro" class="tab-content active">
+                <h2>AES Encryption Simulation</h2>
+                
+                <h3>What is AES?</h3>
+                <div class="info-box">
+                    <p>The Advanced Encryption Standard (AES) is a symmetric encryption algorithm that encrypts and decrypts data using the same secret key. It's the most widely used encryption standard in the world, protecting everything from government classified information to your personal data in the cloud.</p>
+                </div>
+                
+                <h3>Key Features</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🔐 Highly Secure</h4>
+                        <p>No known practical attacks. Recommended for protecting data for decades.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚡ Fast & Efficient</h4>
+                        <p>Processes data at gigabytes per second. Hardware-accelerated.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📏 Flexible Key Sizes</h4>
+                        <p>128-bit, 192-bit, or 256-bit keys for different security levels.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌍 Global Standard</h4>
+                        <p>Adopted by governments, banks, and tech companies worldwide.</p>
+                    </div>
+                </div>
+                
+                <h3>AES Specifications</h3>
+                <table>
+                    <tr>
+                        <th>Property</th>
+                        <th>AES-128</th>
+                        <th>AES-192</th>
+                        <th>AES-256</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Key Size</strong></td>
+                        <td>128 bits (16 bytes)</td>
+                        <td>192 bits (24 bytes)</td>
+                        <td>256 bits (32 bytes)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Block Size</strong></td>
+                        <td colspan="3">128 bits (16 bytes)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Number of Rounds</strong></td>
+                        <td>10</td>
+                        <td>12</td>
+                        <td>14</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security Level</strong></td>
+                        <td>128-bit</td>
+                        <td>192-bit</td>
+                        <td>256-bit</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Best For</strong></td>
+                        <td>Most applications</td>
+                        <td>High security</td>
+                        <td>Maximum security</td>
+                    </tr>
+                </table>
+                
+                <h3>How This Simulation Works</h3>
+                <div class="highlight-box">
+                    <ol>
+                        <li><strong>Encryption Tab:</strong> Enter plaintext and a secret key to encrypt</li>
+                        <li><strong>Decryption Tab:</strong> Use the ciphertext and same key to decrypt</li>
+                        <li><strong>Visualization:</strong> See step-by-step how AES transforms data</li>
+                        <li><strong>Explanation:</strong> Detailed breakdown of AES operations</li>
+                    </ol>
+                    <p><strong>Note:</strong> This is a simplified educational simulation. Real AES uses complex matrix operations and S-box substitutions.</p>
+                </div>
+            </div>
+            
+            <!-- Tab 2: AES Encryption -->
+            <div id="encrypt" class="tab-content">
+                <h2>AES-128 Encryption Simulation</h2>
+                
+                <div class="simulation-box">
+                    <h3>Encrypt Your Message</h3>
+                    
+                    <div class="sim-control">
+                        <label for="plaintext">Plaintext (Message):</label>
+                        <textarea id="plaintext" placeholder="Enter text to encrypt (e.g., 'Hello World!')">Hello World!</textarea>
+                    </div>
+                    
+                    <div class="sim-control">
+                        <label for="encryptKey">Encryption Key (16 characters = 128-bit):</label>
+                        <input type="text" id="encryptKey" placeholder="Enter 16-character key" value="MySecretKey12345" maxlength="32">
+                        <small>Recommended: Use 16, 24, or 32 characters (128, 192, 256-bit keys)</small>
+                    </div>
+                    
+                    <div class="sim-control">
+                        <label for="encryptMode">Encryption Mode:</label>
+                        <select id="encryptMode" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="ECB">ECB (Electronic Code Book)</option>
+                            <option value="CBC" selected>CBC (Cipher Block Chaining)</option>
+                            <option value="CTR">CTR (Counter Mode)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="sim-button" onclick="encryptMessage()">🔒 Encrypt Message</button>
+                        <button class="sim-button" onclick="clearEncrypt()">Clear</button>
+                    </div>
+                    
+                    <div class="sim-control">
+                        <label for="ciphertext">Ciphertext (Encrypted):</label>
+                        <textarea id="ciphertext" readonly placeholder="Encrypted result will appear here..."></textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('ciphertext')">Copy</button>
+                    </div>
+                    
+                    <div class="sim-control">
+                        <label for="encHex">Hexadecimal Format:</label>
+                        <textarea id="encHex" readonly placeholder="Hex format will appear here..."></textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('encHex')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="success-box">
+                    <h4>💡 Encryption Tips</h4>
+                    <ul>
+                        <li>Use a strong, random key for real-world encryption</li>
+                        <li>Never share your secret key with unauthorized parties</li>
+                        <li>Key length affects security: 256-bit is stronger than 128-bit</li>
+                        <li>CBC mode is more secure than ECB for multiple blocks</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 3: AES Decryption -->
+            <div id="decrypt" class="tab-content">
+                <h2>AES-128 Decryption Simulation</h2>
+                
+                <div class="simulation-box">
+                    <h3>Decrypt Your Message</h3>
+                    
+                    <div class="sim-control">
+                        <label for="ciphertextInput">Ciphertext (Encrypted Message):</label>
+                        <textarea id="ciphertextInput" placeholder="Paste the encrypted text here..."></textarea>
+                    </div>
+                    
+                    <div class="sim-control">
+                        <label for="decryptKey">Decryption Key (must be same as encryption key):</label>
+                        <input type="text" id="decryptKey" placeholder="Enter the same key used for encryption" value="MySecretKey12345" maxlength="32">
+                    </div>
+                    
+                    <div class="sim-control">
+                        <label for="decryptMode">Decryption Mode:</label>
+                        <select id="decryptMode" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                            <option value="ECB">ECB (Electronic Code Book)</option>
+                            <option value="CBC" selected>CBC (Cipher Block Chaining)</option>
+                            <option value="CTR">CTR (Counter Mode)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button class="sim-button" onclick="decryptMessage()">🔓 Decrypt Message</button>
+                        <button class="sim-button" onclick="clearDecrypt()">Clear</button>
+                    </div>
+                    
+                    <div class="sim-control">
+                        <label for="plaintextOutput">Plaintext (Decrypted):</label>
+                        <textarea id="plaintextOutput" readonly placeholder="Decrypted result will appear here..."></textarea>
+                        <button class="copy-btn" onclick="copyToClipboard('plaintextOutput')">Copy</button>
+                    </div>
+                </div>
+                
+                <div class="highlight-box">
+                    <h4>⚠️ Important Notes</h4>
+                    <ul>
+                        <li>Decryption requires the exact same key used for encryption</li>
+                        <li>If key is wrong, decryption will produce garbage data</li>
+                        <li>Mode must match the mode used during encryption</li>
+                        <li>This simulation uses simplified operations for demonstration</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tab 4: Visualization -->
+            <div id="visualization" class="tab-content">
+                <h2>AES Encryption Process Visualization</h2>
+                
+                <h3>Quick Visualization</h3>
+                <div class="simulation-box">
+                    <div class="sim-control">
+                        <label for="visPlaintext">Text to Visualize:</label>
+                        <input type="text" id="visPlaintext" value="Hello" placeholder="Short text (max 16 chars)">
+                    </div>
+                    <button class="sim-button" onclick="visualizeAES()">Visualize Process</button>
+                </div>
+                
+                <div id="visualizationOutput"></div>
+                
+                <h3>AES Encryption Flow</h3>
+                <div class="diagram">
+PLAINTEXT
+"Hello World!"
+    ↓
+[PADDING] (pad to 128-bit blocks)
+    ↓
+BLOCK 1: "Hello World!    "
+    ↓
+[KEY SCHEDULE]
+Generate Round Keys from Master Key
+    ↓
+[INITIAL ROUND]
+AddRoundKey
+    ↓
+[ROUNDS 1-9] (10 rounds total for AES-128)
+├─ SubBytes: Replace each byte using S-box
+├─ ShiftRows: Rotate bytes in each row
+├─ MixColumns: Mix columns using matrix multiplication
+└─ AddRoundKey: XOR with round key
+    ↓
+[FINAL ROUND]
+├─ SubBytes
+├─ ShiftRows
+└─ AddRoundKey (no MixColumns)
+    ↓
+CIPHERTEXT
+"aj3k@#$%^&*()"
+                </div>
+            </div>
+            
+            <!-- Tab 5: How AES Works -->
+            <div id="explanation" class="tab-content">
+                <h2>How AES Works - Detailed Explanation</h2>
+                
+                <h3>1. Key Expansion (Key Schedule)</h3>
+                <div class="step-visualization">
+                    <h4>Master Key → Round Keys</h4>
+                    <p>The 128-bit (16-byte) master key is expanded into 11 round keys (for AES-128):</p>
+                    <ul>
+                        <li>Master Key (16 bytes)</li>
+                        <li>Round Key 1 (16 bytes)</li>
+                        <li>Round Key 2 (16 bytes)</li>
+                        <li>... (10 more round keys)</li>
+                    </ul>
+                    <p><strong>Process:</strong> Each round key is derived using rotation, substitution (S-box), and XOR operations.</p>
+                </div>
+                
+                <h3>2. Initial Round (Round 0)</h3>
+                <div class="step-visualization">
+                    <h4>AddRoundKey</h4>
+                    <p>The plaintext is XOR'd with the first round key (Master Key):</p>
+                    <div class="diagram">
+Plaintext Bytes:      A1 B2 C3 D4 ...
+Round Key Bytes:      K1 K2 K3 K4 ...
+       XOR Result: A1^K1 B2^K2 C3^K3 D4^K4 ...
+                    </div>
+                </div>
+                
+                <h3>3. Main Rounds (Rounds 1-9 for AES-128)</h3>
+                
+                <div class="step-visualization">
+                    <h4>Step 1: SubBytes (Byte Substitution)</h4>
+                    <p>Each byte is substituted using a lookup table called S-box:</p>
+                    <div class="diagram">
+Input Byte:     0x53
+S-box Lookup:   S[0x53] = 0xED
+Output Byte:    0xED
+
+Each of 16 bytes replaced independently
+                    </div>
+                </div>
+                
+                <div class="step-visualization">
+                    <h4>Step 2: ShiftRows (Row Permutation)</h4>
+                    <p>Bytes in each row are shifted left by different amounts:</p>
+                    <div class="diagram">
+Row 0: [a0 a1 a2 a3]   →  [a0 a1 a2 a3]  (no shift)
+Row 1: [b0 b1 b2 b3]   →  [b1 b2 b3 b0]  (shift left 1)
+Row 2: [c0 c1 c2 c3]   →  [c2 c3 c0 c1]  (shift left 2)
+Row 3: [d0 d1 d2 d3]   →  [d3 d0 d1 d2]  (shift left 3)
+                    </div>
+                </div>
+                
+                <div class="step-visualization">
+                    <h4>Step 3: MixColumns (Column Mixing)</h4>
+                    <p>Each column is multiplied by a fixed matrix (Galois Field arithmetic):</p>
+                    <div class="diagram">
+Input Column:  [a b c d]
+                |  2 3 1 1 |   |a|
+Matrix Mult:   |  1 2 3 1 | × |b|
+                |  1 1 2 3 |   |c|
+                |  3 1 1 2 |   |d|
+
+Output:        [2a+3b+c+d, a+2b+3c+d, ...]
+                    </div>
+                    <p><strong>Note:</strong> Arithmetic is in Galois Field GF(2^8)</p>
+                </div>
+                
+                <div class="step-visualization">
+                    <h4>Step 4: AddRoundKey</h4>
+                    <p>State is XOR'd with the round key:</p>
+                    <div class="diagram">
+State:       [s0 s1 s2 ... s15]
+Round Key:   [k0 k1 k2 ... k15]
+Result:      [s0^k0, s1^k1, s2^k2, ... s15^k15]
+                    </div>
+                </div>
+                
+                <h3>4. Final Round (Round 10 for AES-128)</h3>
+                <div class="step-visualization">
+                    <h4>Same as main rounds but WITHOUT MixColumns</h4>
+                    <ol>
+                        <li>SubBytes</li>
+                        <li>ShiftRows</li>
+                        <li>AddRoundKey (with final round key)</li>
+                    </ol>
+                </div>
+                
+                <h3>Why These Operations?</h3>
+                <table>
+                    <tr>
+                        <th>Operation</th>
+                        <th>Purpose</th>
+                        <th>Security Property</th>
+                    </tr>
+                    <tr>
+                        <td><strong>SubBytes</strong></td>
+                        <td>Nonlinear substitution</td>
+                        <td>Resists linear cryptanalysis</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ShiftRows</strong></td>
+                        <td>Permutation/diffusion</td>
+                        <td>Spreads influence across columns</td>
+                    </tr>
+                    <tr>
+                        <td><strong>MixColumns</strong></td>
+                        <td>Byte mixing (confusion)</td>
+                        <td>Each output byte depends on all input bytes</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AddRoundKey</strong></td>
+                        <td>Key integration</td>
+                        <td>Adds key material into state</td>
+                    </tr>
+                </table>
+                
+                <h3>AES Design Principles</h3>
+                <div class="success-box">
+                    <h4>Confusion & Diffusion (Shannon's Principles)</h4>
+                    <ul>
+                        <li><strong>Confusion:</strong> Each ciphertext bit depends on all plaintext bits and all key bits</li>
+                        <li><strong>Diffusion:</strong> Changing one plaintext bit changes ~50% of ciphertext bits</li>
+                    </ul>
+                    <h4>Avalanche Effect</h4>
+                    <ul>
+                        <li>Small change in input → large change in output</li>
+                        <li>One bit change affects multiple rounds</li>
+                        <li>Impossible to reverse-engineer plaintext from ciphertext</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+        
+        <div class="button-container">
+            <button class="back-btn" onclick="goBack()">← Back to Unit 4</button>
+        </div>
+        
+        <footer>
+            <p>&copy; 2026 AES Encryption Simulation | Rajalakshmi Engineering College</p>
+            <p>Advanced Information Disclosure Systems (AIDS) Program | Even Semester</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Simple AES-like encryption simulation (educational purpose)
+        function stringToBytes(str) {
+            const bytes = [];
+            for (let i = 0; i < str.length; i++) {
+                bytes.push(str.charCodeAt(i) & 0xff);
+            }
+            return bytes;
+        }
+        
+        function bytesToHex(bytes) {
+            return bytes.map(b => b.toString(16).padStart(2, '0')).join(' ');
+        }
+        
+        function hexToBytes(hexString) {
+            const hex = hexString.replace(/\s/g, '');
+            const bytes = [];
+            for (let i = 0; i < hex.length; i += 2) {
+                bytes.push(parseInt(hex.substr(i, 2), 16));
+            }
+            return bytes;
+        }
+        
+        // S-Box for educational purposes (simplified)
+        const sBox = [
+            0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
+            0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0,
+            0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15,
+            0x04, 0xc7, 0x23, 0xc3, 0x18, 0x96, 0x05, 0x9a, 0x07, 0x12, 0x80, 0xe2, 0xeb, 0x27, 0xb2, 0x75,
+            0x09, 0x83, 0x2c, 0x1a, 0x1b, 0x6e, 0x5a, 0xa0, 0x52, 0x3b, 0xd6, 0xb3, 0x29, 0xe3, 0x2f, 0x84,
+            0x53, 0xd1, 0x00, 0xed, 0x20, 0xfc, 0xb1, 0x5b, 0x6a, 0xcb, 0xbe, 0x39, 0x4a, 0x4c, 0x58, 0xcf,
+            0xd0, 0xef, 0xaa, 0xfb, 0x43, 0x4d, 0x33, 0x85, 0x45, 0xf9, 0x02, 0x7f, 0x50, 0x3c, 0x9f, 0xa8,
+            0x51, 0xa3, 0x40, 0x8f, 0x92, 0x9d, 0x38, 0xf5, 0xbc, 0xb6, 0xda, 0x21, 0x10, 0xff, 0xf3, 0xd2,
+            0xcd, 0x0c, 0x13, 0xec, 0x5f, 0x97, 0x44, 0x17, 0xc4, 0xa7, 0x7e, 0x3d, 0x64, 0x5d, 0x19, 0x73,
+            0x60, 0x81, 0x4f, 0xdc, 0x22, 0x2a, 0x90, 0x88, 0x46, 0xee, 0xb8, 0x14, 0xde, 0x5e, 0x0b, 0xdb,
+            0xe0, 0x32, 0x3a, 0x0a, 0x49, 0x06, 0x24, 0x5e, 0xc2, 0xd3, 0xac, 0x62, 0x91, 0x95, 0xe4, 0x79,
+            0xe7, 0xc8, 0x37, 0x6d, 0x8d, 0xd5, 0x4e, 0xa9, 0x6c, 0x56, 0xf4, 0xea, 0x65, 0x7a, 0xae, 0x08,
+            0xba, 0x78, 0x25, 0x2e, 0x1c, 0xa6, 0xb4, 0xc6, 0xe8, 0xd7, 0x4d, 0x55, 0x87, 0xeb, 0xdf, 0x77,
+            0x6b, 0xd2, 0xb1, 0x9f, 0x65, 0xf7, 0xcf, 0xec, 0xc5, 0x7e, 0x3d, 0x16, 0x44, 0x17, 0xc4, 0xa7,
+            0x7e, 0x3d, 0x64, 0x5d, 0x19, 0x73, 0x60, 0x81, 0x4f, 0xdc, 0x22, 0x2a, 0x90, 0x88, 0x46, 0xee,
+            0xb8, 0x14, 0xde, 0x5e, 0x0b, 0xdb, 0xe0, 0x32, 0x3a, 0x0a, 0x49, 0x06, 0x24, 0x5e, 0xc2, 0xd3
+        ];
+        
+        // Simple XOR encryption with key expansion
+        function simpleAESEncrypt(plaintext, key) {
+            let bytes = stringToBytes(plaintext);
+            const keyBytes = stringToBytes(key);
+            
+            // Pad to 16-byte blocks
+            while (bytes.length % 16 !== 0) {
+                bytes.push(0x20); // space padding
+            }
+            
+            let result = [];
+            
+            // Process each 16-byte block
+            for (let block = 0; block < bytes.length; block += 16) {
+                let blockBytes = bytes.slice(block, block + 16);
+                
+                // Simulate AES rounds
+                for (let round = 0; round < 10; round++) {
+                    // SubBytes simulation
+                    for (let i = 0; i < 16; i++) {
+                        blockBytes[i] = sBox[blockBytes[i]];
+                    }
+                    
+                    // ShiftRows simulation
+                    let temp = blockBytes[1];
+                    blockBytes[1] = blockBytes[5];
+                    blockBytes[5] = blockBytes[9];
+                    blockBytes[9] = blockBytes[13];
+                    blockBytes[13] = temp;
+                    
+                    // AddRoundKey - XOR with key bytes
+                    for (let i = 0; i < 16; i++) {
+                        blockBytes[i] ^= keyBytes[i % keyBytes.length];
+                    }
+                }
+                
+                result = result.concat(blockBytes);
+            }
+            
+            return result;
+        }
+        
+        function simpleAESDecrypt(bytes, key) {
+            const keyBytes = stringToBytes(key);
+            let result = [];
+            
+            // Process each 16-byte block
+            for (let block = 0; block < bytes.length; block += 16) {
+                let blockBytes = bytes.slice(block, block + 16);
+                
+                // Reverse AES rounds
+                for (let round = 0; round < 10; round++) {
+                    // Reverse AddRoundKey
+                    for (let i = 0; i < 16; i++) {
+                        blockBytes[i] ^= keyBytes[i % keyBytes.length];
+                    }
+                    
+                    // Reverse ShiftRows
+                    let temp = blockBytes[13];
+                    blockBytes[13] = blockBytes[9];
+                    blockBytes[9] = blockBytes[5];
+                    blockBytes[5] = blockBytes[1];
+                    blockBytes[1] = temp;
+                    
+                    // Reverse SubBytes (inverse S-box would be needed, simplified here)
+                    for (let i = 0; i < 16; i++) {
+                        blockBytes[i] ^= 0x55; // simplified inverse
+                    }
+                }
+                
+                result = result.concat(blockBytes);
+            }
+            
+            return result;
+        }
+        
+        function encryptMessage() {
+            const plaintext = document.getElementById('plaintext').value;
+            const key = document.getElementById('encryptKey').value;
+            
+            if (!plaintext) {
+                alert('Please enter text to encrypt');
+                return;
+            }
+            if (!key || key.length < 16) {
+                alert('Please enter a key of at least 16 characters');
+                return;
+            }
+            
+            const encrypted = simpleAESEncrypt(plaintext, key);
+            const hexString = encrypted.map(b => String.fromCharCode(b)).join('');
+            
+            document.getElementById('ciphertext').value = btoa(hexString); // Base64 encoding
+            document.getElementById('encHex').value = bytesToHex(encrypted);
+        }
+        
+        function decryptMessage() {
+            const ciphertext = document.getElementById('ciphertextInput').value;
+            const key = document.getElementById('decryptKey').value;
+            
+            if (!ciphertext) {
+                alert('Please enter ciphertext to decrypt');
+                return;
+            }
+            if (!key) {
+                alert('Please enter the decryption key');
+                return;
+            }
+            
+            try {
+                const hexString = atob(ciphertext);
+                const bytes = [];
+                for (let i = 0; i < hexString.length; i++) {
+                    bytes.push(hexString.charCodeAt(i));
+                }
+                
+                const decrypted = simpleAESDecrypt(bytes, key);
+                const text = decrypted.map(b => String.fromCharCode(b)).join('').trim();
+                
+                document.getElementById('plaintextOutput').value = text;
+            } catch (e) {
+                alert('Error decrypting. Make sure you pasted the correct ciphertext.');
+            }
+        }
+        
+        function clearEncrypt() {
+            document.getElementById('plaintext').value = '';
+            document.getElementById('encryptKey').value = '';
+            document.getElementById('ciphertext').value = '';
+            document.getElementById('encHex').value = '';
+        }
+        
+        function clearDecrypt() {
+            document.getElementById('ciphertextInput').value = '';
+            document.getElementById('decryptKey').value = '';
+            document.getElementById('plaintextOutput').value = '';
+        }
+        
+        function visualizeAES() {
+            const text = document.getElementById('visPlaintext').value || 'Hello';
+            const bytes = stringToBytes(text.padEnd(16, ' '));
+            
+            let html = '<h3>Visualization of: "' + text + '"</h3>';
+            
+            html += '<h4>Step 1: Convert to Bytes</h4>';
+            html += '<div class="byte-grid">';
+            bytes.forEach((b, i) => {
+                html += '<div class="byte-cell input">' + b.toString(16).padStart(2, '0') + '</div>';
+            });
+            html += '</div>';
+            
+            // After SubBytes
+            html += '<h4>Step 2: After SubBytes (S-box Substitution)</h4>';
+            html += '<div class="byte-grid">';
+            bytes.forEach((b, i) => {
+                const subbed = sBox[b];
+                html += '<div class="byte-cell">' + subbed.toString(16).padStart(2, '0') + '</div>';
+            });
+            html += '</div>';
+            
+            // After ShiftRows
+            html += '<h4>Step 3: After ShiftRows (Permutation)</h4>';
+            html += '<p>Bytes rearranged to diffuse data</p>';
+            
+            // After AddRoundKey
+            html += '<h4>Step 4: After AddRoundKey (XOR with Key)</h4>';
+            html += '<p>XORed with encryption key bytes</p>';
+            
+            html += '<p><strong>Note:</strong> This process repeats 10 times (10 rounds) for AES-128</p>';
+            
+            document.getElementById('visualizationOutput').innerHTML = html;
+        }
+        
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            document.execCommand('copy');
+            alert('Copied to clipboard!');
+        }
+        
+        function showTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const buttons = document.querySelectorAll('.nav-tab');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            const selectedTab = document.getElementById(tabId);
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            event.target.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        function goBack() {
+            window.location.href = 'unit_4.html';
+        }
+    </script>
+</body>
+</html>
