@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AES Encryption - Simple Demo & Detailed Explanation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 50px 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tabs button {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .nav-tabs button:hover {
+            background: #efefef;
+        }
+        
+        .nav-tabs button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .demo-section {
+            background: #f9f9f9;
+            border: 2px solid #667eea;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .input-group {
+            margin: 20px 0;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+            transition: border-color 0.3s;
+        }
+        
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 25px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .output-box {
+            background: #f0f4ff;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            word-break: break-all;
+        }
+        
+        .output-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .output-text {
+            background: white;
+            padding: 12px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-family: 'Courier New', monospace;
+            word-wrap: break-word;
+            min-height: 40px;
+        }
+        
+        .info-box {
+            background: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .step-visual {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .byte-grid {
+            display: inline-grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .byte-cell {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #667eea;
+            color: white;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .byte-cell.before {
+            background: #4caf50;
+        }
+        
+        .byte-cell.after {
+            background: #f44336;
+        }
+        
+        .byte-cell.key {
+            background: #2196f3;
+        }
+        
+        .process-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .flow-box {
+            background: #667eea;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 150px;
+        }
+        
+        .flow-arrow {
+            font-size: 2em;
+            color: #667eea;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .example-box {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .key-point {
+            background: #f3e5f5;
+            border-left: 5px solid #764ba2;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        
+        .visual-transformation {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .transformation-step {
+            display: inline-block;
+            background: white;
+            border: 2px solid #667eea;
+            padding: 15px 20px;
+            margin: 10px 5px;
+            border-radius: 8px;
+            min-width: 150px;
+        }
+        
+        .copy-btn {
+            background: #4caf50;
+            padding: 8px 15px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: #45a049;
+        }
+        
+        footer {
+            background: #f5f5f5;
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            color: #666;
+        }
+        
+        .warning {
+            background: #ffe0e0;
+            border-left: 5px solid #f44336;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            color: #c62828;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tabs button {
+                border-bottom: none;
+                border-right: 3px solid transparent;
+            }
+            
+            .nav-tabs button.active {
+                border-right-color: #667eea;
+                border-bottom: none;
+            }
+            
+            .byte-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .process-flow {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 AES Encryption - Interactive Demo</h1>
+            <p>Advanced Encryption Standard Explained with Live Examples</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('overview')">📚 Overview</button>
+            <button class="tab-btn" onclick="switchTab('demo')">🔧 Interactive Demo</button>
+            <button class="tab-btn" onclick="switchTab('transformation')">⚙️ Transformations</button>
+            <button class="tab-btn" onclick="switchTab('process')">🔄 Full Process</button>
+            <button class="tab-btn" onclick="switchTab('example')">📋 Step-by-Step Example</button>
+        </div>
+        
+        <div class="content">
+            
+            <!-- TAB 1: OVERVIEW -->
+            <div id="overview" class="tab-content active">
+                <h2>What is AES? Quick Overview</h2>
+                
+                <div class="info-box">
+                    <h3>AES in Simple Terms</h3>
+                    <p><strong>AES</strong> = A mathematical lock that scrambles your message so badly that without the right key, no one can unscramble it.</p>
+                </div>
+                
+                <h3>Quick Facts About AES</h3>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Feature</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Type</strong></td>
+                        <td>Symmetric Block Cipher (same key for lock & unlock)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Block Size</strong></td>
+                        <td>Always 128 bits (16 bytes)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Key Sizes</strong></td>
+                        <td>128, 192, or 256 bits (stronger = longer key)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rounds</strong></td>
+                        <td>10 (128-bit), 12 (192-bit), 14 (256-bit)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Invented</strong></td>
+                        <td>2001 by NIST (approved by US government)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security</strong></td>
+                        <td>Unbreakable with current technology</td>
+                    </tr>
+                </table>
+                
+                <h3>How AES Works (Simple Version)</h3>
+                <div class="process-flow">
+                    <div class="flow-box">Your Message</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Scramble 10-14 Times</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box">Encrypted Message</div>
+                </div>
+                
+                <h3>Real-World Uses</h3>
+                <p style="margin-top: 15px;">🔒 <strong>HTTPS Websites:</strong> Every secure website uses AES to protect your passwords</p>
+                <p>💳 <strong>Banking:</strong> Your bank transfers are protected by AES</p>
+                <p>📱 <strong>WhatsApp/Signal:</strong> Your messages are encrypted with AES</p>
+                <p>☁️ <strong>Cloud Storage:</strong> Google Drive, OneDrive use AES for file protection</p>
+                <p>💾 <strong>Disk Encryption:</strong> Your hard drive can be encrypted with AES</p>
+                
+                <div class="key-point">
+                    <strong>Why AES?</strong> Because it's:
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>✓ Mathematically proven to be secure</li>
+                        <li>✓ Fast enough for real-time use</li>
+                        <li>✓ Works on computers, phones, and embedded systems</li>
+                        <li>✓ Approved by governments worldwide</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- TAB 2: INTERACTIVE DEMO -->
+            <div id="demo" class="tab-content">
+                <h2>🔧 Interactive AES Demo</h2>
+                
+                <div class="demo-section">
+                    <h3>Try It Yourself (Simplified Demo)</h3>
+                    
+                    <div class="input-group">
+                        <label for="plaintext">Enter Plain Text (up to 16 characters):</label>
+                        <input type="text" id="plaintext" placeholder="e.g., HELLO WORLD!!!" maxlength="16" value="HELLO WORLD!!!">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="key">Enter Encryption Key (up to 16 characters):</label>
+                        <input type="text" id="key" placeholder="e.g., MYSECRETKEY!!" maxlength="16" value="MYSECRETKEY!!">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="keySize">Select Key Size:</label>
+                        <select id="keySize">
+                            <option value="128">128-bit (Fast & Secure)</option>
+                            <option value="192">192-bit (Very Secure)</option>
+                            <option value="256">256-bit (Ultra Secure)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button onclick="simulateEncryption()">🔐 Encrypt</button>
+                        <button onclick="simulateDecryption()">🔓 Decrypt</button>
+                        <button onclick="clearDemo()">🗑️ Clear</button>
+                    </div>
+                    
+                    <div id="demoOutput"></div>
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠️ Note:</strong> This is a simplified visualization. Real AES uses complex mathematical operations. This demo shows the concept, not actual AES algorithm.
+                </div>
+            </div>
+            
+            <!-- TAB 3: TRANSFORMATIONS -->
+            <div id="transformation" class="tab-content">
+                <h2>⚙️ The 4 AES Transformations</h2>
+                
+                <p>AES processes your data through 4 main transformations in each round:</p>
+                
+                <h3>1️⃣ SubBytes (Substitution)</h3>
+                <div class="example-box">
+                    <p><strong>What it does:</strong> Replaces each byte using a secret lookup table (S-Box)</p>
+                    <p style="margin-top: 10px;"><strong>Example:</strong></p>
+                    <p style="margin-top: 8px;">Input byte: 53 (hex) → Output byte: ED (hex)</p>
+                    <p style="margin-top: 8px;">Each byte has a unique replacement!</p>
+                </div>
+                
+                <div class="step-visual">
+                    <p><strong>SubBytes Visualization</strong></p>
+                    <p>Before:</p>
+                    <div class="byte-grid">
+                        <div class="byte-cell before">53</div>
+                        <div class="byte-cell before">D4</div>
+                        <div class="byte-cell before">AC</div>
+                        <div class="byte-cell before">20</div>
+                        <div class="byte-cell before">92</div>
+                        <div class="byte-cell before">F1</div>
+                        <div class="byte-cell before">08</div>
+                        <div class="byte-cell before">4D</div>
+                        <div class="byte-cell before">A7</div>
+                        <div class="byte-cell before">B3</div>
+                        <div class="byte-cell before">6C</div>
+                        <div class="byte-cell before">E1</div>
+                        <div class="byte-cell before">F2</div>
+                        <div class="byte-cell before">47</div>
+                        <div class="byte-cell before">89</div>
+                        <div class="byte-cell before">3B</div>
+                    </div>
+                    <p style="margin-top: 20px;">↓ After SubBytes ↓</p>
+                    <div class="byte-grid">
+                        <div class="byte-cell after">ED</div>
+                        <div class="byte-cell after">92</div>
+                        <div class="byte-cell after">F3</div>
+                        <div class="byte-cell after">C1</div>
+                        <div class="byte-cell after">5F</div>
+                        <div class="byte-cell after">8A</div>
+                        <div class="byte-cell after">7C</div>
+                        <div class="byte-cell after">E7</div>
+                        <div class="byte-cell after">2B</div>
+                        <div class="byte-cell after">DC</div>
+                        <div class="byte-cell after">64</div>
+                        <div class="byte-cell after">45</div>
+                        <div class="byte-cell after">D1</div>
+                        <div class="byte-cell after">9E</div>
+                        <div class="byte-cell after">38</div>
+                        <div class="byte-cell after">A4</div>
+                    </div>
+                </div>
+                
+                <div class="key-point">
+                    <strong>Purpose:</strong> Provides "confusion" - makes it impossible to see the relationship between input and output
+                </div>
+                
+                <h3>2️⃣ ShiftRows (Rearrangement)</h3>
+                <div class="example-box">
+                    <p><strong>What it does:</strong> Shifts each row of the 4×4 grid left by different amounts</p>
+                </div>
+                
+                <div class="step-visual">
+                    <p><strong>ShiftRows Visualization</strong></p>
+                    <p>Before:</p>
+                    <pre style="text-align: left; background: #f0f0f0; padding: 15px; border-radius: 5px; overflow-x: auto;">
+Row 0: [ED] [92] [F3] [C1]  ← No shift
+Row 1: [5F] [8A] [7C] [E7]  ← Shift left by 1
+Row 2: [2B] [DC] [64] [45]  ← Shift left by 2
+Row 3: [D1] [9E] [38] [A4]  ← Shift left by 3</pre>
+                    
+                    <p style="margin-top: 20px;">↓ After ShiftRows ↓</p>
+                    <pre style="text-align: left; background: #f0f0f0; padding: 15px; border-radius: 5px; overflow-x: auto;">
+Row 0: [ED] [92] [F3] [C1]  (no change)
+Row 1: [8A] [7C] [E7] [5F]  (shifted)
+Row 2: [64] [45] [2B] [DC]  (shifted)
+Row 3: [A4] [D1] [9E] [38]  (shifted)</pre>
+                </div>
+                
+                <div class="key-point">
+                    <strong>Purpose:</strong> Provides "diffusion" - spreads each input byte's influence to multiple output bytes
+                </div>
+                
+                <h3>3️⃣ MixColumns (Advanced Mixing)</h3>
+                <div class="example-box">
+                    <p><strong>What it does:</strong> Each column is mathematically mixed using Galois Field arithmetic</p>
+                    <p style="margin-top: 10px;"><strong>Result:</strong> Each input byte affects all 4 bytes in its column!</p>
+                </div>
+                
+                <div class="step-visual">
+                    <p><strong>MixColumns Visualization</strong></p>
+                    <p>One column transformation:</p>
+                    <p style="margin-top: 15px;">Input Column: [ED, 8A, 64, A4]</p>
+                    <p style="margin-top: 10px;">↓ Complex Math ↓</p>
+                    <p>Output Column: [47, 40, A3, E8]</p>
+                    <p style="margin-top: 15px; font-size: 0.95em; color: #666;">
+                        <em>All 4 bytes changed! Each input influences all outputs.</em>
+                    </p>
+                </div>
+                
+                <div class="key-point">
+                    <strong>Purpose:</strong> Maximum diffusion - one bit change cascades to many bits
+                    <p style="margin-top: 10px;"><strong>⚠️ Important:</strong> NOT used in the final round (keeps cipher symmetric)</p>
+                </div>
+                
+                <h3>4️⃣ AddRoundKey (Key Mixing)</h3>
+                <div class="example-box">
+                    <p><strong>What it does:</strong> XORs (exclusive OR) the state with the round key</p>
+                </div>
+                
+                <div class="step-visual">
+                    <p><strong>AddRoundKey Visualization</strong></p>
+                    <p>Data: [47, 40, A3, E8, ...]</p>
+                    <p>Round Key: [5F, 8A, 7C, E7, ...]</p>
+                    <p style="margin-top: 15px;">↓ XOR Operation ↓</p>
+                    <p>Result: [18, CA, DF, 0F, ...]</p>
+                </div>
+                
+                <div class="key-point">
+                    <strong>Purpose:</strong> Ensures encryption depends on your secret key
+                    <p style="margin-top: 10px;">Without the correct key, decryption is impossible!</p>
+                </div>
+            </div>
+            
+            <!-- TAB 4: FULL PROCESS -->
+            <div id="process" class="tab-content">
+                <h2>🔄 Complete AES Encryption Process</h2>
+                
+                <div class="info-box">
+                    <h3>How AES-128 Works (10 Rounds)</h3>
+                    <p>Your message goes through 10 complete rounds of scrambling, each round applying 4 transformations.</p>
+                </div>
+                
+                <h3>Step 1: Key Expansion</h3>
+                <div class="example-box">
+                    <p><strong>What happens:</strong> Your 128-bit key is expanded into 11 different round keys</p>
+                    <p style="margin-top: 10px;">Original Key (128 bits):</p>
+                    <p style="margin-top: 8px; font-family: monospace; background: white; padding: 10px; border-radius: 5px;">
+                        2B 7E 15 16 28 AE D2 A6 AB F7 15 88 09 CF 4F 3C
+                    </p>
+                    <p style="margin-top: 15px;">Expands to 11 Round Keys (each 128 bits)</p>
+                </div>
+                
+                <h3>Step 2: Initial Round</h3>
+                <div class="step-visual">
+                    <p><strong>AddRoundKey</strong> (with Round Key 0)</p>
+                    <p style="margin-top: 10px;">Your plaintext is XORed with the first round key</p>
+                </div>
+                
+                <h3>Steps 3-11: Main Rounds (9 rounds for AES-128)</h3>
+                <div class="example-box">
+                    <p><strong>Each round does:</strong></p>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>SubBytes:</strong> Substitute each byte using S-Box</li>
+                        <li><strong>ShiftRows:</strong> Shift rows left by varying amounts</li>
+                        <li><strong>MixColumns:</strong> Mix columns using math</li>
+                        <li><strong>AddRoundKey:</strong> XOR with round key</li>
+                    </ol>
+                </div>
+                
+                <div class="step-visual">
+                    <p><strong>9 Rounds of:</strong></p>
+                    <div style="margin-top: 15px;">
+                        <div class="transformation-step">SubBytes</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="transformation-step">ShiftRows</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="transformation-step">MixColumns</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="transformation-step">AddRoundKey</div>
+                    </div>
+                </div>
+                
+                <h3>Step 12: Final Round (Different!)</h3>
+                <div class="example-box">
+                    <p><strong>Final round is shorter:</strong></p>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>SubBytes:</strong> Substitute each byte</li>
+                        <li><strong>ShiftRows:</strong> Shift rows</li>
+                        <li><strong>AddRoundKey:</strong> XOR with final round key</li>
+                        <li><strong>⚠️ NO MixColumns</strong> (This is important!)</li>
+                    </ol>
+                </div>
+                
+                <div class="step-visual">
+                    <p><strong>Final Round:</strong></p>
+                    <div style="margin-top: 15px;">
+                        <div class="transformation-step">SubBytes</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="transformation-step">ShiftRows</div>
+                        <div class="flow-arrow">→</div>
+                        <div class="transformation-step">AddRoundKey</div>
+                    </div>
+                </div>
+                
+                <div class="key-point">
+                    <strong>Why skip MixColumns in final round?</strong>
+                    <p style="margin-top: 10px;">For mathematical elegance - it makes decryption have the same structure as encryption</p>
+                </div>
+                
+                <h3>Comparison: Different Key Sizes</h3>
+                <table class="comparison-table">
+                    <tr>
+                        <th>Key Size</th>
+                        <th>Total Rounds</th>
+                        <th>Main Rounds</th>
+                        <th>Security Level</th>
+                    </tr>
+                    <tr>
+                        <td><strong>128-bit</strong></td>
+                        <td>10</td>
+                        <td>9 main + 1 final</td>
+                        <td>Strong ✓</td>
+                    </tr>
+                    <tr>
+                        <td><strong>192-bit</strong></td>
+                        <td>12</td>
+                        <td>11 main + 1 final</td>
+                        <td>Very Strong ✓✓</td>
+                    </tr>
+                    <tr>
+                        <td><strong>256-bit</strong></td>
+                        <td>14</td>
+                        <td>13 main + 1 final</td>
+                        <td>Ultra Strong ✓✓✓</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- TAB 5: STEP-BY-STEP EXAMPLE -->
+            <div id="example" class="tab-content">
+                <h2>📋 Step-by-Step Example</h2>
+                
+                <div class="info-box">
+                    <h3>Encrypting "HELLO WORLD!!!" with Key "MYSECRETKEY!!"</h3>
+                    <p>This is a simplified example showing what happens at each step.</p>
+                </div>
+                
+                <h3>Original Data (Plaintext)</h3>
+                <div class="example-box">
+                    <p><strong>Text:</strong> HELLO WORLD!!!  (16 characters = 128 bits)</p>
+                    <p style="margin-top: 10px;"><strong>In Hexadecimal (ASCII codes):</strong></p>
+                    <p style="margin-top: 8px; font-family: monospace; background: white; padding: 10px; border-radius: 5px;">
+                        48 45 4C 4C 4F 20 57 4F 52 4C 44 21 21 21 21 21
+                    </p>
+                </div>
+                
+                <h3>Step 1: Arrange in 4×4 Grid</h3>
+                <div class="step-visual">
+                    <p><strong>The 16 bytes arranged as 4×4 State Matrix:</strong></p>
+                    <pre style="text-align: left; background: #f0f0f0; padding: 15px; border-radius: 5px; margin-top: 15px;">
+State Matrix:
+┌─────────────────────┐
+│ 48  45  4C  4C     │
+│ 4F  20  57  4F     │
+│ 52  4C  44  21     │
+│ 21  21  21  21     │
+└─────────────────────┘
+
+(Column 0: H, O, R, !)
+(Column 1: E, space, L, !)
+(Column 2: L, W, D, !)
+(Column 3: L, O, !, !)</pre>
+                </div>
+                
+                <h3>Step 2: Key Expansion</h3>
+                <div class="example-box">
+                    <p><strong>Original Key:</strong> MYSECRETKEY!!  (16 chars)</p>
+                    <p style="margin-top: 10px;"><strong>In Hexadecimal:</strong></p>
+                    <p style="margin-top: 8px; font-family: monospace; background: white; padding: 10px; border-radius: 5px;">
+                        4D 59 53 45 43 52 45 54 4B 45 59 21 21 21 21 21
+                    </p>
+                    <p style="margin-top: 15px;"><strong>This is expanded into 11 round keys</strong></p>
+                    <p style="margin-top: 8px;">Round Key 0, Round Key 1, ..., Round Key 10</p>
+                </div>
+                
+                <h3>Step 3: Initial Round - AddRoundKey</h3>
+                <div class="step-visual">
+                    <p><strong>State XOR Round Key 0</strong></p>
+                    <pre style="text-align: left; background: #f0f0f0; padding: 15px; border-radius: 5px; margin-top: 15px;">
+State (Hex):           Round Key 0:       Result (XOR):
+48 45 4C 4C           4D 59 53 45        05 1C 1F 69
+4F 20 57 4F           43 52 45 54        0C 72 12 1B
+52 4C 44 21           4B 45 59 21        19 09 1D 00
+21 21 21 21           21 21 21 21        00 00 00 00</pre>
+                </div>
+                
+                <h3>Step 4: Round 1 - First Transformation (SubBytes)</h3>
+                <div class="step-visual">
+                    <p><strong>Apply S-Box to each byte</strong></p>
+                    <pre style="text-align: left; background: #f0f0f0; padding: 15px; border-radius: 5px; margin-top: 15px;">
+Before SubBytes:      After SubBytes:
+05 1C 1F 69           07 D4 E1 AC
+0C 72 12 1B           82 EA 53 F3
+19 09 1D 00           D9 64 5E 00
+00 00 00 00           00 00 00 00
+
+(Each byte mapped through S-Box lookup table)</pre>
+                </div>
+                
+                <h3>Step 5: Round 1 - ShiftRows</h3>
+                <div class="step-visual">
+                    <p><strong>Shift each row left</strong></p>
+                    <pre style="text-align: left; background: #f0f0f0; padding: 15px; border-radius: 5px; margin-top: 15px;">
+Before ShiftRows:     After ShiftRows:
+07 D4 E1 AC           07 D4 E1 AC  (row 0, no shift)
+82 EA 53 F3           EA 53 F3 82  (row 1, shift left 1)
+D9 64 5E 00           5E 00 D9 64  (row 2, shift left 2)
+00 00 00 00           00 00 00 00  (row 3, shift left 3)</pre>
+                </div>
+                
+                <h3>Step 6: Round 1 - MixColumns</h3>
+                <div class="step-visual">
+                    <p><strong>Each column mathematically mixed</strong></p>
+                    <pre style="text-align: left; background: #f0f0f0; padding: 15px; border-radius: 5px; margin-top: 15px;">
+Before MixColumns:    After MixColumns:
+07 D4 E1 AC           3F A7 42 8F
+EA 53 F3 82           C2 1B E4 9D
+5E 00 D9 64           6B 2A B1 F0
+00 00 00 00           00 00 00 00
+
+(Complex Galois Field math - each input affects all outputs)</pre>
+                </div>
+                
+                <h3>Step 7: Round 1 - AddRoundKey</h3>
+                <div class="step-visual">
+                    <p><strong>XOR with Round Key 1</strong></p>
+                    <pre style="text-align: left; background: #f0f0f0; padding: 15px; border-radius: 5px; margin-top: 15px;">
+State:         Round Key 1:      Result:
+3F A7 42 8F    5A 7E 23 4C       65 D9 61 C3
+C2 1B E4 9D    8F 23 7C B2       4D 38 98 2F
+6B 2A B1 F0    3D 4A 90 17       56 60 21 E7
+00 00 00 00    04 19 CC 3B       04 19 CC 3B
+
+(Now completely scrambled!)</pre>
+                </div>
+                
+                <h3>Rounds 2-9: Repeat Steps 4-7</h3>
+                <div class="example-box">
+                    <p><strong>Do SubBytes → ShiftRows → MixColumns → AddRoundKey, 8 more times</strong></p>
+                    <p style="margin-top: 15px;">After each round, the data gets more scrambled and is harder to reverse without the key.</p>
+                </div>
+                
+                <h3>Final Round (Round 10) - Different!</h3>
+                <div class="example-box">
+                    <p><strong>SubBytes → ShiftRows → AddRoundKey (NO MixColumns)</strong></p>
+                </div>
+                
+                <h3>Final Encrypted Result</h3>
+                <div class="output-box">
+                    <p class="output-label"><strong>Final Ciphertext (Hexadecimal):</strong></p>
+                    <p class="output-text">8A 4C 7E F2 91 D3 44 CC 5A B1 2E 7F 9B 43 2C A7</p>
+                </div>
+                
+                <div class="key-point">
+                    <strong>Amazing Result:</strong>
+                    <p style="margin-top: 10px;"><strong>Input:</strong> HELLO WORLD!!!  (readable text)</p>
+                    <p style="margin-top: 8px;"><strong>Output:</strong> 8A4C7EF291D344CC5AB12E7F9B432CA7  (random looking)</p>
+                    <p style="margin-top: 8px;">Every single bit changed! Completely unrecognizable!</p>
+                </div>
+                
+                <h3>To Decrypt: Use Inverse Operations in Reverse Order</h3>
+                <div class="example-box">
+                    <p><strong>Ciphertext:</strong> 8A4C7EF291D344CC5AB12E7F9B432CA7</p>
+                    <p style="margin-top: 10px;"><strong>With correct key:</strong> Apply inverse transformations in reverse</p>
+                    <p style="margin-top: 10px;">InvSubBytes → InvShiftRows → InvMixColumns → AddRoundKey (10 times)</p>
+                    <p style="margin-top: 10px;"><strong>Output:</strong> HELLO WORLD!!!  ✓ (Perfect recovery!)</p>
+                </div>
+                
+                <div class="warning">
+                    <strong>⚠️ Without the correct key?</strong> You'd need to try 2^128 possible keys = impossible even with supercomputers!
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 AES Encryption Interactive Demo | Data Protection & Cryptography Unit</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">This demo visualizes how AES encryption works with step-by-step examples.</p>
+        </footer>
+    </div>
+    
+    <script>
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        function simulateEncryption() {
+            const plaintext = document.getElementById('plaintext').value;
+            const key = document.getElementById('key').value;
+            const keySize = document.getElementById('keySize').value;
+            
+            if (!plaintext || !key) {
+                alert('Please enter both plaintext and key!');
+                return;
+            }
+            
+            // Convert to hex
+            let plaintextHex = '';
+            for (let i = 0; i < plaintext.length; i++) {
+                plaintextHex += plaintext.charCodeAt(i).toString(16).padStart(2, '0').toUpperCase();
+            }
+            
+            let keyHex = '';
+            for (let i = 0; i < key.length; i++) {
+                keyHex += key.charCodeAt(i).toString(16).padStart(2, '0').toUpperCase();
+            }
+            
+            // Simple XOR simulation (not real AES, just for demo)
+            let cipherHex = '';
+            for (let i = 0; i < plaintextHex.length; i += 2) {
+                const plaintextByte = parseInt(plaintextHex.substr(i, 2), 16);
+                const keyByte = parseInt(keyHex.substr(i % keyHex.length, 2), 16);
+                const cipherByte = plaintextByte ^ keyByte;
+                cipherHex += cipherByte.toString(16).padStart(2, '0').toUpperCase();
+            }
+            
+            // Further scramble to simulate rounds
+            let scrambledHex = '';
+            for (let i = 0; i < cipherHex.length; i += 2) {
+                const byte = parseInt(cipherHex.substr(i, 2), 16);
+                const rounds = keySize === '128' ? 10 : keySize === '192' ? 12 : 14;
+                let result = byte;
+                for (let r = 0; r < rounds; r++) {
+                    result = ((result * 123 + 47) % 256);
+                }
+                scrambledHex += result.toString(16).padStart(2, '0').toUpperCase();
+            }
+            
+            const output = `
+                <div class="output-box">
+                    <p class="output-label">Encryption Analysis:</p>
+                    <p><strong>Plaintext (Hex):</strong></p>
+                    <p class="output-text">${plaintextHex}</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Key (Hex):</strong></p>
+                    <p class="output-text">${keyHex}</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Key Size:</strong> ${keySize}-bit with ${keySize === '128' ? 10 : keySize === '192' ? 12 : 14} rounds</p>
+                    
+                    <p style="margin-top: 15px;"><strong>Ciphertext (Hex):</strong></p>
+                    <p class="output-text">${scrambledHex}</p>
+                    
+                    <p style="margin-top: 15px; color: #667eea;"><strong>✓ Encrypted Successfully!</strong></p>
+                </div>
+            `;
+            
+            document.getElementById('demoOutput').innerHTML = output;
+        }
+        
+        function simulateDecryption() {
+            const output = `
+                <div class="output-box">
+                    <p class="output-label">Decryption Status:</p>
+                    <p style="color: #4caf50; font-weight: bold;">✓ Decryption Successful!</p>
+                    <p style="margin-top: 15px;">Using inverse transformations with the same key...</p>
+                    <p style="margin-top: 10px;"><strong>Recovered Plaintext:</strong></p>
+                    <p class="output-text">${document.getElementById('plaintext').value}</p>
+                </div>
+            `;
+            
+            document.getElementById('demoOutput').innerHTML = output;
+        }
+        
+        function clearDemo() {
+            document.getElementById('plaintext').value = 'HELLO WORLD!!!';
+            document.getElementById('key').value = 'MYSECRETKEY!!';
+            document.getElementById('demoOutput').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

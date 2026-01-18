@@ -1,0 +1,16 @@
+ 1047  git push origin main
+ 1048  git add .
+ 1049  git commit -m "chnges in index3"
+ 1050  git push origin main
+ 1051  git add .
+ 1052  git commit -m "chnges in index3"
+ 1053  git push origin main
+ 1054  git add .
+ 1055  git commit -m "chnges in index3"
+ 1056  git push origin main
+ 1057  git add .
+ 1058  git commit -m "chnges in index3"
+ 1059  git push origin main
+ 1060  ls
+ 1061  pwd
+ 1062  history
