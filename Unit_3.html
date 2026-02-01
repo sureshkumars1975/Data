@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hashing, Digital Signatures & Authentication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 30px;
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            border-radius: 8px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-icon {
+            margin-right: 15px;
+            font-size: 1.8em;
+        }
+        
+        .section h3 {
+            color: #333;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .section p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        
+        .key-points {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+        }
+        
+        .key-points h4 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        
+        .key-points ul {
+            margin-left: 20px;
+        }
+        
+        .key-points li {
+            color: #555;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .code-block strong {
+            color: #66d9ef;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 2px solid #667eea;
+        }
+        
+        .card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            color: #555;
+            font-size: 0.95em;
+        }
+        
+        .threat-box {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        
+        .threat-box h4 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+        
+        .threat-box p, .threat-box ul {
+            color: #721c24;
+        }
+        
+        .threat-box ul {
+            margin-left: 20px;
+        }
+        
+        .threat-box li {
+            margin: 5px 0;
+        }
+        
+        .toc {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .toc h3 {
+            color: #0066cc;
+            margin-bottom: 15px;
+        }
+        
+        .toc ol {
+            margin-left: 20px;
+        }
+        
+        .toc li {
+            color: #333;
+            margin: 8px 0;
+        }
+        
+        .process-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 2px solid #667eea;
+        }
+        
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .flow-step p {
+            margin: 0;
+        }
+        
+        .method-comparison {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 2px solid #667eea;
+            margin: 15px 0;
+        }
+        
+        .method-comparison h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .pros {
+            color: #28a745;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+        
+        .cons {
+            color: #dc3545;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Hashing, Digital Signatures & Authentication</h1>
+            <p>Cryptographic Techniques & Security Methods</p>
+        </div>
+        
+        <div class="content">
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h3>📋 Table of Contents</h3>
+                <ol>
+                    <li>Hashing Techniques & Algorithms</li>
+                    <li>Digital Signatures</li>
+                    <li>Authentication Methods</li>
+                    <li>Password Authentication</li>
+                    <li>Biometric Authentication</li>
+                    <li>Multi-Factor Authentication (MFA)</li>
+                    <li>CIA Security Model</li>
+                    <li>Authentication Threats & Attacks</li>
+                    <li>RPC Protocol</li>
+                </ol>
+            </div>
+            
+            <!-- Section 1: Hashing Techniques -->
+            <div class="section">
+                <h2><span class="section-icon">🔑</span> 1. Hashing Techniques & Algorithms</h2>
+                
+                <h3>What is Hashing?</h3>
+                <p>Hashing is a cryptographic function that converts an input (of any size) into a fixed-size string of bytes. The output is called a hash value or digest. Hashing is a one-way function – you cannot reverse it to get the original input.</p>
+                
+                <div class="highlight">
+                    <strong>Key Properties of Hash Functions:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Deterministic:</strong> Same input always produces same output</li>
+                        <li><strong>Fast:</strong> Quick to compute hash value</li>
+                        <li><strong>One-way:</strong> Impossible to reverse (find input from hash)</li>
+                        <li><strong>Avalanche Effect:</strong> Small change in input produces completely different hash</li>
+                        <li><strong>Collision-resistant:</strong> Hard to find two inputs with same hash</li>
+                        <li><strong>Fixed size:</strong> Output size independent of input size</li>
+                    </ul>
+                </div>
+                
+                <h3>Common Hashing Algorithms</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Hash Size</th>
+                            <th>Status</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>MD5</strong></td>
+                            <td>128 bits</td>
+                            <td>❌ BROKEN</td>
+                            <td>Legacy only (collision found)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SHA-1</strong></td>
+                            <td>160 bits</td>
+                            <td>⚠️ DEPRECATED</td>
+                            <td>Git, legacy systems (weak)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SHA-256</strong></td>
+                            <td>256 bits</td>
+                            <td>✅ SECURE</td>
+                            <td>Bitcoin, passwords, general use</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SHA-512</strong></td>
+                            <td>512 bits</td>
+                            <td>✅ SECURE</td>
+                            <td>High-security applications</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SHA-3</strong></td>
+                            <td>256/512</td>
+                            <td>✅ MODERN</td>
+                            <td>Future applications, highly secure</td>
+                        </tr>
+                        <tr>
+                            <td><strong>BLAKE2</strong></td>
+                            <td>256/512</td>
+                            <td>✅ FAST</td>
+                            <td>Faster than MD5, very secure</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Hash Function Example: SHA-256</h3>
+                <div class="code-block">
+                    <strong>Input:</strong> "Hello World"<br>
+                    <strong>Output:</strong> a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad1f146e<br><br>
+                    <strong>Input:</strong> "Hello World!"<br>
+                    <strong>Output:</strong> 7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069<br><br>
+                    <strong>Note:</strong> Tiny change (added "!") = completely different hash (Avalanche Effect)
+                </div>
+                
+                <h3>Hashing Applications</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Integrity Verification</h4>
+                        <p>Verify data hasn't been modified. Download files with hash to check integrity.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Password Storage</h4>
+                        <p>Store hash of password, not password itself. Never reverse to get password.</p>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Blockchain</h4>
+                        <p>Bitcoin uses SHA-256 to create immutable blocks linked by hashes.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Digital Signatures</h4>
+                        <p>Hash message, then encrypt hash with private key for signature.</p>
+                    </div>
+                </div>
+                
+                <h3>Salting & Hashing for Passwords</h3>
+                <div class="highlight">
+                    <strong>Why Salt?</strong> Without salt, two users with same password have same hash (vulnerability). Salt adds random value to each password before hashing.
+                    <div style="margin-top: 15px;">
+                        <strong>Example:</strong><br>
+                        Password: "password123"<br>
+                        Salt: "abc123xyz"<br>
+                        Hash: SHA-256("password123" + "abc123xyz") = unique hash
+                    </div>
+                </div>
+                
+                <h3>Hashing Best Practices</h3>
+                <div class="key-points">
+                    <h4>Recommendations:</h4>
+                    <ul>
+                        <li>Use SHA-256 or SHA-512 (never MD5 or SHA-1)</li>
+                        <li>For passwords, use bcrypt, Argon2, or scrypt (slower, more secure)</li>
+                        <li>Always use salt for password hashing</li>
+                        <li>Use multiple iterations (e.g., bcrypt with cost factor 12+)</li>
+                        <li>Never log passwords or hashes in plain text</li>
+                        <li>Implement rate limiting on password attempts</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Section 2: Digital Signatures -->
+            <div class="section">
+                <h2><span class="section-icon">✍️</span> 2. Digital Signatures</h2>
+                
+                <h3>What is a Digital Signature?</h3>
+                <p>A digital signature is a cryptographic technique that proves:
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Authentication:</strong> Message is from claimed sender</li>
+                    <li><strong>Non-repudiation:</strong> Sender cannot deny sending message</li>
+                    <li><strong>Integrity:</strong> Message hasn't been modified</li>
+                </ol>
+                </p>
+                
+                <h3>How Digital Signatures Work</h3>
+                <div class="process-flow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div>
+                            <p><strong>Hash Message:</strong> Hash the message using SHA-256 (or similar)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <p><strong>Encrypt Hash:</strong> Encrypt hash with sender's private key (creates signature)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <p><strong>Send:</strong> Send message + signature to recipient</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div>
+                            <p><strong>Decrypt Signature:</strong> Recipient decrypts signature with sender's public key (gets original hash)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div>
+                            <p><strong>Hash Message:</strong> Recipient hashes received message with same algorithm</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div>
+                            <p><strong>Compare:</strong> If hashes match, signature is valid (message authentic & unmodified)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Digital Signature Algorithms</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Algorithm</th>
+                            <th>Based On</th>
+                            <th>Key Size</th>
+                            <th>Use Case</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>RSA</strong></td>
+                            <td>Integer Factorization</td>
+                            <td>2048-4096 bits</td>
+                            <td>Email, documents, SSL/TLS</td>
+                        </tr>
+                        <tr>
+                            <td><strong>DSA</strong></td>
+                            <td>Discrete Logarithm</td>
+                            <td>1024-3072 bits</td>
+                            <td>Legacy systems</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ECDSA</strong></td>
+                            <td>Elliptic Curve</td>
+                            <td>256-521 bits</td>
+                            <td>Bitcoin, Ethereum (more efficient)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EdDSA</strong></td>
+                            <td>Elliptic Curve</td>
+                            <td>256 bits</td>
+                            <td>Modern cryptography (fastest)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Digital Signature Example: RSA</h3>
+                <div class="code-block">
+                    <strong>Signing Process:</strong><br>
+                    1. Message: "Pay Alice $100"<br>
+                    2. Hash: SHA-256(message) = abc123xyz...<br>
+                    3. Signature: RSA_Encrypt(hash, private_key) = xyz789abc...<br>
+                    4. Send: message + signature<br><br>
+                    <strong>Verification Process:</strong><br>
+                    1. Receive: message + signature<br>
+                    2. Hash_received: SHA-256(message) = abc123xyz...<br>
+                    3. Decrypted: RSA_Decrypt(signature, public_key) = abc123xyz...<br>
+                    4. If Hash_received == Decrypted: Valid signature ✅
+                </div>
+                
+                <h3>Applications of Digital Signatures</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Email Security</h4>
+                        <p>S/MIME and PGP use digital signatures to authenticate email.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Document Signing</h4>
+                        <p>Legal documents, contracts signed digitally with non-repudiation.</p>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>SSL/TLS Certificates</h4>
+                        <p>Websites signed with digital certificates (public key infrastructure).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Blockchain</h4>
+                        <p>Transactions signed with ECDSA (Bitcoin, Ethereum).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 3: Authentication Methods -->
+            <div class="section">
+                <h2><span class="section-icon">🔓</span> 3. Authentication Methods</h2>
+                
+                <h3>What is Authentication?</h3>
+                <p>Authentication is the process of verifying that a user is who they claim to be. It's different from authorization (what user can do).</p>
+                
+                <h3>Types of Authentication Factors</h3>
+                <div class="grid-3">
+                    <div class="card">
+                        <h4>Something You Know</h4>
+                        <p><strong>Examples:</strong> Password, PIN, security question answer</p>
+                    </div>
+                    <div class="card">
+                        <h4>Something You Have</h4>
+                        <p><strong>Examples:</strong> Phone, hardware token, authenticator app</p>
+                    </div>
+                    <div class="card">
+                        <h4>Something You Are</h4>
+                        <p><strong>Examples:</strong> Fingerprint, iris scan, facial recognition</p>
+                    </div>
+                </div>
+                
+                <h3>Authentication Factor Strength Comparison</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Factor</th>
+                            <th>Strength</th>
+                            <th>Cost</th>
+                            <th>Ease of Use</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Password</strong></td>
+                            <td>Low ⭐</td>
+                            <td>Free</td>
+                            <td>Easy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>PIN</strong></td>
+                            <td>Low ⭐</td>
+                            <td>Free</td>
+                            <td>Very Easy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security Questions</strong></td>
+                            <td>Low ⭐</td>
+                            <td>Free</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>One-Time Password (OTP)</strong></td>
+                            <td>Medium ⭐⭐</td>
+                            <td>Low</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hardware Token</strong></td>
+                            <td>High ⭐⭐⭐</td>
+                            <td>High</td>
+                            <td>Easy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Biometrics</strong></td>
+                            <td>Very High ⭐⭐⭐⭐</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Section 4: Password Authentication -->
+            <div class="section">
+                <h2><span class="section-icon">🔑</span> 4. Password Authentication</h2>
+                
+                <h3>Password Basics</h3>
+                <p>Passwords are the most common form of authentication. Users provide a secret string that only they should know.</p>
+                
+                <h3>Password Security Challenges</h3>
+                <div class="threat-box">
+                    <h4>❌ Weaknesses of Passwords</h4>
+                    <ul>
+                        <li><strong>User Weakness:</strong> Users choose weak passwords (123456, password, qwerty)</li>
+                        <li><strong>Reuse:</strong> Users reuse password across multiple sites</li>
+                        <li><strong>Forgetting:</strong> Users forget passwords, need recovery</li>
+                        <li><strong>Phishing:</strong> Users tricked into revealing password</li>
+                        <li><strong>Keylogging:</strong> Malware captures password as typed</li>
+                        <li><strong>Database Breach:</strong> If database breached, passwords compromised</li>
+                        <li><strong>Shoulder Surfing:</strong> Someone watches password being typed</li>
+                    </ul>
+                </div>
+                
+                <h3>Password Security Best Practices</h3>
+                <div class="key-points">
+                    <h4>For Users:</h4>
+                    <ul>
+                        <li>Use strong passwords (12+ characters, mixed case, numbers, symbols)</li>
+                        <li>Use unique password for each important site</li>
+                        <li>Use password manager (e.g., Bitwarden, LastPass) to store passwords securely</li>
+                        <li>Never share password with anyone</li>
+                        <li>Never use personal information (birthday, name) in password</li>
+                        <li>Change password regularly (every 90 days recommended)</li>
+                        <li>Avoid common patterns (qwerty, 123456, abc123)</li>
+                    </ul>
+                </div>
+                
+                <div class="key-points">
+                    <h4>For Administrators:</h4>
+                    <ul>
+                        <li>Hash passwords with salt (never store plaintext)</li>
+                        <li>Use bcrypt, Argon2, or scrypt (slow, resistant to attacks)</li>
+                        <li>Implement rate limiting (limit login attempts)</li>
+                        <li>Require strong password policy</li>
+                        <li>Implement account lockout after failed attempts</li>
+                        <li>Use HTTPS for login (encrypt in transit)</li>
+                        <li>Implement password expiration (optional, debated)</li>
+                        <li>Enable multi-factor authentication</li>
+                    </ul>
+                </div>
+                
+                <h3>Password Strength Estimation</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Password Type</th>
+                            <th>Example</th>
+                            <th>Time to Crack (GPU)</th>
+                            <th>Security Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>4 digits</td>
+                            <td>1234</td>
+                            <td>< 1 second</td>
+                            <td>❌ Very Weak</td>
+                        </tr>
+                        <tr>
+                            <td>6 letters (lowercase)</td>
+                            <td>password</td>
+                            <td>1 minute</td>
+                            <td>❌ Weak</td>
+                        </tr>
+                        <tr>
+                            <td>8 mixed characters</td>
+                            <td>Pass@123</td>
+                            <td>4 hours</td>
+                            <td>⚠️ Medium</td>
+                        </tr>
+                        <tr>
+                            <td>12 mixed characters</td>
+                            <td>SecurePa$$2024</td>
+                            <td>200 years</td>
+                            <td>✅ Strong</td>
+                        </tr>
+                        <tr>
+                            <td>16 mixed characters</td>
+                            <td>SecureP@$$word2024!</td>
+                            <td>Billions of years</td>
+                            <td>✅✅ Very Strong</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Section 5: Biometric Authentication -->
+            <div class="section">
+                <h2><span class="section-icon">👆</span> 5. Biometric Authentication</h2>
+                
+                <h3>What is Biometric Authentication?</h3>
+                <p>Biometric authentication uses unique physical or behavioral characteristics to verify identity. It's based on "something you are."</p>
+                
+                <h3>Types of Biometric Authentication</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Fingerprint Recognition</h4>
+                        <p>Most common. Scans fingerprint pattern. Used in phones, buildings, government.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Facial Recognition</h4>
+                        <p>Analyzes facial features (distance between eyes, nose shape, etc). Used in airports, phones.</p>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Iris/Retina Scanning</h4>
+                        <p>Scans unique patterns in eye. Very accurate. Used in high-security areas.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Voice Recognition</h4>
+                        <p>Analyzes voice patterns. Used in banking, phone authentication.</p>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Behavioral Biometrics</h4>
+                        <p>Typing pattern, gait (walking pattern), mouse movement. Continuous authentication.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Hand Geometry</h4>
+                        <p>Scans hand shape and size. Used in some access control systems.</p>
+                    </div>
+                </div>
+                
+                <h3>Biometric Comparison</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Biometric Type</th>
+                            <th>Accuracy</th>
+                            <th>Cost</th>
+                            <th>Acceptance</th>
+                            <th>Spoofing Risk</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Fingerprint</strong></td>
+                            <td>99.9%</td>
+                            <td>Low</td>
+                            <td>High</td>
+                            <td>Medium (fake finger)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Facial Recognition</strong></td>
+                            <td>99%+</td>
+                            <td>Medium</td>
+                            <td>High</td>
+                            <td>High (deep fake, photo)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Iris/Retina</strong></td>
+                            <td>99.9%+</td>
+                            <td>High</td>
+                            <td>Low</td>
+                            <td>Very Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Voice</strong></td>
+                            <td>97%</td>
+                            <td>Low</td>
+                            <td>Medium</td>
+                            <td>Medium (voice recording)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Behavioral</strong></td>
+                            <td>95-98%</td>
+                            <td>Low</td>
+                            <td>Medium</td>
+                            <td>Low</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Biometric Advantages & Disadvantages</h3>
+                <div class="grid-2">
+                    <div class="card" style="background: #d4edda; border: 2px solid #28a745;">
+                        <h4 style="color: #155724;">✅ Advantages</h4>
+                        <ul style="margin-left: 20px; color: #155724;">
+                            <li>No password to forget</li>
+                            <li>Very hard to spoof/fake</li>
+                            <li>Fast authentication</li>
+                            <li>User-friendly (no typing needed)</li>
+                            <li>Unique to individual (can't be shared)</li>
+                            <li>Difficult to steal or duplicate</li>
+                        </ul>
+                    </div>
+                    <div class="card" style="background: #f8d7da; border: 2px solid #dc3545;">
+                        <h4 style="color: #721c24;">⚠️ Disadvantages</h4>
+                        <ul style="margin-left: 20px; color: #721c24;">
+                            <li>Expensive equipment</li>
+                            <li>Privacy concerns (tracking)</li>
+                            <li>Database breach = permanent loss</li>
+                            <li>False rejections (10-20%)</li>
+                            <li>Cannot change like password</li>
+                            <li>May not work for disabled people</li>
+                            <li>Spoofing possible (deep fakes, fake fingers)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Biometric Security Concerns</h3>
+                <div class="threat-box">
+                    <h4>⚠️ Threats to Biometric Systems</h4>
+                    <ul>
+                        <li><strong>Spoofing:</strong> Fake fingerprint, photo, or voice recording</li>
+                        <li><strong>Template Theft:</strong> Stolen biometric templates from database</li>
+                        <li><strong>Liveness Detection Bypass:</strong> Defeating liveness checks</li>
+                        <li><strong>Deep Fakes:</strong> Synthetic facial/voice generation</li>
+                        <li><strong>Presentation Attacks:</strong> Presenting fake biometric (silicone finger)</li>
+                        <li><strong>Privacy:</strong> Tracking people without consent</li>
+                        <li><strong>False Positive:</strong> System accepts wrong person</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Section 6: Multi-Factor Authentication -->
+            <div class="section">
+                <h2><span class="section-icon">🔐</span> 6. Multi-Factor Authentication (MFA)</h2>
+                
+                <h3>What is Multi-Factor Authentication?</h3>
+                <p>MFA requires two or more authentication factors to verify identity. Even if one factor is compromised, account remains secure.</p>
+                
+                <h3>MFA Types & Methods</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Two-Factor Authentication (2FA)</h4>
+                        <p>Requires exactly 2 factors. Example: Password + OTP</p>
+                    </div>
+                    <div class="card">
+                        <h4>Three-Factor Authentication (3FA)</h4>
+                        <p>Requires 3 factors. Example: Password + OTP + Biometric</p>
+                    </div>
+                </div>
+                
+                <h3>Common MFA Methods</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Type</th>
+                            <th>Factor</th>
+                            <th>Security Level</th>
+                            <th>Adoption</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>SMS OTP</strong></td>
+                            <td>One-Time Password</td>
+                            <td>Something You Have</td>
+                            <td>⚠️ Medium</td>
+                            <td>Highest</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Authenticator App</strong></td>
+                            <td>Time-based OTP (TOTP)</td>
+                            <td>Something You Have</td>
+                            <td>✅ High</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hardware Token</strong></td>
+                            <td>FIDO2/U2F</td>
+                            <td>Something You Have</td>
+                            <td>✅ Very High</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Biometric + Password</strong></td>
+                            <td>Hybrid</td>
+                            <td>Multiple Factors</td>
+                            <td>✅✅ Excellent</td>
+                            <td>Growing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Push Notification</strong></td>
+                            <td>App-based approval</td>
+                            <td>Something You Have</td>
+                            <td>✅ High</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Email Code</strong></td>
+                            <td>One-Time Code</td>
+                            <td>Something You Have</td>
+                            <td>⚠️ Medium</td>
+                            <td>High</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>How TOTP (Authenticator Apps) Work</h3>
+                <div class="process-flow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div>
+                            <p><strong>Setup:</strong> User scans QR code in app (Google Authenticator, Microsoft Authenticator, Authy)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <p><strong>Shared Secret:</strong> App stores shared secret key synchronized with server</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <p><strong>Generate Code:</strong> App generates new 6-digit code every 30 seconds using algorithm</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div>
+                            <p><strong>User Enters Code:</strong> User enters 6-digit code from app during login</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div>
+                            <p><strong>Server Verifies:</strong> Server generates same code with same algorithm, compares with user input</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div>
+                            <p><strong>Grant Access:</strong> If codes match, access granted (code only valid for 30 seconds)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>MFA Best Practices</h3>
+                <div class="key-points">
+                    <h4>Recommendations:</h4>
+                    <ul>
+                        <li>Use authenticator apps over SMS (SMS susceptible to interception)</li>
+                        <li>Use hardware security keys (U2F/FIDO2) for high-security accounts (email, banking)</li>
+                        <li>Combine different factor types (not just 2 passwords)</li>
+                        <li>Keep backup recovery codes safe (if you lose phone)</li>
+                        <li>Enable MFA on all important accounts (email, banking, social media)</li>
+                        <li>Don't use SMS for financial institutions (use hardware tokens)</li>
+                        <li>Avoid email-only 2FA if possible (use app or hardware token)</li>
+                    </ul>
+                </div>
+                
+                <h3>MFA Vulnerabilities</h3>
+                <div class="threat-box">
+                    <h4>⚠️ MFA Can Still Be Bypassed</h4>
+                    <ul>
+                        <li><strong>SIM Swap:</strong> Attacker convinces carrier to transfer phone number</li>
+                        <li><strong>Phishing:</strong> User enters password + OTP on fake website</li>
+                        <li><strong>Malware:</strong> Keylogger captures code as typed</li>
+                        <li><strong>Social Engineering:</strong> Attacker tricks user into revealing OTP</li>
+                        <li><strong>Hardware Token Loss:</strong> User loses USB security key</li>
+                        <li><strong>Backup Code Theft:</strong> Attacker finds written backup codes</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Section 7: CIA Model -->
+            <div class="section">
+                <h2><span class="section-icon">🛡️</span> 7. CIA Security Model</h2>
+                
+                <h3>What is the CIA Model?</h3>
+                <p>The CIA model (Confidentiality, Integrity, Availability) is the foundation of information security. All security measures should protect these three principles.</p>
+                
+                <h3>The Three Pillars of CIA</h3>
+                <div class="grid-3">
+                    <div class="card" style="border: 3px solid #667eea;">
+                        <h4>🔒 Confidentiality</h4>
+                        <p><strong>Definition:</strong> Only authorized people can access information.</p>
+                        <p style="margin-top: 10px;"><strong>Ensures:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Data is not disclosed to unauthorized parties</li>
+                            <li>Privacy of sensitive information</li>
+                            <li>Secrets remain secret</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Threats:</strong> Eavesdropping, data breach, unauthorized access</p>
+                        <p style="margin-top: 10px;"><strong>Safeguards:</strong> Encryption, access control, authentication</p>
+                    </div>
+                    
+                    <div class="card" style="border: 3px solid #28a745;">
+                        <h4>📝 Integrity</h4>
+                        <p><strong>Definition:</strong> Data is accurate and hasn't been modified.</p>
+                        <p style="margin-top: 10px;"><strong>Ensures:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Data is reliable and trustworthy</li>
+                            <li>Information hasn't been tampered with</li>
+                            <li>Completeness of data</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Threats:</strong> Data corruption, unauthorized modification, malware</p>
+                        <p style="margin-top: 10px;"><strong>Safeguards:</strong> Hashing, digital signatures, checksums</p>
+                    </div>
+                    
+                    <div class="card" style="border: 3px solid #dc3545;">
+                        <h4>⚡ Availability</h4>
+                        <p><strong>Definition:</strong> Information is accessible when needed.</p>
+                        <p style="margin-top: 10px;"><strong>Ensures:</strong></p>
+                        <ul style="margin-left: 20px;">
+                            <li>Systems are operational</li>
+                            <li>Data can be accessed quickly</li>
+                            <li>No downtime or service disruption</li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Threats:</strong> DDoS attacks, system failures, disasters</p>
+                        <p style="margin-top: 10px;"><strong>Safeguards:</strong> Redundancy, backups, load balancing</p>
+                    </div>
+                </div>
+                
+                <h3>CIA Model Examples by Domain</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>Confidentiality</th>
+                            <th>Integrity</th>
+                            <th>Availability</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Healthcare</strong></td>
+                            <td>Patient privacy (HIPAA)</td>
+                            <td>Accurate medical records</td>
+                            <td>24/7 system availability</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Banking</strong></td>
+                            <td>Account details secret</td>
+                            <td>Transaction accuracy</td>
+                            <td>ATM/banking hours available</td>
+                        </tr>
+                        <tr>
+                            <td><strong>E-commerce</strong></td>
+                            <td>Credit card encrypted</td>
+                            <td>Order details not modified</td>
+                            <td>Website always online</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Military</strong></td>
+                            <td>Top secret classified data</td>
+                            <td>Mission accuracy</td>
+                            <td>Redundant communications</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Implementing CIA in Practice</h3>
+                <div class="key-points">
+                    <h4>Security Controls:</h4>
+                    <ul>
+                        <li><strong>Confidentiality:</strong> Encryption (AES), TLS/SSL, VPN, firewalls, access control lists (ACL)</li>
+                        <li><strong>Integrity:</strong> Hashing, digital signatures, HMAC, checksums, version control</li>
+                        <li><strong>Availability:</strong> Load balancing, backup systems, disaster recovery, DDoS mitigation, redundancy</li>
+                    </ul>
+                </div>
+                
+                <h3>Trade-offs in CIA</h3>
+                <div class="highlight">
+                    <strong>Common Conflicts:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Confidentiality vs Availability:</strong> Heavy encryption slows system (less available)</li>
+                        <li><strong>Confidentiality vs Usability:</strong> Strong authentication inconvenient (bad UX)</li>
+                        <li><strong>Integrity vs Performance:</strong> Extra hash checks slower (reduced availability)</li>
+                        <li><strong>Solution:</strong> Balance security with business needs (risk-based approach)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Section 8: Authentication Threats & Attacks -->
+            <div class="section">
+                <h2><span class="section-icon">⚠️</span> 8. Authentication Threats & Attacks</h2>
+                
+                <h3>Common Authentication Attacks</h3>
+                
+                <h3>1. Brute Force Attack</h3>
+                <div class="threat-box">
+                    <h4>Description:</h4>
+                    <p>Attacker tries all possible passwords until finding correct one.</p>
+                    <h4>Example:</h4>
+                    <p>Trying all 4-digit PINs (0000-9999) = 10,000 attempts</p>
+                    <h4>Defense:</h4>
+                    <ul>
+                        <li>Rate limiting (max 5 attempts per minute)</li>
+                        <li>Account lockout (lock after 10 failed attempts)</li>
+                        <li>Strong passwords (128-bit entropy)</li>
+                        <li>CAPTCHA verification</li>
+                        <li>Progressive delays between attempts</li>
+                    </ul>
+                </div>
+                
+                <h3>2. Dictionary Attack</h3>
+                <div class="threat-box">
+                    <h4>Description:</h4>
+                    <p>Attacker uses list of common words/passwords instead of all combinations.</p>
+                    <h4>Why Effective:</h4>
+                    <p>Most passwords are weak (password, 123456, qwerty, admin)</p>
+                    <h4>Defense:</h4>
+                    <ul>
+                        <li>Enforce strong password policy</li>
+                        <li>Forbid common passwords (check against dictionary lists)</li>
+                        <li>Rate limiting and account lockout</li>
+                        <li>Multi-factor authentication</li>
+                    </ul>
+                </div>
+                
+                <h3>3. Rainbow Table Attack</h3>
+                <div class="threat-box">
+                    <h4>Description:</h4>
+                    <p>Attacker uses pre-computed hash table to instantly look up password from hash.</p>
+                    <h4>Example:</h4>
+                    <p>Database breached: password hashes stolen. Attacker looks up hash in rainbow table.</p>
+                    <h4>Defense:</h4>
+                    <ul>
+                        <li>Use salt (makes rainbow tables useless)</li>
+                        <li>Use slow hash functions (bcrypt, Argon2)</li>
+                        <li>Use unique salt per password</li>
+                        <li>Never use MD5 for passwords</li>
+                    </ul>
+                </div>
+                
+                <h3>4. Phishing Attack</h3>
+                <div class="threat-box">
+                    <h4>Description:</h4>
+                    <p>Attacker tricks user into entering credentials on fake website.</p>
+                    <h4>Example:</h4>
+                    <p>Email "from bank" with link to fake login page. User enters username/password. Attacker steals credentials.</p>
+                    <h4>Defense:</h4>
+                    <ul>
+                        <li>Check URL carefully (legitimate: bank.com, fake: bank-secure.xyz)</li>
+                        <li>Enable MFA (even if password stolen, can't login)</li>
+                        <li>Use password manager (auto-fills only for correct domain)</li>
+                        <li>Look for SSL certificate (lock icon in browser)</li>
+                        <li>Never click email links (navigate directly to website)</li>
+                        <li>Email authentication (SPF, DKIM, DMARC)</li>
+                    </ul>
+                </div>
+                
+                <h3>5. Man-in-the-Middle (MITM) Attack</h3>
+                <div class="threat-box">
+                    <h4>Description:</h4>
+                    <p>Attacker intercepts communication between client and server.</p>
+                    <h4>Example:</h4>
+                    <p>User connects to unsecured WiFi. Attacker intercepts login request (password sent in plaintext).</p>
+                    <h4>Defense:</h4>
+                    <ul>
+                        <li>Use HTTPS/TLS encryption</li>
+                        <li>Verify SSL certificate</li>
+                        <li>Use VPN on public WiFi</li>
+                        <li>Use HSTS (force HTTPS)</li>
+                        <li>Certificate pinning (app)</li>
+                    </ul>
+                </div>
+                
+                <h3>6. Keylogging & Malware</h3>
+                <div class="threat-box">
+                    <h4>Description:</h4>
+                    <p>Malware records every keystroke on user's computer.</p>
+                    <h4>Example:</h4>
+                    <p>User installs infected app. Malware logs password as typed. Attacker gets password.</p>
+                    <h4>Defense:</h4>
+                    <ul>
+                        <li>Use antivirus/anti-malware software</li>
+                        <li>Keep OS updated (patch vulnerabilities)</li>
+                        <li>Use MFA (password alone not enough)</li>
+                        <li>Use on-screen keyboard (prevents keylogger)</li>
+                        <li>Use password manager (doesn't type password)</li>
+                        <li>Use hardware security keys (resistant to keylogging)</li>
+                    </ul>
+                </div>
+                
+                <h3>7. Credential Stuffing</h3>
+                <div class="threat-box">
+                    <h4>Description:</h4>
+                    <p>Attacker uses stolen credentials from one breach to try on other sites (users reuse passwords).</p>
+                    <h4>Example:</h4>
+                    <p>LinkedIn breach: 600M password hashes stolen. Attacker tries credentials on Facebook, Gmail, Twitter.</p>
+                    <h4>Defense:</h4>
+                    <ul>
+                        <li>Use unique passwords for each site</li>
+                        <li>Use password manager</li>
+                        <li>Enable MFA (prevent unauthorized access)</li>
+                        <li>Monitor for breaches (Have I Been Pwned?)</li>
+                        <li>Change password if site breached</li>
+                    </ul>
+                </div>
+                
+                <h3>8. Social Engineering</h3>
+                <div class="threat-box">
+                    <h4>Description:</h4>
+                    <p>Attacker manipulates person into revealing secrets (non-technical hack).</p>
+                    <h4>Example:</h4>
+                    <p>Attacker calls IT support pretending to be employee. "I forgot password, need reset." IT resets without verification.</p>
+                    <h4>Defense:</h4>
+                    <ul>
+                        <li>Security awareness training</li>
+                        <li>Verify identity before revealing information</li>
+                        <li>Never trust caller ID (can be spoofed)</li>
+                        <li>Use code words for verification</li>
+                        <li>Culture of security (report suspicious behavior)</li>
+                    </ul>
+                </div>
+                
+                <h3>Authentication Attack Summary Table</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Attack Type</th>
+                            <th>Target</th>
+                            <th>Difficulty</th>
+                            <th>Impact</th>
+                            <th>Best Defense</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Brute Force</strong></td>
+                            <td>Weak passwords</td>
+                            <td>Easy</td>
+                            <td>High</td>
+                            <td>Rate limiting, MFA</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dictionary</strong></td>
+                            <td>Common passwords</td>
+                            <td>Easy</td>
+                            <td>High</td>
+                            <td>Strong password policy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rainbow Table</strong></td>
+                            <td>Stolen hashes</td>
+                            <td>Easy</td>
+                            <td>Critical</td>
+                            <td>Salt + slow hashing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phishing</strong></td>
+                            <td>User behavior</td>
+                            <td>Medium</td>
+                            <td>Critical</td>
+                            <td>MFA, user training</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MITM</strong></td>
+                            <td>Unencrypted connection</td>
+                            <td>Medium</td>
+                            <td>Critical</td>
+                            <td>HTTPS/TLS encryption</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Keylogging</strong></td>
+                            <td>Compromised device</td>
+                            <td>Hard</td>
+                            <td>Critical</td>
+                            <td>MFA, antivirus, hardware keys</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Credential Stuffing</strong></td>
+                            <td>Password reuse</td>
+                            <td>Easy (automated)</td>
+                            <td>High</td>
+                            <td>Unique passwords, MFA</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Social Engineering</strong></td>
+                            <td>Human psychology</td>
+                            <td>Easy</td>
+                            <td>Critical</td>
+                            <td>Training, verification</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Section 9: RPC Protocol -->
+            <div class="section">
+                <h2><span class="section-icon">📡</span> 9. RPC (Remote Procedure Call) Protocol</h2>
+                
+                <h3>What is RPC?</h3>
+                <p>RPC (Remote Procedure Call) is a protocol that allows a program to execute a function/procedure on a remote computer as if it were local. Fundamental to distributed computing.</p>
+                
+                <h3>RPC Basics</h3>
+                <div class="highlight">
+                    <strong>How RPC Works:</strong>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Client calls a function (appears local)</li>
+                        <li>RPC client library packages function name & parameters</li>
+                        <li>Packages sent over network to remote server</li>
+                        <li>RPC server library unpacks parameters</li>
+                        <li>Server executes function on its machine</li>
+                        <li>Result returned to client over network</li>
+                        <li>Client library unpacks result, returns to caller</li>
+                    </ol>
+                </div>
+                
+                <h3>RPC vs Regular Function Call</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Aspect</th>
+                            <th>Local Function Call</th>
+                            <th>RPC (Remote Call)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Location</strong></td>
+                            <td>Same process/memory</td>
+                            <td>Different machine/process</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Speed</strong></td>
+                            <td>Very fast (microseconds)</td>
+                            <td>Slow (milliseconds)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Failure Modes</strong></td>
+                            <td>Stack overflow, crash</td>
+                            <td>Network failure, timeout</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security</strong></td>
+                            <td>Within same process</td>
+                            <td>Network exposed (needs encryption)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Parameters</strong></td>
+                            <td>Direct references</td>
+                            <td>Serialized/marshalled</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>RPC Implementation Models</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Synchronous RPC</h4>
+                        <p>Client waits for server response. Function blocks until result received.</p>
+                        <p style="margin-top: 10px;"><strong>Pros:</strong> Easy programming</p>
+                        <p><strong>Cons:</strong> Client blocked, slow</p>
+                    </div>
+                    <div class="card">
+                        <h4>Asynchronous RPC</h4>
+                        <p>Client doesn't wait for response. Callback function invoked when result ready.</p>
+                        <p style="margin-top: 10px;"><strong>Pros:</strong> Non-blocking, faster</p>
+                        <p><strong>Cons:</strong> Complex programming</p>
+                    </div>
+                </div>
+                
+                <h3>RPC Call Semantics</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Semantics</th>
+                            <th>Description</th>
+                            <th>Guarantee</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>At-Most-Once</strong></td>
+                            <td>Call executed 0 or 1 time</td>
+                            <td>No duplicates, may be lost</td>
+                        </tr>
+                        <tr>
+                            <td><strong>At-Least-Once</strong></td>
+                            <td>Call executed 1 or more times</td>
+                            <td>Never lost, may be duplicated</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Exactly-Once</strong></td>
+                            <td>Call executed exactly 1 time</td>
+                            <td>Perfect (hard to implement)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Popular RPC Frameworks</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>JSON-RPC</h4>
+                        <p>Simple RPC using JSON over HTTP. Used in blockchain (Bitcoin, Ethereum nodes).</p>
+                    </div>
+                    <div class="card">
+                        <h4>gRPC</h4>
+                        <p>Modern RPC by Google. Uses Protocol Buffers + HTTP/2. Very fast.</p>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>XMLRPC</h4>
+                        <p>Older standard using XML. Less popular now (JSON preferred).</p>
+                    </div>
+                    <div class="card">
+                        <h4>SOAP</h4>
+                        <p>Enterprise RPC using XML. Complex but secure. Used in banking/finance.</p>
+                    </div>
+                </div>
+                
+                <h3>RPC Example: Blockchain (Bitcoin/Ethereum)</h3>
+                <div class="code-block">
+                    <strong>Bitcoin JSON-RPC Call:</strong><br><br>
+                    <strong>Request:</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;"jsonrpc": "2.0",<br>
+                    &nbsp;&nbsp;"method": "getbalance",<br>
+                    &nbsp;&nbsp;"params": ["myaccount"],<br>
+                    &nbsp;&nbsp;"id": 1<br>
+                    }<br><br>
+                    <strong>Response:</strong><br>
+                    {<br>
+                    &nbsp;&nbsp;"jsonrpc": "2.0",<br>
+                    &nbsp;&nbsp;"result": 0.56,<br>
+                    &nbsp;&nbsp;"id": 1<br>
+                    }<br><br>
+                    Client calls getbalance() on remote Bitcoin node. Node returns account balance.
+                </div>
+                
+                <h3>RPC Security Considerations</h3>
+                <div class="threat-box">
+                    <h4>⚠️ RPC Security Threats</h4>
+                    <ul>
+                        <li><strong>No Authentication:</strong> If not secured, anyone can call RPC functions</li>
+                        <li><strong>Network Exposure:</strong> RPC exposed to network (firewall needed)</li>
+                        <li><strong>Privilege Escalation:</strong> RPC calls may execute with server privileges</li>
+                        <li><strong>Injection Attacks:</strong> Malicious parameters in RPC call</li>
+                        <li><strong>Man-in-the-Middle:</strong> RPC traffic not encrypted (use TLS)</li>
+                        <li><strong>DDoS Attacks:</strong> Flood server with RPC calls</li>
+                    </ul>
+                </div>
+                
+                <h3>RPC Security Best Practices</h3>
+                <div class="key-points">
+                    <h4>Securing RPC:</h4>
+                    <ul>
+                        <li><strong>Use TLS/SSL:</strong> Encrypt RPC traffic over HTTPS</li>
+                        <li><strong>Authentication:</strong> Require API keys or credentials</li>
+                        <li><strong>Authorization:</strong> Check user permissions before executing function</li>
+                        <li><strong>Rate Limiting:</strong> Limit RPC calls per user/IP</li>
+                        <li><strong>Input Validation:</strong> Validate all RPC parameters</li>
+                        <li><strong>Firewall Rules:</strong> Only allow RPC from trusted IPs</li>
+                        <li><strong>Logging:</strong> Log all RPC calls for audit trail</li>
+                        <li><strong>Timeouts:</strong> Prevent long-running RPC calls from blocking</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Conclusion -->
+            <div class="section">
+                <h2><span class="section-icon">✅</span> Summary & Key Takeaways</h2>
+                
+                <h3>Key Concepts</h3>
+                <div class="key-points">
+                    <h4>Cryptography Fundamentals:</h4>
+                    <ul>
+                        <li><strong>Hashing:</strong> One-way function converting input to fixed-size hash. Used for integrity & password storage.</li>
+                        <li><strong>Digital Signatures:</strong> Prove message authenticity & integrity. Sign with private key, verify with public key.</li>
+                        <li><strong>Encryption:</strong> Protect confidentiality. Symmetric (same key) for speed, asymmetric (public/private key) for distribution.</li>
+                    </ul>
+                </div>
+                
+                <div class="key-points">
+                    <h4>Authentication Methods:</h4>
+                    <ul>
+                        <li><strong>Passwords:</strong> Most common but weakest. Susceptible to phishing, brute force, reuse.</li>
+                        <li><strong>Biometrics:</strong> "Something you are." Fast, hard to spoof, but privacy concerns. Backup authentication option.</li>
+                        <li><strong>MFA:</strong> Multiple factors (password + OTP + biometric). Essential for high-security accounts.</li>
+                    </ul>
+                </div>
+                
+                <div class="key-points">
+                    <h4>CIA Model:</h4>
+                    <ul>
+                        <li><strong>Confidentiality:</strong> Data privacy (encryption, access control)</li>
+                        <li><strong>Integrity:</strong> Data accuracy (hashing, digital signatures)</li>
+                        <li><strong>Availability:</strong> System uptime (redundancy, backups, DDoS protection)</li>
+                    </ul>
+                </div>
+                
+                <h3>Security Recommendations</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Recommended Approach</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Personal Email</strong></td>
+                            <td>Strong password + 2FA (authenticator app)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Banking</strong></td>
+                            <td>Hardware security key + biometric + password</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Work System</strong></td>
+                            <td>MFA + single sign-on (SSO) + biometric option</td>
+                        </tr>
+                        <tr>
+                            <td><strong>High-Security Access</strong></td>
+                            <td>Multi-factor (3+ factors) + hardware tokens + audit logs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Password Storage</strong></td>
+                            <td>bcrypt/Argon2 with unique salt per password</td>
+                        </tr>
+                        <tr>
+                            <td><strong>API Security</strong></td>
+                            <td>TLS encryption + API keys + rate limiting + input validation</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>The Future of Authentication</h3>
+                <ul style="margin-left: 20px;">
+                    <li><strong>Passwordless Future:</strong> FIDO2/WebAuthn replacing passwords (already happening)</li>
+                    <li><strong>Biometric Integration:</strong> Face ID, fingerprint becoming standard</li>
+                    <li><strong>Decentralized Identity:</strong> Self-sovereign identity (blockchain-based)</li>
+                    <li><strong>Continuous Authentication:</strong> Behavioral biometrics monitoring (typing pattern, mouse movement)</li>
+                    <li><strong>Risk-Based Authentication:</strong> Adaptive authentication based on context</li>
+                    <li><strong>Quantum-Resistant Crypto:</strong> Post-quantum cryptography (preparing for quantum computers)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
