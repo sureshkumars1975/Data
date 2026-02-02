@@ -1,0 +1,1833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Attacks & Data Security</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin: 30px 0;
+            padding: 30px;
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            border-radius: 8px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-icon {
+            margin-right: 15px;
+            font-size: 1.8em;
+        }
+        
+        .section h3 {
+            color: #333;
+            font-size: 1.3em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        
+        .section p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+        }
+        
+        .key-points {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+        }
+        
+        .key-points h4 {
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+        
+        .key-points ul {
+            margin-left: 20px;
+        }
+        
+        .key-points li {
+            color: #555;
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .threat-box {
+            background: #f8d7da;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+        }
+        
+        .threat-box h4 {
+            color: #721c24;
+            margin-bottom: 10px;
+        }
+        
+        .threat-box p, .threat-box ul {
+            color: #721c24;
+        }
+        
+        .threat-box ul {
+            margin-left: 20px;
+        }
+        
+        .threat-box li {
+            margin: 5px 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .comparison-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 2px solid #667eea;
+        }
+        
+        .card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .card p {
+            color: #555;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .toc h3 {
+            color: #0066cc;
+            margin-bottom: 15px;
+        }
+        
+        .toc ol {
+            margin-left: 20px;
+        }
+        
+        .toc li {
+            color: #333;
+            margin: 8px 0;
+        }
+        
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+            margin: 20px 0;
+        }
+        
+        .risk-cell {
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: bold;
+            color: white;
+            font-size: 0.85em;
+        }
+        
+        .risk-critical { background: #c00; }
+        .risk-high { background: #f00; }
+        .risk-medium { background: #ff9800; }
+        .risk-low { background: #ffeb3b; color: #333; }
+        .risk-minimal { background: #8bc34a; }
+        
+        .process-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 2px solid #667eea;
+        }
+        
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .flow-step p {
+            margin: 0;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .access-control-matrix {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .access-control-matrix th, .access-control-matrix td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .access-control-matrix th {
+            background: #667eea;
+            color: white;
+        }
+        
+        .access-allowed { background: #d4edda; color: #155724; }
+        .access-denied { background: #f8d7da; color: #721c24; }
+        
+        .attack-flow {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 5px solid #dc3545;
+            margin: 15px 0;
+        }
+        
+        .attack-flow h4 {
+            color: #dc3545;
+            margin-bottom: 10px;
+        }
+        
+        .control-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .control-type {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 2px solid #667eea;
+        }
+        
+        .control-type h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .severity-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        
+        .severity-critical { background: #c00; }
+        .severity-high { background: #f00; }
+        .severity-medium { background: #ff9800; }
+        .severity-low { background: #ffeb3b; }
+        
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .grid-2, .grid-3, .control-comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Privacy Attacks & Data Security</h1>
+            <p>Methods, Controls, Risk Assessment & Threat Mitigation</p>
+        </div>
+        
+        <div class="content">
+            <!-- Table of Contents -->
+            <div class="toc">
+                <h3>📋 Table of Contents</h3>
+                <ol>
+                    <li>Privacy Attacks Overview</li>
+                    <li>Methods of Privacy Attacks</li>
+                    <li>Data Security Principles</li>
+                    <li>Access Control Models</li>
+                    <li>Data Loss Prevention (DLP)</li>
+                    <li>Extra Security Controls</li>
+                    <li>Risk Assessment & Measurement</li>
+                    <li>Threat Modeling & Analysis</li>
+                    <li>Attack Simulation & Defense</li>
+                </ol>
+            </div>
+            
+            <!-- Section 1: Privacy Attacks Overview -->
+            <div class="section">
+                <h2><span class="section-icon">👁️</span> 1. Privacy Attacks Overview</h2>
+                
+                <h3>What are Privacy Attacks?</h3>
+                <p>Privacy attacks are attempts to gain unauthorized access to, disclose, or misuse personal or sensitive data. Attackers aim to violate confidentiality and privacy rights.</p>
+                
+                <h3>Types of Privacy Violations</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Information Disclosure</h4>
+                        <p>Unauthorized access to personal data (names, addresses, SSN, medical records).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Data Breach</h4>
+                        <p>Large-scale theft of data from organization. Examples: Target, Equifax, Facebook.</p>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Surveillance</h4>
+                        <p>Continuous monitoring of individual's activities (tracking, location, behavior).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Data Profiling</h4>
+                        <p>Creating detailed profiles from collected data for discrimination or manipulation.</p>
+                    </div>
+                </div>
+                
+                <h3>Privacy Impact by Domain</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>Sensitive Data</th>
+                            <th>Potential Impact</th>
+                            <th>Regulations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Healthcare</strong></td>
+                            <td>Medical records, DNA, medications</td>
+                            <td>Identity theft, discrimination, insurance denial</td>
+                            <td>HIPAA (US), GDPR (EU)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Finance</strong></td>
+                            <td>Banking info, credit cards, SSN</td>
+                            <td>Fraud, identity theft, financial loss</td>
+                            <td>PCI-DSS, GLBA</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Education</strong></td>
+                            <td>Student records, grades, SSN</td>
+                            <td>Discrimination, educational record tampering</td>
+                            <td>FERPA (US)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Government</strong></td>
+                            <td>Citizen data, voting records, benefits</td>
+                            <td>Identity theft, election interference</td>
+                            <td>Agency-specific laws</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Social Media</strong></td>
+                            <td>Profile data, messages, location, photos</td>
+                            <td>Stalking, harassment, manipulation, blackmail</td>
+                            <td>GDPR, CCPA</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Section 2: Methods of Privacy Attacks -->
+            <div class="section">
+                <h2><span class="section-icon">⚔️</span> 2. Methods of Privacy Attacks</h2>
+                
+                <h3>Common Privacy Attack Techniques</h3>
+                
+                <h3>A. Eavesdropping & Interception</h3>
+                <div class="attack-flow">
+                    <h4>Description:</h4>
+                    <p>Attacker intercepts unencrypted communication to capture sensitive data.</p>
+                    <h4>Examples:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Packet sniffing on WiFi (capture passwords, emails)</li>
+                        <li>Man-in-the-middle (MITM) attacks on unsecured networks</li>
+                        <li>Cellular network interception (2G networks vulnerable)</li>
+                        <li>Phone tapping (requires legal warrant or hacking)</li>
+                    </ul>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Use HTTPS/TLS encryption</li>
+                        <li>Use VPN on public WiFi</li>
+                        <li>Avoid unsecured WiFi networks</li>
+                        <li>Use encrypted messaging apps (Signal, WhatsApp)</li>
+                    </ul>
+                </div>
+                
+                <h3>B. De-anonymization & Re-identification</h3>
+                <div class="attack-flow">
+                    <h4>Description:</h4>
+                    <p>Attacker combines anonymized data with other data sources to identify individuals.</p>
+                    <h4>Example:</h4>
+                    <p><strong>Netflix Dataset (2006):</strong> Netflix released anonymized movie ratings. Researchers combined with IMDb ratings to re-identify users (25-50% success rate). Users' movie preferences revealed personal information.</p>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Use differential privacy (add statistical noise)</li>
+                        <li>K-anonymity (make individual indistinguishable from k-1 others)</li>
+                        <li>Aggregate data before release</li>
+                        <li>Limit combinations of quasi-identifiers</li>
+                    </ul>
+                </div>
+                
+                <h3>C. Tracking & Location Surveillance</h3>
+                <div class="attack-flow">
+                    <h4>Description:</h4>
+                    <p>Attacker or service tracks individual's location and movement patterns.</p>
+                    <h4>Methods:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>GPS tracking (via smartphone, car)</li>
+                        <li>WiFi location tracking (identify nearby networks)</li>
+                        <li>Cell tower triangulation (phone location)</li>
+                        <li>Bluetooth beacons (tracking in buildings)</li>
+                        <li>IP address geolocation</li>
+                        <li>Social media check-ins</li>
+                    </ul>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Disable location services when not needed</li>
+                        <li>Use VPN to hide IP address</li>
+                        <li>Avoid checking into locations on social media</li>
+                        <li>Use Faraday cage (blocks tracking signals)</li>
+                        <li>Turn off WiFi & Bluetooth when not in use</li>
+                    </ul>
+                </div>
+                
+                <h3>D. Metadata Analysis</h3>
+                <div class="attack-flow">
+                    <h4>Description:</h4>
+                    <p>Attacker analyzes metadata (data about data) to infer private information.</p>
+                    <h4>Examples:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Email Metadata:</strong> Who emailed whom, when, frequency = relationship mapping</li>
+                        <li><strong>Phone Records:</strong> Call logs (without content) reveal social network</li>
+                        <li><strong>Web Browsing:</strong> Sites visited reveal interests, health status</li>
+                        <li><strong>File Metadata:</strong> Photo EXIF data contains location, camera, timestamp</li>
+                    </ul>
+                    <h4>Famous Case:</h4>
+                    <p>NSA collects phone metadata on millions of Americans without warrant. Analysis reveals patterns revealing medical conditions, religious beliefs, political affiliations.</p>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Strip metadata from files before sharing</li>
+                        <li>Use ephemeral messaging (disappearing messages)</li>
+                        <li>Use Tor browser (hides browsing metadata)</li>
+                        <li>Disable EXIF data in photos</li>
+                    </ul>
+                </div>
+                
+                <h3>E. Social Engineering & Phishing</h3>
+                <div class="attack-flow">
+                    <h4>Description:</h4>
+                    <p>Attacker manipulates person into revealing personal information.</p>
+                    <h4>Methods:</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Phishing emails (fake bank login page)</li>
+                        <li>Pretexting (fake authority figure)</li>
+                        <li>Baiting (USB drive left in parking lot)</li>
+                        <li>Tailgating (following into secure building)</li>
+                    </ul>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Security awareness training</li>
+                        <li>Verify sender identity before revealing info</li>
+                        <li>Check URLs before clicking</li>
+                        <li>Enable MFA</li>
+                    </ul>
+                </div>
+                
+                <h3>F. Data Scraping & Web Scraping</h3>
+                <div class="attack-flow">
+                    <h4>Description:</h4>
+                    <p>Attacker automatically extracts data from websites (social media, job sites, real estate listings).</p>
+                    <h4>Example:</h4>
+                    <p>Scraping LinkedIn profiles reveals employment history, education, connections = building social network for targeting.</p>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Rate limiting on data access</li>
+                        <li>CAPTCHAs to detect bots</li>
+                        <li>robots.txt file to block scrapers</li>
+                        <li>Legal terms of service (prevent scraping)</li>
+                    </ul>
+                </div>
+                
+                <h3>G. Inference Attacks</h3>
+                <div class="attack-flow">
+                    <h4>Description:</h4>
+                    <p>Attacker uses indirect information to infer private data.</p>
+                    <h4>Example:</h4>
+                    <p><strong>Membership Inference:</strong> Attacker queries AI model repeatedly to determine if specific record in training data. If model outputs change when member added = user's data was used.</p>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Differential privacy in machine learning</li>
+                        <li>Model compression to reduce leakage</li>
+                        <li>Limit query access to models</li>
+                    </ul>
+                </div>
+                
+                <h3>H. Doxing</h3>
+                <div class="attack-flow">
+                    <h4>Description:</h4>
+                    <p>Attacker publishes personal information online to harass or endanger target.</p>
+                    <h4>Example:</h4>
+                    <p>Activist's address, phone number, family names released online → harassment, swatting, physical danger</p>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Limit personal information online</li>
+                        <li>Use privacy settings on social media</li>
+                        <li>Use private domain registration (WHOIS privacy)</li>
+                        <li>Monitor for leaked information</li>
+                        <li>Report doxing to authorities & platforms</li>
+                    </ul>
+                </div>
+                
+                <h3>Privacy Attack Methods Summary</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Attack Method</th>
+                            <th>Data Targeted</th>
+                            <th>Difficulty</th>
+                            <th>Impact</th>
+                            <th>Detection</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Eavesdropping</strong></td>
+                            <td>Unencrypted communications</td>
+                            <td>Easy</td>
+                            <td>High</td>
+                            <td>Hard (passive)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>De-anonymization</strong></td>
+                            <td>Anonymized datasets</td>
+                            <td>Medium</td>
+                            <td>Critical</td>
+                            <td>Hard</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tracking</strong></td>
+                            <td>Location data</td>
+                            <td>Easy</td>
+                            <td>High</td>
+                            <td>Hard</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Metadata Analysis</strong></td>
+                            <td>Metadata patterns</td>
+                            <td>Medium</td>
+                            <td>High</td>
+                            <td>Hard</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Social Engineering</strong></td>
+                            <td>Any (human target)</td>
+                            <td>Easy</td>
+                            <td>Critical</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Web Scraping</strong></td>
+                            <td>Public website data</td>
+                            <td>Easy</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inference Attacks</strong></td>
+                            <td>ML model outputs</td>
+                            <td>Hard</td>
+                            <td>Medium</td>
+                            <td>Hard</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Doxing</strong></td>
+                            <td>Public + OSINT</td>
+                            <td>Easy</td>
+                            <td>Critical</td>
+                            <td>Medium</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Section 3: Data Security Principles -->
+            <div class="section">
+                <h2><span class="section-icon">🔒</span> 3. Data Security Principles</h2>
+                
+                <h3>Core Data Security Principles</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Data Classification</h4>
+                        <p>Categorize data by sensitivity level (Public, Internal, Confidential, Restricted).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Encryption</h4>
+                        <p>Encrypt sensitive data both in transit (TLS) and at rest (AES-256).</p>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Access Control</h4>
+                        <p>Only authorized users can access data. Use least privilege principle.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Audit Logging</h4>
+                        <p>Log all access to sensitive data. Review logs for suspicious activity.</p>
+                    </div>
+                </div>
+                
+                <h3>Data Lifecycle Protection</h3>
+                <div class="process-flow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div>
+                            <p><strong>Collection:</strong> Collect only necessary data. Get informed consent.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <p><strong>Processing:</strong> Minimize processing. Encrypt sensitive data.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <p><strong>Storage:</strong> Store on secure servers. Backup regularly.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div>
+                            <p><strong>Sharing:</strong> Only share with authorized parties. Use encryption.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div>
+                            <p><strong>Destruction:</strong> Securely delete data when no longer needed (crypto shredding).</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Privacy-First Design (Privacy by Design)</h3>
+                <div class="key-points">
+                    <h4>Core Principles:</h4>
+                    <ul>
+                        <li><strong>Data Minimization:</strong> Collect only necessary data</li>
+                        <li><strong>Purpose Limitation:</strong> Use data only for stated purpose</li>
+                        <li><strong>Storage Limitation:</strong> Keep data only as long as needed</li>
+                        <li><strong>Integrity & Confidentiality:</strong> Secure data against loss, damage, unauthorized processing</li>
+                        <li><strong>Transparency:</strong> Disclose data practices clearly</li>
+                        <li><strong>Accountability:</strong> Document privacy measures</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Section 4: Access Control Models -->
+            <div class="section">
+                <h2><span class="section-icon">🔑</span> 4. Access Control Models</h2>
+                
+                <h3>Access Control Fundamentals</h3>
+                <p>Access Control decides WHO can access WHAT resources and WHAT actions they can perform.</p>
+                
+                <h3>Access Control Models Comparison</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>How It Works</th>
+                            <th>Flexibility</th>
+                            <th>Use Case</th>
+                            <th>Complexity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>DAC</strong></td>
+                            <td>Owner decides permissions</td>
+                            <td>High</td>
+                            <td>Personal computers, home systems</td>
+                            <td>Low</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MAC</strong></td>
+                            <td>System enforces security labels</td>
+                            <td>Low</td>
+                            <td>Military, government classified</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td><strong>RBAC</strong></td>
+                            <td>User roles have permissions</td>
+                            <td>Medium</td>
+                            <td>Enterprise, most applications</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ABAC</strong></td>
+                            <td>Attributes determine access</td>
+                            <td>Very High</td>
+                            <td>Cloud, complex environments</td>
+                            <td>Very High</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>1. Discretionary Access Control (DAC)</h3>
+                <div class="card" style="border-left: 5px solid #667eea;">
+                    <h4>How It Works:</h4>
+                    <p>Data owner decides who can access their data and what permissions they have.</p>
+                    <h4>Example:</h4>
+                    <p>File permissions on Windows/Linux. Owner can grant read, write, execute permissions to other users.</p>
+                    <h4>Pros:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Flexible (owner has control)</li>
+                        <li>Simple to implement</li>
+                    </ul>
+                    <h4>Cons:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Owner may set weak permissions</li>
+                        <li>No central security policy</li>
+                        <li>Vulnerable to Trojan horses (execute permission)</li>
+                    </ul>
+                </div>
+                
+                <h3>2. Mandatory Access Control (MAC)</h3>
+                <div class="card" style="border-left: 5px solid #667eea;">
+                    <h4>How It Works:</h4>
+                    <p>System enforces security policy. Each user has clearance level, each data has classification level. User can only access data with lower or equal classification.</p>
+                    <h4>Security Levels (Top-Secret → Unclassified):</h4>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Top Secret:</strong> Highest classification</li>
+                        <li><strong>Secret:</strong> Medium classification</li>
+                        <li><strong>Confidential:</strong> Lower classification</li>
+                        <li><strong>Unclassified:</strong> Public information</li>
+                    </ul>
+                    <h4>Example (No Read Down, No Write Up):</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Colonel (Secret clearance) CAN read Secret documents</li>
+                        <li>Colonel (Secret clearance) CANNOT read Top Secret</li>
+                        <li>Colonel CANNOT write to Top Secret (no write up)</li>
+                    </ul>
+                    <h4>Pros:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Strong security (centrally enforced)</li>
+                        <li>Prevents information leakage</li>
+                    </ul>
+                    <h4>Cons:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Inflexible (rigid classifications)</li>
+                        <li>Complex & difficult to manage</li>
+                        <li>Slows down operations</li>
+                    </ul>
+                </div>
+                
+                <h3>3. Role-Based Access Control (RBAC)</h3>
+                <div class="card" style="border-left: 5px solid #667eea;">
+                    <h4>How It Works:</h4>
+                    <p>Users assigned to roles. Each role has specific permissions. User inherits role permissions.</p>
+                    <h4>Example (Hospital):</h4>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Doctor Role:</strong> Can read/write patient records, prescribe medications</li>
+                        <li><strong>Nurse Role:</strong> Can read patient records, log vitals (read/write limited)</li>
+                        <li><strong>Receptionist Role:</strong> Can read patient name/contact, NOT medical info</li>
+                        <li><strong>Admin Role:</strong> Can modify all records, manage users</li>
+                    </ul>
+                    <h4>Pros:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Simple to understand & manage</li>
+                        <li>Scalable (one role = many users)</li>
+                        <li>Works well for most organizations</li>
+                    </ul>
+                    <h4>Cons:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Role explosion (too many fine-grained roles)</li>
+                        <li>Doesn't handle exceptions well</li>
+                    </ul>
+                </div>
+                
+                <h3>4. Attribute-Based Access Control (ABAC)</h3>
+                <div class="card" style="border-left: 5px solid #667eea;">
+                    <h4>How It Works:</h4>
+                    <p>Access based on attributes (user, resource, environment, action). More flexible than RBAC.</p>
+                    <h4>Example (Cloud Storage):</h4>
+                    <p>Access granted if: User is in "Finance" department AND File is "Annual Report" AND Current time is 9-5 PM AND IP is from company office</p>
+                    <h4>Policy Language:</h4>
+                    <div class="code-block">
+                        <strong>IF</strong> user.department = "Finance"<br>
+                        &nbsp;&nbsp;<strong>AND</strong> resource.classification = "Confidential"<br>
+                        &nbsp;&nbsp;<strong>AND</strong> action = "read"<br>
+                        &nbsp;&nbsp;<strong>AND</strong> time.hour BETWEEN 9 AND 17<br>
+                        <strong>THEN</strong> allow access
+                    </div>
+                    <h4>Pros:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Most flexible & powerful</li>
+                        <li>Handles complex scenarios</li>
+                        <li>Context-aware (time, location, etc)</li>
+                    </ul>
+                    <h4>Cons:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Complex to design & implement</li>
+                        <li>Performance overhead</li>
+                        <li>Hard to debug policies</li>
+                    </ul>
+                </div>
+                
+                <h3>Least Privilege Principle</h3>
+                <div class="highlight">
+                    <strong>Key Principle:</strong> Give users the MINIMUM permissions needed to do their job. Nothing more.
+                    <div style="margin-top: 15px;">
+                        <strong>Example:</strong><br>
+                        Receptionist needs to read patient contact info. Give them read-only access to Contact Info table. Do NOT give them access to Medical Records, Billing, or Admin functions.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 5: Data Loss Prevention (DLP) -->
+            <div class="section">
+                <h2><span class="section-icon">🛡️</span> 5. Data Loss Prevention (DLP)</h2>
+                
+                <h3>What is Data Loss Prevention?</h3>
+                <p>DLP is a set of technologies and practices to prevent accidental or intentional unauthorized disclosure of sensitive data.</p>
+                
+                <h3>Data Loss Scenarios</h3>
+                <div class="grid-2">
+                    <div class="threat-box">
+                        <h4>Accidental Loss</h4>
+                        <ul>
+                            <li>Email to wrong recipient</li>
+                            <li>USB drive left in taxi</li>
+                            <li>Hard drive not encrypted</li>
+                            <li>Cloud share with public link</li>
+                            <li>Unencrypted backup deleted</li>
+                        </ul>
+                    </div>
+                    <div class="threat-box">
+                        <h4>Intentional Loss (Insider Threat)</h4>
+                        <ul>
+                            <li>Disgruntled employee steals data</li>
+                            <li>Contract worker downloads files</li>
+                            <li>Departing employee copies database</li>
+                            <li>Bribed employee sells client list</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>DLP Technologies</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>DLP Type</th>
+                            <th>Where It Runs</th>
+                            <th>Detection Method</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Endpoint DLP</strong></td>
+                            <td>User's computer</td>
+                            <td>Monitor USB, print, copy/paste, email</td>
+                            <td>Block/warn, log activity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Network DLP</strong></td>
+                            <td>Network gateway</td>
+                            <td>Inspect outgoing traffic for patterns</td>
+                            <td>Block/log transmission</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cloud DLP</strong></td>
+                            <td>Cloud storage service</td>
+                            <td>Monitor cloud uploads/sharing</td>
+                            <td>Block oversharing, audit logs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Database DLP</strong></td>
+                            <td>Database server</td>
+                            <td>Monitor data access & exports</td>
+                            <td>Alert on unusual patterns</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>DLP Detection Techniques</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Pattern Matching</h4>
+                        <p>Detect sensitive data types: credit card numbers (regex), SSN, PII patterns.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Fingerprinting</h4>
+                        <p>Hash data file. Detect if this specific file leaves organization.</p>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Dictionary/Keyword Matching</h4>
+                        <p>Search for keywords ("confidential", "client list", project names).</p>
+                    </div>
+                    <div class="card">
+                        <h4>Statistical Analysis</h4>
+                        <p>Detect unusual data access (user access 1000x normal volume).</p>
+                    </div>
+                </div>
+                
+                <h3>DLP Actions</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Action</th>
+                            <th>Description</th>
+                            <th>When Used</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Allow</strong></td>
+                            <td>Permit the action</td>
+                            <td>Action matches approved patterns</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Monitor</strong></td>
+                            <td>Log & track action (allow it)</td>
+                            <td>Suspicious but not critical. Need audit trail.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Warn</strong></td>
+                            <td>Alert user & ask for confirmation</td>
+                            <td>Sensitive data, let user override if legitimate</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Quarantine</strong></td>
+                            <td>Block & save for review by admin</td>
+                            <td>Possibly malicious, manual review needed</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Block</strong></td>
+                            <td>Deny the action immediately</td>
+                            <td>Violation of policy, never allow</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>DLP Best Practices</h3>
+                <div class="key-points">
+                    <h4>Implementing Effective DLP:</h4>
+                    <ul>
+                        <li>Classify data by sensitivity level first</li>
+                        <li>Define clear data handling policies</li>
+                        <li>Use multiple detection methods (not just pattern matching)</li>
+                        <li>Start with "monitor & log" before blocking</li>
+                        <li>Review logs regularly for false positives</li>
+                        <li>Train employees on data handling policies</li>
+                        <li>Monitor USB devices, cloud uploads, email attachments</li>
+                        <li>Implement file encryption for sensitive data</li>
+                        <li>Use digital rights management (DRM) for control of document access</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Section 6: Extra Security Controls -->
+            <div class="section">
+                <h2><span class="section-icon">🔐</span> 6. Extra Security Controls</h2>
+                
+                <h3>Layered Security (Defense in Depth)</h3>
+                <p>Don't rely on single security measure. Implement multiple layers. If one fails, others protect.</p>
+                
+                <h3>Categories of Security Controls</h3>
+                <div class="control-comparison">
+                    <div class="control-type">
+                        <h4>Preventive</h4>
+                        <p>Stop attack from happening</p>
+                        <ul style="margin-left: 20px; color: #555;">
+                            <li>Firewall</li>
+                            <li>Encryption</li>
+                            <li>Access control</li>
+                            <li>Patch management</li>
+                        </ul>
+                    </div>
+                    <div class="control-type">
+                        <h4>Detective</h4>
+                        <p>Detect attack while happening</p>
+                        <ul style="margin-left: 20px; color: #555;">
+                            <li>IDS/IPS</li>
+                            <li>Antivirus</li>
+                            <li>Audit logs</li>
+                            <li>SIEM system</li>
+                        </ul>
+                    </div>
+                    <div class="control-type">
+                        <h4>Responsive</h4>
+                        <p>React after attack detected</p>
+                        <ul style="margin-left: 20px; color: #555;">
+                            <li>Incident response</li>
+                            <li>Isolation</li>
+                            <li>Recovery</li>
+                            <li>Notification</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Key Security Controls</h3>
+                
+                <h3>1. Encryption</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Encryption Type</th>
+                            <th>When</th>
+                            <th>Algorithm</th>
+                            <th>Key Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>At Rest</strong></td>
+                            <td>Data stored on disk</td>
+                            <td>AES-256 (symmetric)</td>
+                            <td>256 bits</td>
+                        </tr>
+                        <tr>
+                            <td><strong>In Transit</strong></td>
+                            <td>Data over network</td>
+                            <td>TLS 1.3 (asymmetric)</td>
+                            <td>256+ bits</td>
+                        </tr>
+                        <tr>
+                            <td><strong>In Use</strong></td>
+                            <td>Data in memory/processing</td>
+                            <td>Homomorphic encryption</td>
+                            <td>Complex</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>2. Multi-Factor Authentication (MFA)</h3>
+                <div class="highlight">
+                    <strong>Add extra authentication factors to critical accounts:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Admin accounts (always MFA)</li>
+                        <li>Email accounts (backup to other accounts)</li>
+                        <li>VPN access (remote access)</li>
+                        <li>Database access (sensitive data)</li>
+                        <li>Cloud console (AWS, Azure, GCP)</li>
+                    </ul>
+                </div>
+                
+                <h3>3. Intrusion Detection/Prevention (IDS/IPS)</h3>
+                <div class="card">
+                    <h4>IDS (Intrusion Detection System)</h4>
+                    <p><strong>Function:</strong> Monitor network traffic for suspicious patterns. Alert on detection (passive).</p>
+                    <p style="margin-top: 10px;"><strong>Example Signature:</strong> Multiple failed login attempts from same IP = brute force attack</p>
+                </div>
+                
+                <div class="card">
+                    <h4>IPS (Intrusion Prevention System)</h4>
+                    <p><strong>Function:</strong> Like IDS but also blocks malicious traffic (active defense).</p>
+                    <p style="margin-top: 10px;"><strong>Example Action:</strong> Detected SQL injection → block connection from that IP</p>
+                </div>
+                
+                <h3>4. Security Information & Event Management (SIEM)</h3>
+                <div class="card">
+                    <h4>What It Does:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Collects logs from all sources (servers, firewalls, routers, applications)</li>
+                        <li>Normalizes log format for analysis</li>
+                        <li>Correlates events to detect patterns</li>
+                        <li>Alerts on anomalies</li>
+                        <li>Provides dashboard for monitoring</li>
+                    </ul>
+                    <h4>Example Correlation:</h4>
+                    <p>User X logged in from IP in China at 3 AM (unusual) → then accessed sensitive database with large export = potential data theft</p>
+                </div>
+                
+                <h3>5. Web Application Firewall (WAF)</h3>
+                <div class="card">
+                    <h4>Protects Against:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>SQL injection (malicious SQL commands)</li>
+                        <li>Cross-Site Scripting (XSS) (inject malicious script)</li>
+                        <li>Cross-Site Request Forgery (CSRF) (force user action)</li>
+                        <li>DDoS attacks (flood with requests)</li>
+                        <li>Malicious bots (scrapers, attackers)</li>
+                    </ul>
+                </div>
+                
+                <h3>6. Backup & Disaster Recovery</h3>
+                <div class="highlight">
+                    <strong>3-2-1 Backup Rule:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>3 copies of data (original + 2 backups)</li>
+                        <li>2 different storage types (disk + tape)</li>
+                        <li>1 copy off-site (protection against disasters)</li>
+                    </ul>
+                </div>
+                
+                <h3>7. Zero Trust Architecture</h3>
+                <div class="card">
+                    <h4>Core Principle:</h4>
+                    <p>"Never trust, always verify." Even internal traffic verified before access.</p>
+                    <h4>Implementation:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Authenticate all users (no implicit trust)</li>
+                        <li>Authorize per-request (not per-session)</li>
+                        <li>Encrypt all communications</li>
+                        <li>Monitor & log everything</li>
+                        <li>Assume breach (prepare for attack)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Section 7: Risk Assessment & Measurement -->
+            <div class="section">
+                <h2><span class="section-icon">📊</span> 7. Risk Assessment & Measurement</h2>
+                
+                <h3>What is Risk?</h3>
+                <p><strong>Risk = Threat × Vulnerability × Impact</strong></p>
+                <p>Risk is the possibility that a threat will exploit a vulnerability and cause damage.</p>
+                
+                <h3>Risk Assessment Process</h3>
+                <div class="process-flow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div>
+                            <p><strong>Asset Identification:</strong> List all valuable assets (data, systems, infrastructure)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <p><strong>Threat Identification:</strong> What could go wrong? (malware, insider, disaster)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <p><strong>Vulnerability Assessment:</strong> What weaknesses exist? (unpatched, weak password policy)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div>
+                            <p><strong>Impact Analysis:</strong> If breach happens, what's the damage? (financial, reputation, legal)</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div>
+                            <p><strong>Risk Calculation:</strong> Combine to get risk score</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div>
+                            <p><strong>Mitigation Planning:</strong> How to reduce risk? (controls, policy)</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Risk Quantification Methods</h3>
+                
+                <h3>A. Quantitative Risk Analysis</h3>
+                <div class="highlight">
+                    <strong>Formula:</strong> Annual Risk = Probability × Impact × Exposure<br><br>
+                    <strong>Example:</strong><br>
+                    - Asset: Customer database with 1M records<br>
+                    - Threat: Data breach<br>
+                    - Probability: 5% annually (1 in 20 chance)<br>
+                    - Impact per record: $100 (fines, notification, credit monitoring)<br>
+                    - Exposure: 1M records<br>
+                    - Annual Risk = 0.05 × $100 × 1M = $5 Million per year
+                </div>
+                
+                <h3>B. Qualitative Risk Analysis</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Risk Level</th>
+                            <th>Probability</th>
+                            <th>Impact</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="severity-indicator severity-critical"></span><strong>Critical</strong></td>
+                            <td>High (> 50%)</td>
+                            <td>Severe ($1M+)</td>
+                            <td>Immediate mitigation (months)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="severity-indicator severity-high"></span><strong>High</strong></td>
+                            <td>Medium (20-50%)</td>
+                            <td>Major ($100k-1M)</td>
+                            <td>Urgent mitigation (quarters)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="severity-indicator severity-medium"></span><strong>Medium</strong></td>
+                            <td>Medium (20-50%)</td>
+                            <td>Moderate ($10k-100k)</td>
+                            <td>Plan mitigation (year)</td>
+                        </tr>
+                        <tr>
+                            <td><span class="severity-indicator severity-low"></span><strong>Low</strong></td>
+                            <td>Low (< 20%)</td>
+                            <td>Minor ($1k-10k)</td>
+                            <td>Monitor & accept</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Risk Matrix (Probability × Impact)</h3>
+                <div style="background: white; padding: 20px; border-radius: 5px; margin: 15px 0;">
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Minimal Impact</th>
+                                <th>Minor Impact</th>
+                                <th>Moderate Impact</th>
+                                <th>Major Impact</th>
+                                <th>Severe Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>High Probability</strong></td>
+                                <td class="risk-cell risk-medium">Medium</td>
+                                <td class="risk-cell risk-high">High</td>
+                                <td class="risk-cell risk-critical">Critical</td>
+                                <td class="risk-cell risk-critical">Critical</td>
+                                <td class="risk-cell risk-critical">Critical</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Medium Probability</strong></td>
+                                <td class="risk-cell risk-low">Low</td>
+                                <td class="risk-cell risk-medium">Medium</td>
+                                <td class="risk-cell risk-high">High</td>
+                                <td class="risk-cell risk-critical">Critical</td>
+                                <td class="risk-cell risk-critical">Critical</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Low Probability</strong></td>
+                                <td class="risk-cell risk-minimal">Minimal</td>
+                                <td class="risk-cell risk-low">Low</td>
+                                <td class="risk-cell risk-medium">Medium</td>
+                                <td class="risk-cell risk-high">High</td>
+                                <td class="risk-cell risk-critical">Critical</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3>Risk Metrics for Privacy</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Definition</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>MTTR</strong></td>
+                            <td>Mean Time To Respond (incident detection → response)</td>
+                            <td>Goal: < 1 hour for critical incident</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MTBF</strong></td>
+                            <td>Mean Time Between Failures (uptime metric)</td>
+                            <td>99.99% uptime = 52 min downtime/year</td>
+                        </tr>
+                        <tr>
+                            <td><strong>RTO</strong></td>
+                            <td>Recovery Time Objective (how long to restore after disaster)</td>
+                            <td>Bank RTO: 4 hours (must restore within 4 hours)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>RPO</strong></td>
+                            <td>Recovery Point Objective (max data loss acceptable)</td>
+                            <td>Bank RPO: 1 hour (backup every hour, lose ≤1 hour data)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>ARO</strong></td>
+                            <td>Annualized Rate of Occurrence (how many times/year)</td>
+                            <td>Data breach ARO: 0.2 = once every 5 years</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Section 8: Threat Modeling -->
+            <div class="section">
+                <h2><span class="section-icon">🎯</span> 8. Threat Modeling & Analysis</h2>
+                
+                <h3>What is Threat Modeling?</h3>
+                <p>Systematic process of identifying potential threats to a system and understanding attack vectors.</p>
+                
+                <h3>STRIDE Threat Model</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Threat Type</th>
+                            <th>Definition</th>
+                            <th>Property Violated</th>
+                            <th>Example Attack</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Spoofing</strong></td>
+                            <td>Pretend to be someone else</td>
+                            <td>Authentication</td>
+                            <td>Fake email from CEO asking for password</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tampering</strong></td>
+                            <td>Modify data in transit or storage</td>
+                            <td>Integrity</td>
+                            <td>Intercept request & change bank transfer amount</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Repudiation</strong></td>
+                            <td>Deny doing something</td>
+                            <td>Non-repudiation</td>
+                            <td>User denies sending email (no log proof)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Information Disclosure</strong></td>
+                            <td>Expose confidential information</td>
+                            <td>Confidentiality</td>
+                            <td>Read customer database from backup on USB</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Denial of Service</strong></td>
+                            <td>Make system unavailable</td>
+                            <td>Availability</td>
+                            <td>DDoS attack floods server with requests</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Elevation of Privilege</strong></td>
+                            <td>Gain higher privileges than authorized</td>
+                            <td>Authorization</td>
+                            <td>Exploit OS vulnerability to become admin</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Attacker Profiling: Average Attacker</h3>
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>Average Attacker Profile</h4>
+                        <p><strong>Skill Level:</strong> Medium (script kiddie)</p>
+                        <p style="margin-top: 10px;"><strong>Motivation:</strong> Money (easiest target)</p>
+                        <p style="margin-top: 10px;"><strong>Resources:</strong> Limited budget</p>
+                        <p style="margin-top: 10px;"><strong>Patience:</strong> Low (quick ROI)</p>
+                        <p style="margin-top: 10px;"><strong>Time:</strong> Hours to days</p>
+                    </div>
+                    <div class="card">
+                        <h4>Attack Strategy</h4>
+                        <ul style="margin-left: 20px; color: #555;">
+                            <li>Find easy targets (outdated software)</li>
+                            <li>Use automated tools/exploits</li>
+                            <li>Mass phishing campaigns</li>
+                            <li>Ransomware attacks</li>
+                            <li>Credential stuffing</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <h3>Attacker Types Comparison</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Attacker Type</th>
+                            <th>Skill Level</th>
+                            <th>Motivation</th>
+                            <th>Target Complexity</th>
+                            <th>Detection Difficulty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Script Kiddie</strong></td>
+                            <td>Low</td>
+                            <td>Curiosity, fame</td>
+                            <td>Very Easy (defaults, known exploits)</td>
+                            <td>Easy</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Average Attacker</strong></td>
+                            <td>Medium</td>
+                            <td>Money</td>
+                            <td>Easy (outdated, weak security)</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Skilled Attacker</strong></td>
+                            <td>High</td>
+                            <td>Espionage, vendetta</td>
+                            <td>Medium (requires custom exploits)</td>
+                            <td>Hard</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nation State</strong></td>
+                            <td>Very High</td>
+                            <td>Political, military</td>
+                            <td>Very Hard (zero-days, APT)</td>
+                            <td>Very Hard</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Attack Chain: How Average Attacker Works</h3>
+                <div class="process-flow">
+                    <div class="flow-step">
+                        <div class="step-number">1</div>
+                        <div>
+                            <p><strong>Reconnaissance:</strong> Identify target company. Google search for public information.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">2</div>
+                        <div>
+                            <p><strong>Scanning:</strong> Use free tools (Shodan, nmap) to find open ports, software versions.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">3</div>
+                        <div>
+                            <p><strong>Enumeration:</strong> Find usernames (LinkedIn). Check for default credentials.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">4</div>
+                        <div>
+                            <p><strong>Vulnerability Identification:</strong> Check for known CVEs in software versions found.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">5</div>
+                        <div>
+                            <p><strong>Exploitation:</strong> Use public exploit code. Send phishing email to employees.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">6</div>
+                        <div>
+                            <p><strong>Access Establishment:</strong> Get foothold in network. Create backdoor for persistence.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">7</div>
+                        <div>
+                            <p><strong>Data Theft:</strong> Find valuable data. Download to attacker's server.</p>
+                        </div>
+                    </div>
+                    <div class="flow-step">
+                        <div class="step-number">8</div>
+                        <div>
+                            <p><strong>Monetization:</strong> Sell data on dark web. Demand ransom. Extort company.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Defending Against Average Attacker</h3>
+                <div class="key-points">
+                    <h4>Most Effective Defenses (Stop 95% of attacks):</h4>
+                    <ul>
+                        <li><strong>Patch Management:</strong> Keep software updated (fixes known CVEs)</li>
+                        <li><strong>Multi-Factor Authentication:</strong> Phishing alone won't work</li>
+                        <li><strong>Employee Training:</strong> Recognize phishing emails</li>
+                        <li><strong>Strong Passwords:</strong> No default credentials</li>
+                        <li><strong>Access Control:</strong> Least privilege (no domain admin for everyone)</li>
+                        <li><strong>Backup & Recovery:</strong> Ransomware doesn't work if you have backup</li>
+                        <li><strong>Firewall & IDS:</strong> Detect port scans, suspicious traffic</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Section 9: Attack Simulation -->
+            <div class="section">
+                <h2><span class="section-icon">🔬</span> 9. Attack Simulation & Defense Strategies</h2>
+                
+                <h3>Penetration Testing (Pen Test)</h3>
+                <p>Authorized security testing to identify vulnerabilities before attackers do.</p>
+                
+                <h3>Penetration Testing Phases</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Activity</th>
+                            <th>Tools</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Reconnaissance</strong></td>
+                            <td>Passive info gathering (public data)</td>
+                            <td>Google, Shodan, WHOIS, DNS</td>
+                            <td>1-2 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scanning</strong></td>
+                            <td>Active probing (ports, services, versions)</td>
+                            <td>nmap, Nessus, Qualys</td>
+                            <td>1-2 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Enumeration</strong></td>
+                            <td>Detailed service mapping (users, shares)</td>
+                            <td>enum4linux, SMB tools</td>
+                            <td>1-2 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Exploitation</strong></td>
+                            <td>Find and exploit vulnerabilities</td>
+                            <td>Metasploit, custom exploits</td>
+                            <td>3-5 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Post-Exploitation</strong></td>
+                            <td>Escalate privilege, establish persistence</td>
+                            <td>Mimikatz, Empire, Cobalt Strike</td>
+                            <td>2-3 days</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reporting</strong></td>
+                            <td>Document findings, recommendations</td>
+                            <td>Word, Dradis</td>
+                            <td>3-5 days</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Example Pen Test Scenario: Healthcare Organization</h3>
+                <div class="attack-flow">
+                    <h4>Objective:</h4>
+                    <p>Test security of patient database containing medical records & SSN.</p>
+                    
+                    <h4>Reconnaissance (Day 1):</h4>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Google: "hospital.com" → find employees on LinkedIn</li>
+                        <li>DNS lookup: Identify mail server, web server IP</li>
+                        <li>WHOIS: Find domain registrar, administrative contacts</li>
+                        <li>Social media: Find employee names, departments</li>
+                    </ul>
+                    
+                    <h4>Scanning (Day 2):</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>nmap -sV 203.0.113.0/24 → find open ports (80, 443, 3306, 5432)</li>
+                        <li>Nessus scan → identify unpatched software, weak configs</li>
+                        <li>Check for known CVEs in identified software versions</li>
+                    </ul>
+                    
+                    <h4>Vulnerability Finding (Day 3-4):</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>SQL injection in patient search field (CRITICAL)</li>
+                        <li>Unencrypted API calls transmitting patient data</li>
+                        <li>Default database credentials (admin/password)</li>
+                        <li>Weak password policy (6 character minimum)</li>
+                    </ul>
+                    
+                    <h4>Exploitation (Day 5):</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Use SQL injection to extract patient database (100k records)</li>
+                        <li>Escalate to database admin account</li>
+                        <li>Create backdoor for persistence</li>
+                    </ul>
+                    
+                    <h4>Finding Report:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>5 Critical vulnerabilities (immediate fix needed)</li>
+                        <li>12 High vulnerabilities (fix within 30 days)</li>
+                        <li>25 Medium vulnerabilities (fix within 90 days)</li>
+                        <li>Estimated exposure: $50M+ in HIPAA fines + liability</li>
+                    </ul>
+                </div>
+                
+                <h3>Defense Strategies Against Common Attacks</h3>
+                
+                <h3>Against SQL Injection</h3>
+                <div class="card">
+                    <h4>Attacker Strategy:</h4>
+                    <p>Input: ' OR '1'='1' → Returns all records</p>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Use parameterized queries (bind variables)</li>
+                        <li>Input validation (whitelist safe characters)</li>
+                        <li>Principle of least privilege (DB user no admin)</li>
+                        <li>WAF (Web Application Firewall)</li>
+                    </ul>
+                </div>
+                
+                <h3>Against Ransomware</h3>
+                <div class="card">
+                    <h4>Attacker Strategy:</h4>
+                    <p>Encrypt all files, demand payment for decryption key</p>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>Backup (offline, immutable copy)</li>
+                        <li>Email filtering (block suspicious attachments)</li>
+                        <li>Endpoint detection (monitor for encryption activity)</li>
+                        <li>Access control (don't give admin rights)</li>
+                        <li>Disaster recovery plan</li>
+                    </ul>
+                </div>
+                
+                <h3>Against Insider Threats</h3>
+                <div class="card">
+                    <h4>Attacker Strategy:</h4>
+                    <p>Employee with access copies database before leaving company</p>
+                    <h4>Defense:</h4>
+                    <ul style="margin-left: 20px;">
+                        <li>DLP (monitor & block file transfers)</li>
+                        <li>Audit logging (track all data access)</li>
+                        <li>User behavior analytics (detect anomalies)</li>
+                        <li>Confidentiality agreements & legal deterrent</li>
+                        <li>Background checks for sensitive roles</li>
+                        <li>Offboarding process (revoke access immediately)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Conclusion -->
+            <div class="section">
+                <h2><span class="section-icon">✅</span> Summary & Key Takeaways</h2>
+                
+                <h3>Privacy Attacks Landscape</h3>
+                <div class="key-points">
+                    <h4>Most Common Privacy Attacks (Order of Frequency):</h4>
+                    <ul>
+                        <li><strong>Phishing & Social Engineering:</strong> Easiest (low skill, high success)</li>
+                        <li><strong>Ransomware:</strong> Most damaging (complete system disruption)</li>
+                        <li><strong>Credential Stuffing:</strong> Automated (password reuse)</li>
+                        <li><strong>Data Breaches:</strong> Most impactful (millions of records stolen)</li>
+                        <li><strong>Insider Threats:</strong> Hardest to detect</li>
+                    </ul>
+                </div>
+                
+                <h3>Security Control Prioritization</h3>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Priority</th>
+                            <th>Control</th>
+                            <th>Cost</th>
+                            <th>Effectiveness</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1 (Critical)</strong></td>
+                            <td>Patch Management & Updates</td>
+                            <td>Low</td>
+                            <td>95% stop average attacker</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2 (Critical)</strong></td>
+                            <td>Multi-Factor Authentication</td>
+                            <td>Low</td>
+                            <td>Stops phishing attacks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3 (Critical)</strong></td>
+                            <td>Backup & Disaster Recovery</td>
+                            <td>Medium</td>
+                            <td>Stops ransomware damage</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4 (Important)</strong></td>
+                            <td>Encryption (At Rest & In Transit)</td>
+                            <td>Low</td>
+                            <td>Prevents data exposure</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5 (Important)</strong></td>
+                            <td>Access Control & Least Privilege</td>
+                            <td>Low</td>
+                            <td>Limits breach scope</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6 (Important)</strong></td>
+                            <td>Security Awareness Training</td>
+                            <td>Low</td>
+                            <td>Reduces human error</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Risk Management Framework</h3>
+                <div class="highlight">
+                    <strong>Remember:</strong> You can't prevent all attacks. Focus on:
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Reduce risk to acceptable level (risk tolerance)</li>
+                        <li>Invest in controls with best ROI</li>
+                        <li>Balance security with usability/cost</li>
+                        <li>Assume breach will happen (prepare for it)</li>
+                        <li>Continuous monitoring & improvement</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
