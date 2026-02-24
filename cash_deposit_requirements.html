@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Automated Cash Deposit Machine — Security Requirements (CIA)</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+      :root{--accent:#0366d6;--high:#c62727;--med:#d18b00;--low:#2d6a4f;--muted:#666}
+      body { font-family: Inter, system-ui, -apple-system, Arial, Helvetica, sans-serif; padding: 24px; max-width: 980px; margin: auto; color:#111; line-height:1.45 }
+    h1 { margin-bottom: 6px; }
+      .top-nav { display:flex; gap:12px; margin-bottom:18px; flex-wrap:wrap }
+      .top-nav a { text-decoration:none; color:var(--accent); padding:6px 10px; border-radius:6px; font-weight:600 }
+    .top-nav a:hover { background:#f0f8ff; }
+      .requirements-table { width:100%; border-collapse:separate; border-spacing:0; margin:18px 0; box-shadow:0 1px 0 rgba(0,0,0,0.04) }
+      .requirements-table th, .requirements-table td { padding:12px 14px; text-align:left; vertical-align:top }
+      .requirements-table thead th { background:#f7f9fb; border-bottom:1px solid #e6eef8; font-weight:700 }
+      .requirements-table tbody tr { background:#fff }
+      .requirements-table tbody tr + tr td { border-top:1px solid #f1f4f8 }
+      .requirements-table tbody tr:nth-child(even) { background:#fcfdff }
+      caption.section-title { caption-side:top; text-align:left; font-weight:800; font-size:1.05rem; padding:6px 0 }
+      .badge { display:inline-block; padding:6px 10px; border-radius:999px; font-weight:700; color:#fff; font-size:0.85rem }
+      .badge.high { background:var(--high) }
+      .badge.medium { background:var(--med) }
+      .badge.low { background:var(--low) }
+      .muted { color:#666 }
+      .back-top { display:inline-block; margin-top:8px; font-size:0.9rem }
+      footer { margin-top:28px; font-size:0.95rem; color:#333 }
+      @media (max-width:720px){
+        body{padding:14px}
+        .requirements-table thead{display:none}
+        .requirements-table tbody td{display:block;padding:10px 8px}
+        .requirements-table tbody td::before{content:attr(data-label);display:block;font-weight:700;margin-bottom:6px}
+      }
+      @media print{ .top-nav{display:none} a{color:#000} .badge{color:#000 !important} }
+  </style>
+</head>
+<body>
+  <nav class="top-nav" aria-label="Main navigation">
+    <a href="index.html">Home</a>
+    <a href="crypto_notation.html">Crypto Notation</a>
+    <a href="brain_tumor_detection_frontend.html">Brain Tumor Demo</a>
+    <a href="#" onclick="history.back(); return false;">Back</a>
+  </nav>
+  <h1>Automated Cash Deposit Machine — Security Requirements (CIA)</h1>
+    <section>
+      <h2 id="problem">Problem</h2>
+      <p>Consider an automated cash deposit machine in which users provide a card or an account number to deposit cash. Give examples of confidentiality, integrity, and availability requirements associated with the system, and, in each case, indicate the degree of importance of the requirement.</p>
+    </section>
+
+    <p class="page-desc">Below are practical examples of confidentiality, integrity and availability requirements for an automated cash deposit machine (ACDM). Each entry shows a short rationale and an importance rating.</p>
+    <section class="cards-grid" aria-labelledby="cards-summary">
+      <h3 id="cards-summary" class="muted">Requirements (card format)</h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:12px">
+        <article class="card" aria-labelledby="conf-title">
+          <h4 id="conf-title">Confidentiality</h4>
+          <p class="muted">Protect sensitive user and transaction data from unauthorized disclosure.</p>
+          <ul>
+            <li><strong>Protect card/account numbers and PINs</strong> — Encrypt PANs, account numbers and PINs in transit and at rest. <span class="badge high">High</span></li>
+            <li><strong>Protect transaction metadata</strong> — Limit access to amounts, timestamps, and identifiers. <span class="badge medium">Medium</span></li>
+            <li><strong>Control access to images/CCTV</strong> — Apply RBAC and retention policies to camera/envelope images. <span class="badge medium">Medium</span></li>
+          </ul>
+        </article>
+
+        <article class="card" aria-labelledby="int-title">
+          <h4 id="int-title">Integrity</h4>
+          <p class="muted">Ensure accurate, untampered records and system behavior.</p>
+          <ul>
+            <li><strong>Accurate deposit recording</strong> — Count validation and reconciled records; cryptographic receipts. <span class="badge high">High</span></li>
+            <li><strong>Protect transaction logs</strong> — Use signatures/HMACs and immutable storage for logs. <span class="badge high">High</span></li>
+            <li><strong>Trusted software/firmware</strong> — Secure boot and signed updates to prevent malicious code. <span class="badge high">High</span></li>
+            <li><strong>Sensor tamper detection</strong> — Detect and log physical manipulation of cash sensors. <span class="badge medium">Medium</span></li>
+          </ul>
+        </article>
+
+        <article class="card" aria-labelledby="av-title">
+          <h4 id="av-title">Availability</h4>
+          <p class="muted">Keep services usable and recoverable for customers and operators.</p>
+          <ul>
+            <li><strong>High uptime</strong> — Redundancy, monitoring, and fast recovery for deposit services. <span class="badge high">High</span></li>
+            <li><strong>Offline queueing</strong> — Securely queue transactions when network is down and sync later. <span class="badge medium">Medium</span></li>
+            <li><strong>Receipts & dispute records</strong> — Persistent references and receipts for reconciliation. <span class="badge medium">Medium</span></li>
+            <li><strong>Physical robustness</strong> — Tamper-evident hardware, UPS, and timely maintenance. <span class="badge high">High</span></li>
+          </ul>
+        </article>
+      </div>
+      <p style="margin-top:12px"><a class="back-top" href="#problem">Back to top</a></p>
+    </section>
+
+  <footer>
+    Controls and mitigations (examples): encryption (TLS, disk crypto), HSMs for key protection, signed firmware/secure boot, tamper-evident hardware, redundant network links and queueing, UPS/backup power, monitoring/alerts, strict access controls and retention policies.
+  </footer>
+</body>
+</html>

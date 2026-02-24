@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Problems 1.1 & 1.2 — CIA Requirements</title>
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#111}
+    header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+    nav a{margin-right:12px;color:#0366d6;text-decoration:none;font-weight:600}
+    h1{font-size:1.25rem;margin:0}
+    section{background:#fff;border:1px solid #e8eef8;padding:14px;border-radius:8px;margin-bottom:14px}
+    .req-list{list-style:none;padding:0;margin:8px 0}
+    .req-list li{padding:8px 0;border-bottom:1px dashed #eef}
+    .badge{display:inline-block;padding:4px 8px;border-radius:999px;color:#fff;font-weight:700;font-size:0.8rem;margin-left:8px}
+    .high{background:#c62727}
+    .medium{background:#d18b00}
+    .low{background:#2d6a4f}
+    .muted{color:#555}
+    footer{margin-top:18px;color:#444;font-size:0.95rem}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Problems 1.1 &amp; 1.2 — Confidentiality, Integrity, Availability</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cash_deposit_requirements.html">CIA Example</a>
+      <a href="#top">Top</a>
+    </nav>
+  </header>
+
+  <section id="p1-1">
+    <h2>Problem 1.1 — Automated Cash Deposit Machine (ACDM)</h2>
+    <p class="muted">Users provide a card or an account number to deposit cash. Examples of confidentiality, integrity and availability requirements are below, with importance.</p>
+
+    <h3>Confidentiality</h3>
+    <ul class="req-list">
+      <li>Protect card PANs, account numbers and PINs — encrypt in transit and at rest. <span class="badge high">High</span></li>
+      <li>Limit access to transaction metadata (who/when/amount) — role-based access and logging. <span class="badge medium">Medium</span></li>
+      <li>Protect images/CCTV/envelope photos — retention policy and access controls. <span class="badge medium">Medium</span></li>
+    </ul>
+
+    <h3>Integrity</h3>
+    <ul class="req-list">
+      <li>Ensure accurate cash counting and recording — reconciled counts and audits. <span class="badge high">High</span></li>
+      <li>Protect transaction logs from tampering — use HMACs/signatures and immutable storage. <span class="badge high">High</span></li>
+      <li>Trusted firmware and secure boot — signed updates to prevent malicious modification. <span class="badge high">High</span></li>
+      <li>Detect physical tampering on sensors — tamper sensors and alerts. <span class="badge medium">Medium</span></li>
+    </ul>
+
+    <h3>Availability</h3>
+    <ul class="req-list">
+      <li>High uptime for deposits — redundancy, monitoring and fast recovery. <span class="badge high">High</span></li>
+      <li>Offline queueing when network fails — secure local queue and later sync. <span class="badge medium">Medium</span></li>
+      <li>Receipt generation and persistent references — printable/email receipts for dispute resolution. <span class="badge medium">Medium</span></li>
+      <li>Physical robustness and power backup (UPS) — protect against vandalism and power loss. <span class="badge high">High</span></li>
+    </ul>
+  </section>
+
+  <section id="p1-2">
+    <h2>Problem 1.2 — Payment Gateway System</h2>
+    <p class="muted">A payment gateway processes a user's payment (card or account) for an item. Below are CIA requirements with importance levels.</p>
+
+    <h3>Confidentiality</h3>
+    <ul class="req-list">
+      <li>Protect cardholder data (PAN, CVV, cardholder name) — PCI-DSS controls, encryption in transit and at rest. <span class="badge high">High</span></li>
+      <li>Protect tokenization and customer profiles — restrict access and protect keys. <span class="badge high">High</span></li>
+      <li>Protect merchant account and settlement details — limit access to authorized systems. <span class="badge medium">Medium</span></li>
+    </ul>
+
+    <h3>Integrity</h3>
+    <ul class="req-list">
+      <li>Ensure transaction integrity from authorization to settlement — cryptographic signatures, sequence IDs. <span class="badge high">High</span></li>
+      <li>Prevent replay and tampering — nonces, timestamps, and signed payloads. <span class="badge high">High</span></li>
+      <li>Accurate billing and reconciliation — end-to-end receipts and audit trails. <span class="badge high">High</span></li>
+      <li>Protect logs and dispute records — immutability and strong access control. <span class="badge medium">Medium</span></li>
+    </ul>
+
+    <h3>Availability</h3>
+    <ul class="req-list">
+      <li>High availability for payment processing — active-active architecture and global failover. <span class="badge high">High</span></li>
+      <li>Graceful degradation and queuing — accept payments offline or queue securely when downstream is unavailable. <span class="badge high">High</span></li>
+      <li>Quick fraud-detection response and throttling — maintain service while mitigating attacks. <span class="badge medium">Medium</span></li>
+      <li>Disaster recovery and business continuity — RTO/RPO defined and tested. <span class="badge high">High</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>File created: <code>cia_problems.html</code>. Tell me if you want a different layout, print-ready PDF, or links added.</p>
+  </footer>
+</body>
+</html>

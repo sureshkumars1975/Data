@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cryptography Notation Reference</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- KaTeX for math rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters:[{left:'$$',right:'$$'},{left:'$',right:'$'}]});"></script>
+
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; padding: 24px; max-width: 1000px; margin: auto; }
+    h1 { margin-bottom: 8px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background: #f6f6f6; }
+    caption { font-size: 0.95rem; margin-bottom: 8px; color: #333; }
+    code { background:#f4f4f4; padding:2px 6px; border-radius:4px; }
+  </style>
+</head>
+<body>
+  <h1>Cryptography Notation Reference</h1>
+  <p>A concise table of symbols, expressions and meanings used in cryptography.</p>
+
+  <table>
+    <caption>Notation</caption>
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th>Expression</th>
+        <th>Meaning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>D, K</td>
+        <td><code>D(K, Y)</code></td>
+        <td>Symmetric decryption of ciphertext <em>Y</em> using secret key <em>K</em></td>
+      </tr>
+      <tr>
+        <td>D, PRa</td>
+        <td><code>D(PRa, Y)</code></td>
+        <td>Asymmetric decryption of ciphertext <em>Y</em> using A's private key <em>PRa</em></td>
+      </tr>
+      <tr>
+        <td>D, PUa</td>
+        <td><code>D(PUa, Y)</code></td>
+        <td>Asymmetric decryption of ciphertext <em>Y</em> using A's public key <em>PUa</em></td>
+      </tr>
+      <tr>
+        <td>E, K</td>
+        <td><code>E(K, X)</code></td>
+        <td>Symmetric encryption of plaintext <em>X</em> using secret key <em>K</em></td>
+      </tr>
+      <tr>
+        <td>E, PRa</td>
+        <td><code>E(PRa, X)</code></td>
+        <td>Asymmetric encryption of plaintext <em>X</em> using A's private key <em>PRa</em></td>
+      </tr>
+      <tr>
+        <td>E, PUa</td>
+        <td><code>E(PUa, X)</code></td>
+        <td>Asymmetric encryption of plaintext <em>X</em> using A's public key <em>PUa</em></td>
+      </tr>
+      <tr>
+        <td>K</td>
+        <td>—</td>
+        <td>Secret key</td>
+      </tr>
+      <tr>
+        <td>PRa</td>
+        <td>—</td>
+        <td>Private key of user A</td>
+      </tr>
+      <tr>
+        <td>PUa</td>
+        <td>—</td>
+        <td>Public key of user A</td>
+      </tr>
+      <tr>
+        <td>MAC, K</td>
+        <td><code>MAC(K, X)</code></td>
+        <td>Message authentication code of message <em>X</em> using secret key <em>K</em></td>
+      </tr>
+      <tr>
+        <td>GF(p)</td>
+        <td>—</td>
+        <td>Finite field of order <em>p</em> (prime). Set $\mathbb{Z}_p$ with arithmetic modulo $p$.</td>
+      </tr>
+      <tr>
+        <td>GF(2<sup>n</sup>)</td>
+        <td>—</td>
+        <td>Finite field of order $2^n$.</td>
+      </tr>
+      <tr>
+        <td>$\mathbb{Z}_n$</td>
+        <td>—</td>
+        <td>Set of integers $\{0,1,\dots,n-1\}$ (integers modulo $n$)</td>
+      </tr>
+      <tr>
+        <td>$\gcd$</td>
+        <td><code>gcd(i, j)</code></td>
+        <td>Greatest common divisor: $\gcd(i,j)$</td>
+      </tr>
+      <tr>
+        <td>Congruence</td>
+        <td><code>$a \equiv b \pmod m$</code></td>
+        <td>$a$ is congruent to $b$ modulo $m$ (same remainder)</td>
+      </tr>
+      <tr>
+        <td>Not congruent</td>
+        <td><code>$a \not\equiv b \pmod m$</code></td>
+        <td>Not congruent modulo $m$</td>
+      </tr>
+      <tr>
+        <td>dlog</td>
+        <td><code>$\mathrm{dlog}_{a,p}(b)$</code></td>
+        <td>Discrete logarithm of $b$ to base $a$ modulo $p$</td>
+      </tr>
+      <tr>
+        <td>$\varphi(n)$</td>
+        <td>—</td>
+        <td>Euler's totient function: count of integers $\lt n$ relatively prime to $n$</td>
+      </tr>
+      <tr>
+        <td>$\Sigma$</td>
+        <td><code>$\sum_{i=1}^n a_i = a_1 + a_2 + \dots + a_n$</code></td>
+        <td>Summation</td>
+      </tr>
+      <tr>
+        <td>$\Pi$</td>
+        <td><code>$\prod_{i=1}^n a_i = a_1 \cdot a_2 \cdot \dots \cdot a_n$</code></td>
+        <td>Product</td>
+      </tr>
+      <tr>
+        <td>$i \mid j$</td>
+        <td>—</td>
+        <td>$i$ divides $j$ (no remainder when $j/i$)</td>
+      </tr>
+      <tr>
+        <td>$|a|$</td>
+        <td>—</td>
+        <td>Absolute value of $a$</td>
+      </tr>
+      <tr>
+        <td>·</td>
+        <td><code>A \cdot (a_1,a_2,\dots,a_k)</code></td>
+        <td>Integer A corresponds to sequence $(a_1,a_2,\dots,a_k)$ (context-dependent)</td>
+      </tr>
+      <tr>
+        <td>}</td>
+        <td>—</td>
+        <td>Concatenation: x } y means x concatenated with y</td>
+      </tr>
+      <tr>
+        <td>≈</td>
+        <td>—</td>
+        <td>Approximately equal</td>
+      </tr>
+      <tr>
+        <td>⊕</td>
+        <td>—</td>
+        <td>Exclusive-OR (XOR). Bitwise XOR for multi-bit variables</td>
+      </tr>
+      <tr>
+        <td>Floor</td>
+        <td><code>$\lfloor x \rfloor$</code></td>
+        <td>Largest integer less than or equal to $x$</td>
+      </tr>
+      <tr>
+        <td>∈</td>
+        <td><code>x ∈ S</code></td>
+        <td>Element x is contained in set S</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="margin-top:18px;">If you want additional entries, formatting changes, or to export this to PDF, tell me which adjustments to make.</p>
+</body>
+</html>
