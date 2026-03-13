@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RMI Animation Simulation</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 24px; line-height: 1.6; }
+    header { margin-bottom: 20px; }
+    section { margin-bottom: 24px; }
+    .box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 170px;
+      height: 120px;
+      margin: 0 20px;
+      border: 2px solid #0066cc;
+      border-radius: 10px;
+      background: rgba(0, 102, 204, 0.08);
+      position: relative;
+    }
+    .box h3 { margin: 8px 0 4px; }
+    .stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 24px 0;
+      position: relative;
+      height: 220px;
+    }
+    .arrow {
+      position: absolute;
+      width: 4px;
+      height: 100px;
+      background: #333;
+      opacity: 0.2;
+      transform-origin: center;
+      border-radius: 2px;
+      transition: opacity 250ms ease, transform 300ms ease;
+    }
+    .arrow.active {
+      opacity: 0.95;
+      background: #009900;
+    }
+    .arrow::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid #333;
+      transform: translateY(-50%);
+      transition: border-left-color 250ms ease;
+    }
+    .arrow.active::after {
+      border-left-color: #009900;
+    }
+    .arrow.response::after {
+      left: -8px;
+      right: auto;
+      border-left: none;
+      border-right: 12px solid #333;
+    }
+    .arrow.response.active::after {
+      border-right-color: #009900;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 12px 0;
+    }
+    .log {
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 120px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      max-height: 180px;
+    }
+    button { padding: 8px 14px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>RMI (Remote Method Invocation) Animation Simulation</h1>
+    <p>This demo shows how Java RMI lets a program call methods on an object located on another JVM (possibly on another machine).</p>
+  </header>
+
+  <section>
+    <h2>What is RMI?</h2>
+    <p><strong>Remote Method Invocation (RMI)</strong> is a Java technology that allows an object running in one Java Virtual Machine (JVM) to invoke methods on an object in another JVM. RMI hides the networking details, allowing the programmer to call remote methods as if they were local.</p>
+    <ul>
+      <li><strong>Client:</strong> Calls a method on a remote interface (via a proxy/stub).</li>
+      <li><strong>Server:</strong> Hosts the remote object and executes the invoked method.</li>
+      <li><strong>Stub/Skeleton:</strong> Stub (client-side proxy) marshals calls to the server; skeleton (server-side dispatcher) unmarshals them and invokes the object.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Animation Simulation</h2>
+    <div class="stage">
+      <div class="box" id="clientBox">
+        <h3>Client</h3>
+        <p id="clientState">Idle</p>
+      </div>
+
+      <div class="box" id="stubBox">
+        <h3>Stub (Proxy)</h3>
+        <p id="stubState">Idle</p>
+      </div>
+
+      <div class="arrow" id="requestArrow" style="top: 107px; left: 190px; height: 10px; width: 200px; transform: rotate(0deg);"></div>
+      <div class="arrow response" id="responseArrow" style="top: 143px; left: 190px; height: 10px; width: 200px; transform: rotate(180deg);"></div>
+
+      <div class="box" id="serverBox">
+        <h3>Server</h3>
+        <p id="serverState">Idle</p>
+      </div>
+
+      <div class="box" id="remoteObjBox" style="margin-left: 20px;">
+        <h3>Remote Object</h3>
+        <p id="remoteObjState">Idle</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="startBtn">Start Simulation</button>
+      <button id="stepBtn">Step →</button>
+      <button id="resetBtn">Reset</button>
+      <label>
+        Speed:
+        <input id="speed" type="range" min="300" max="1800" value="900" step="100">
+        <span id="speedLabel">900ms</span>
+      </label>
+    </div>
+
+    <div>
+      <h3>Activity Log</h3>
+      <div id="log" class="log">Press "Start Simulation" to begin.</div>
+    </div>
+  </section>
+
+  <script>
+    const clientState = document.getElementById('clientState');
+    const stubState = document.getElementById('stubState');
+    const serverState = document.getElementById('serverState');
+    const remoteObjState = document.getElementById('remoteObjState');
+    const requestArrow = document.getElementById('requestArrow');
+    const responseArrow = document.getElementById('responseArrow');
+    const log = document.getElementById('log');
+
+    const startBtn = document.getElementById('startBtn');
+    const stepBtn = document.getElementById('stepBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const speedInput = document.getElementById('speed');
+    const speedLabel = document.getElementById('speedLabel');
+
+    const steps = [
+      {
+        title: 'Client invokes remote method',
+        action: () => {
+          clientState.textContent = 'Calling remote method';
+          stubState.textContent = 'Marshalling call';
+          serverState.textContent = 'Waiting for request';
+          remoteObjState.textContent = 'Idle';
+          activateArrow(requestArrow);
+          logMessage('Client → Stub: invoke add(2, 3) on remote object');
+        }
+      },
+      {
+        title: 'Stub sends request to server',
+        action: () => {
+          clientState.textContent = 'Waiting';
+          stubState.textContent = 'Sending request over network';
+          serverState.textContent = 'Receiving request';
+          deactivateArrow(requestArrow);
+          activateArrow(responseArrow, false);
+          logMessage('Stub → Server: request (marshalled parameters)');
+        }
+      },
+      {
+        title: 'Server dispatches to remote object',
+        action: () => {
+          serverState.textContent = 'Dispatching to remote object';
+          remoteObjState.textContent = 'Executing add(2, 3)';
+          deactivateArrow(responseArrow);
+          activateArrow(requestArrow, false);
+          logMessage('Server: unmarshalling and calling remote object method');
+        }
+      },
+      {
+        title: 'Remote object returns result',
+        action: () => {
+          remoteObjState.textContent = 'Returning result (5)';
+          serverState.textContent = 'Sending response';
+          activateArrow(responseArrow, true);
+          logMessage('Remote Object → Server: result (5)');
+        }
+      },
+      {
+        title: 'Stub receives response',
+        action: () => {
+          serverState.textContent = 'Idle';
+          stubState.textContent = 'Unmarshalling response';
+          clientState.textContent = 'Waiting';
+          deactivateArrow(requestArrow);
+          activateArrow(responseArrow, true);
+          logMessage('Server → Stub: response (marshalled result)');
+        }
+      },
+      {
+        title: 'Client gets result',
+        action: () => {
+          stubState.textContent = 'Delivering result';
+          clientState.textContent = 'Received result: 5';
+          remoteObjState.textContent = 'Idle';
+          deactivateArrow(responseArrow);
+          logMessage('Stub → Client: returned value (5)');
+        }
+      }
+    ];
+
+    let currentStep = 0;
+    let intervalId = null;
+
+    function logMessage(message) {
+      const time = new Date().toLocaleTimeString();
+      log.textContent += `\n[${time}] ${message}`;
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function activateArrow(arrowEl, highlight = true) {
+      arrowEl.classList.add('active');
+      if (highlight) arrowEl.style.transform = 'scaleX(1.05)';
+    }
+
+    function deactivateArrow(arrowEl) {
+      arrowEl.classList.remove('active');
+      arrowEl.style.transform = 'scaleX(1)';
+    }
+
+    function setSpeedLabel(ms) {
+      speedLabel.textContent = `${ms}ms`;
+    }
+
+    function resetSimulation() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+      currentStep = 0;
+      clientState.textContent = 'Idle';
+      stubState.textContent = 'Idle';
+      serverState.textContent = 'Idle';
+      remoteObjState.textContent = 'Idle';
+      deactivateArrow(requestArrow);
+      deactivateArrow(responseArrow);
+      log.textContent = 'Press "Start Simulation" to begin.';
+      startBtn.textContent = 'Start Simulation';
+      stepBtn.disabled = false;
+    }
+
+    function runStep() {
+      if (currentStep >= steps.length) {
+        startBtn.textContent = 'Restart';
+        stepBtn.disabled = true;
+        return;
+      }
+
+      steps[currentStep].action();
+      currentStep += 1;
+    }
+
+    function startSimulation() {
+      if (intervalId) return;
+
+      if (currentStep >= steps.length) {
+        resetSimulation();
+      }
+
+      startBtn.textContent = 'Running...';
+      stepBtn.disabled = true;
+
+      intervalId = setInterval(() => {
+        runStep();
+        if (currentStep >= steps.length) {
+          clearInterval(intervalId);
+          intervalId = null;
+          startBtn.textContent = 'Restart';
+          stepBtn.disabled = true;
+        }
+      }, Number(speedInput.value));
+    }
+
+    startBtn.addEventListener('click', startSimulation);
+    stepBtn.addEventListener('click', () => {
+      if (intervalId) return;
+      runStep();
+      if (currentStep >= steps.length) {
+        stepBtn.disabled = true;
+        startBtn.textContent = 'Restart';
+      }
+    });
+
+    resetBtn.addEventListener('click', resetSimulation);
+
+    speedInput.addEventListener('input', (event) => {
+      setSpeedLabel(event.target.value);
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+        startBtn.textContent = 'Start Simulation';
+        stepBtn.disabled = false;
+      }
+    });
+
+    setSpeedLabel(speedInput.value);
+  </script>
+
+  <footer>
+    <p>&copy; 2026 RMI Simulation Demo</p>
+  </footer>
+</body>
+</html>

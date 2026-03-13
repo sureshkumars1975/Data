@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Metadata Analysis Animation</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 24px; line-height: 1.6; }
+    header { margin-bottom: 20px; }
+    section { margin-bottom: 24px; }
+    .box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 170px;
+      height: 110px;
+      margin: 0 20px;
+      border: 2px solid #0066cc;
+      border-radius: 10px;
+      background: rgba(0, 102, 204, 0.08);
+      position: relative;
+    }
+    .box h3 { margin: 8px 0 4px; }
+    .stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 24px 0;
+      position: relative;
+      height: 220px;
+    }
+    .arrow {
+      position: absolute;
+      width: 4px;
+      height: 100px;
+      background: #333;
+      opacity: 0.2;
+      transform-origin: center;
+      border-radius: 2px;
+      transition: opacity 250ms ease, transform 300ms ease;
+    }
+    .arrow.active {
+      opacity: 0.95;
+      background: #009900;
+    }
+    .arrow::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid #333;
+      transform: translateY(-50%);
+      transition: border-left-color 250ms ease;
+    }
+    .arrow.active::after {
+      border-left-color: #009900;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 12px 0;
+    }
+    .log {
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 120px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      max-height: 200px;
+    }
+    button { padding: 8px 14px; cursor: pointer; }
+    .metadata {
+      font-family: monospace;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 12px;
+      max-width: 640px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Metadata Analysis Animation</h1>
+    <p>See how hidden metadata in a file can be extracted and analyzed to reveal context that may identify people, locations, or tools used.</p>
+  </header>
+
+  <section>
+    <h2>What is Metadata Analysis?</h2>
+    <p>Metadata is data about data—like timestamps, location tags, or software used. Analyzing metadata can expose patterns or identities even when the main content seems anonymous.</p>
+    <ul>
+      <li><strong>File:</strong> contains hidden metadata (e.g., camera model, edit history).</li>
+      <li><strong>Analyzer:</strong> extracts and inspects metadata.</li>
+      <li><strong>Inference:</strong> metadata is used to infer identity, location, or behavior.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Animation Simulation</h2>
+    <div class="stage">
+      <div class="box" id="fileBox">
+        <h3>File</h3>
+        <p id="fileState">Ready</p>
+      </div>
+
+      <div class="arrow" id="extractArrow" style="top: 100px; left: 190px; height: 10px; width: 180px; transform: rotate(0deg);"></div>
+
+      <div class="box" id="analyzerBox">
+        <h3>Analyzer</h3>
+        <p id="analyzerState">Idle</p>
+      </div>
+
+      <div class="arrow" id="inferArrow" style="top: 100px; left: 370px; height: 10px; width: 180px; transform: rotate(0deg);"></div>
+
+      <div class="box" id="resultBox">
+        <h3>Inferred Info</h3>
+        <p id="resultState">None</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="startBtn">Start Simulation</button>
+      <button id="stepBtn">Step →</button>
+      <button id="resetBtn">Reset</button>
+      <label>
+        Speed:
+        <input id="speed" type="range" min="300" max="1800" value="900" step="100">
+        <span id="speedLabel">900ms</span>
+      </label>
+    </div>
+
+    <div>
+      <h3>Activity Log</h3>
+      <div id="log" class="log">Press "Start Simulation" to begin.</div>
+    </div>
+
+    <div>
+      <h3>Example Metadata Extracted</h3>
+      <div class="metadata" id="metadataDisplay">(metadata will appear here as it is extracted)</div>
+    </div>
+  </section>
+
+  <script>
+    const fileState = document.getElementById('fileState');
+    const analyzerState = document.getElementById('analyzerState');
+    const resultState = document.getElementById('resultState');
+    const metadataDisplay = document.getElementById('metadataDisplay');
+
+    const extractArrow = document.getElementById('extractArrow');
+    const inferArrow = document.getElementById('inferArrow');
+
+    const log = document.getElementById('log');
+    const startBtn = document.getElementById('startBtn');
+    const stepBtn = document.getElementById('stepBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const speedInput = document.getElementById('speed');
+    const speedLabel = document.getElementById('speedLabel');
+
+    const fakeMetadata = {
+      filename: 'photo.jpg',
+      camera: 'PhoneCam X100',
+      captured: '2026-03-12 17:22',
+      gps: '40.7128° N, 74.0060° W',
+      editor: 'ImageEdit Pro 4.3',
+      author: 'jdoe@example.com'
+    };
+
+    const steps = [
+      {
+        title: 'File is opened for analysis',
+        action: () => {
+          fileState.textContent = 'Opened';
+          analyzerState.textContent = 'Preparing to extract metadata';
+          resultState.textContent = 'None';
+          activateArrow(extractArrow);
+          logMessage('Analyzer: opening file and scanning for metadata.');
+        }
+      },
+      {
+        title: 'Metadata extracted',
+        action: () => {
+          analyzerState.textContent = 'Extracting metadata';
+          metadataDisplay.textContent = formatMetadata(fakeMetadata);
+          deactivateArrow(extractArrow);
+          activateArrow(inferArrow);
+          logMessage('Analyzer: metadata extracted (camera, GPS, editor, author).');
+        }
+      },
+      {
+        title: 'Analysis infers identity and location',
+        action: () => {
+          analyzerState.textContent = 'Analyzing metadata';
+          resultState.textContent = 'Potential identity found';
+          deactivateArrow(inferArrow);
+          logMessage('Analyzer: inferred likely author and location from metadata.');
+        }
+      },
+      {
+        title: 'Result displayed',
+        action: () => {
+          resultState.textContent = 'Author: jdoe@example.com (NYC)';
+          analyzerState.textContent = 'Completed';
+          logMessage('Result: metadata reveals identity and location.');
+        }
+      }
+    ];
+
+    let currentStep = 0;
+    let intervalId = null;
+
+    function formatMetadata(data) {
+      return Object.entries(data)
+        .map(([key, value]) => `${key}: ${value}`)
+        .join('\n');
+    }
+
+    function logMessage(message) {
+      const time = new Date().toLocaleTimeString();
+      log.textContent += `\n[${time}] ${message}`;
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function activateArrow(arrowEl, highlight = true) {
+      arrowEl.classList.add('active');
+      if (highlight) arrowEl.style.transform = 'scaleX(1.05)';
+    }
+
+    function deactivateArrow(arrowEl) {
+      arrowEl.classList.remove('active');
+      arrowEl.style.transform = 'scaleX(1)';
+    }
+
+    function setSpeedLabel(ms) {
+      speedLabel.textContent = `${ms}ms`;
+    }
+
+    function resetSimulation() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+      currentStep = 0;
+      fileState.textContent = 'Ready';
+      analyzerState.textContent = 'Idle';
+      resultState.textContent = 'None';
+      metadataDisplay.textContent = '(metadata will appear here as it is extracted)';
+      deactivateArrow(extractArrow);
+      deactivateArrow(inferArrow);
+      log.textContent = 'Press "Start Simulation" to begin.';
+      startBtn.textContent = 'Start Simulation';
+      stepBtn.disabled = false;
+    }
+
+    function runStep() {
+      if (currentStep >= steps.length) {
+        startBtn.textContent = 'Restart';
+        stepBtn.disabled = true;
+        return;
+      }
+      steps[currentStep].action();
+      currentStep += 1;
+    }
+
+    function startSimulation() {
+      if (intervalId) return;
+      if (currentStep >= steps.length) {
+        resetSimulation();
+      }
+      startBtn.textContent = 'Running...';
+      stepBtn.disabled = true;
+      intervalId = setInterval(() => {
+        runStep();
+        if (currentStep >= steps.length) {
+          clearInterval(intervalId);
+          intervalId = null;
+          startBtn.textContent = 'Restart';
+          stepBtn.disabled = true;
+        }
+      }, Number(speedInput.value));
+    }
+
+    startBtn.addEventListener('click', startSimulation);
+    stepBtn.addEventListener('click', () => {
+      if (intervalId) return;
+      runStep();
+      if (currentStep >= steps.length) {
+        stepBtn.disabled = true;
+        startBtn.textContent = 'Restart';
+      }
+    });
+
+    resetBtn.addEventListener('click', resetSimulation);
+
+    speedInput.addEventListener('input', (event) => {
+      setSpeedLabel(event.target.value);
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+        startBtn.textContent = 'Start Simulation';
+        stepBtn.disabled = false;
+      }
+    });
+
+    setSpeedLabel(speedInput.value);
+  </script>
+
+  <footer>
+    <p>&copy; 2026 Metadata Analysis Demo</p>
+  </footer>
+</body>
+</html>

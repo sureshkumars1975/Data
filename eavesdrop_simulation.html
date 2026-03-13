@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eavesdropping & Interception Animation</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 24px; line-height: 1.6; }
+    header { margin-bottom: 20px; }
+    section { margin-bottom: 24px; }
+    .box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 160px;
+      height: 110px;
+      margin: 0 16px;
+      border: 2px solid #0066cc;
+      border-radius: 10px;
+      background: rgba(0, 102, 204, 0.08);
+      position: relative;
+    }
+    .box.attacker { border-color: #cc3300; background: rgba(204, 51, 0, 0.08); }
+    .box h3 { margin: 8px 0 4px; }
+    .stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 24px 0;
+      position: relative;
+      height: 220px;
+    }
+    .arrow {
+      position: absolute;
+      width: 4px;
+      height: 100px;
+      background: #333;
+      opacity: 0.2;
+      transform-origin: center;
+      border-radius: 2px;
+      transition: opacity 250ms ease, transform 300ms ease;
+    }
+    .arrow.active {
+      opacity: 0.95;
+      background: #009900;
+    }
+    .arrow.intercept.active {
+      opacity: 0.95;
+      background: #cc3300;
+    }
+    .arrow::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid #333;
+      transform: translateY(-50%);
+      transition: border-left-color 250ms ease;
+    }
+    .arrow.active::after {
+      border-left-color: #009900;
+    }
+    .arrow.intercept::after {
+      border-left-color: #cc3300;
+    }
+    .arrow.response::after {
+      left: -8px;
+      right: auto;
+      border-left: none;
+      border-right: 12px solid #333;
+    }
+    .arrow.response.active::after {
+      border-right-color: #009900;
+    }
+    .arrow.response.intercept.active::after {
+      border-right-color: #cc3300;
+    }
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 12px 0;
+    }
+    .log {
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 120px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      max-height: 180px;
+    }
+    button { padding: 8px 14px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Eavesdropping & Interception Animation</h1>
+    <p>This demo illustrates how an attacker can eavesdrop on and intercept messages between a client and a server when communication is not protected.</p>
+  </header>
+
+  <section>
+    <h2>What is Eavesdropping / Interception?</h2>
+    <p>Eavesdropping means an attacker reads the data being sent between two parties without altering it. Interception means the attacker can also change the message before forwarding it.</p>
+    <ul>
+      <li><strong>Client:</strong> Sends a request to the server.</li>
+      <li><strong>Server:</strong> Sends back a response.</li>
+      <li><strong>Attacker:</strong> Watches messages transit and can modify them if the connection is not secured.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Animation Simulation</h2>
+    <div class="stage">
+      <div class="box" id="clientBox">
+        <h3>Client</h3>
+        <p id="clientState">Idle</p>
+      </div>
+
+      <div class="arrow" id="toAttackerArrow" style="top: 100px; left: 185px; height: 10px; width: 180px; transform: rotate(0deg);"></div>
+
+      <div class="box attacker" id="attackerBox">
+        <h3>Attacker</h3>
+        <p id="attackerState">Idle</p>
+      </div>
+
+      <div class="arrow" id="toServerArrow" style="top: 100px; left: 355px; height: 10px; width: 180px; transform: rotate(0deg);"></div>
+
+      <div class="box" id="serverBox">
+        <h3>Server</h3>
+        <p id="serverState">Idle</p>
+      </div>
+
+      <div class="arrow response" id="toAttackerResponseArrow" style="top: 135px; left: 355px; height: 10px; width: 180px; transform: rotate(180deg);"></div>
+      <div class="arrow response" id="toClientResponseArrow" style="top: 135px; left: 185px; height: 10px; width: 180px; transform: rotate(180deg);"></div>
+    </div>
+
+    <div class="controls">
+      <button id="startBtn">Start Simulation</button>
+      <button id="stepBtn">Step →</button>
+      <button id="resetBtn">Reset</button>
+      <label>
+        Speed:
+        <input id="speed" type="range" min="300" max="1800" value="900" step="100">
+        <span id="speedLabel">900ms</span>
+      </label>
+    </div>
+
+    <div>
+      <h3>Activity Log</h3>
+      <div id="log" class="log">Press "Start Simulation" to begin.</div>
+    </div>
+  </section>
+
+  <script>
+    const clientState = document.getElementById('clientState');
+    const attackerState = document.getElementById('attackerState');
+    const serverState = document.getElementById('serverState');
+    const toAttackerArrow = document.getElementById('toAttackerArrow');
+    const toServerArrow = document.getElementById('toServerArrow');
+    const toAttackerResponseArrow = document.getElementById('toAttackerResponseArrow');
+    const toClientResponseArrow = document.getElementById('toClientResponseArrow');
+    const log = document.getElementById('log');
+
+    const startBtn = document.getElementById('startBtn');
+    const stepBtn = document.getElementById('stepBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const speedInput = document.getElementById('speed');
+    const speedLabel = document.getElementById('speedLabel');
+
+    const steps = [
+      {
+        title: 'Client sends request',
+        action: () => {
+          clientState.textContent = 'Sending request';
+          attackerState.textContent = 'Listening';
+          serverState.textContent = 'Waiting';
+          activateArrow(toAttackerArrow);
+          logMessage('Client → Attacker: request ("GET /data")');
+        }
+      },
+      {
+        title: 'Attacker eavesdrops request',
+        action: () => {
+          clientState.textContent = 'Waiting';
+          attackerState.textContent = 'Eavesdropping request';
+          serverState.textContent = 'Waiting';
+          deactivateArrow(toAttackerArrow);
+          activateInterceptionArrow(toServerArrow);
+          logMessage('Attacker: reads request ("GET /data")');
+        }
+      },
+      {
+        title: 'Attacker forwards request',
+        action: () => {
+          attackerState.textContent = 'Forwarding request';
+          serverState.textContent = 'Receiving request';
+          activateArrow(toServerArrow);
+          logMessage('Attacker → Server: forwarding request');
+        }
+      },
+      {
+        title: 'Server responds',
+        action: () => {
+          serverState.textContent = 'Sending response';
+          attackerState.textContent = 'Listening';
+          activateArrow(toAttackerResponseArrow);
+          logMessage('Server → Attacker: response ("data=123")');
+        }
+      },
+      {
+        title: 'Attacker intercepts response',
+        action: () => {
+          serverState.textContent = 'Idle';
+          attackerState.textContent = 'Intercepting response';
+          deactivateArrow(toAttackerResponseArrow);
+          activateInterceptionArrow(toClientResponseArrow);
+          logMessage('Attacker: modifies response to ("data=999")');
+        }
+      },
+      {
+        title: 'Attacker sends response to client',
+        action: () => {
+          attackerState.textContent = 'Sending modified response';
+          clientState.textContent = 'Receiving response';
+          activateArrow(toClientResponseArrow);
+          logMessage('Attacker → Client: response ("data=999")');
+        }
+      },
+      {
+        title: 'Client receives response',
+        action: () => {
+          clientState.textContent = 'Received response: data=999';
+          attackerState.textContent = 'Idle';
+          deactivateArrow(toClientResponseArrow);
+          logMessage('Client: data has been altered by attacker');
+        }
+      }
+    ];
+
+    let currentStep = 0;
+    let intervalId = null;
+
+    function logMessage(message) {
+      const time = new Date().toLocaleTimeString();
+      log.textContent += `\n[${time}] ${message}`;
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function activateArrow(arrowEl, highlight = true) {
+      arrowEl.classList.add('active');
+      if (highlight) arrowEl.style.transform = 'scaleX(1.05)';
+    }
+
+    function activateInterceptionArrow(arrowEl) {
+      arrowEl.classList.add('intercept', 'active');
+      arrowEl.style.transform = 'scaleX(1.05)';
+    }
+
+    function deactivateArrow(arrowEl) {
+      arrowEl.classList.remove('active', 'intercept');
+      arrowEl.style.transform = 'scaleX(1)';
+    }
+
+    function setSpeedLabel(ms) {
+      speedLabel.textContent = `${ms}ms`;
+    }
+
+    function resetSimulation() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+      currentStep = 0;
+      clientState.textContent = 'Idle';
+      attackerState.textContent = 'Idle';
+      serverState.textContent = 'Idle';
+      deactivateArrow(toAttackerArrow);
+      deactivateArrow(toServerArrow);
+      deactivateArrow(toAttackerResponseArrow);
+      deactivateArrow(toClientResponseArrow);
+      log.textContent = 'Press "Start Simulation" to begin.';
+      startBtn.textContent = 'Start Simulation';
+      stepBtn.disabled = false;
+    }
+
+    function runStep() {
+      if (currentStep >= steps.length) {
+        startBtn.textContent = 'Restart';
+        stepBtn.disabled = true;
+        return;
+      }
+
+      steps[currentStep].action();
+      currentStep += 1;
+    }
+
+    function startSimulation() {
+      if (intervalId) return;
+
+      if (currentStep >= steps.length) {
+        resetSimulation();
+      }
+
+      startBtn.textContent = 'Running...';
+      stepBtn.disabled = true;
+
+      intervalId = setInterval(() => {
+        runStep();
+        if (currentStep >= steps.length) {
+          clearInterval(intervalId);
+          intervalId = null;
+          startBtn.textContent = 'Restart';
+          stepBtn.disabled = true;
+        }
+      }, Number(speedInput.value));
+    }
+
+    startBtn.addEventListener('click', startSimulation);
+    stepBtn.addEventListener('click', () => {
+      if (intervalId) return;
+      runStep();
+      if (currentStep >= steps.length) {
+        stepBtn.disabled = true;
+        startBtn.textContent = 'Restart';
+      }
+    });
+
+    resetBtn.addEventListener('click', resetSimulation);
+
+    speedInput.addEventListener('input', (event) => {
+      setSpeedLabel(event.target.value);
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+        startBtn.textContent = 'Start Simulation';
+        stepBtn.disabled = false;
+      }
+    });
+
+    setSpeedLabel(speedInput.value);
+  </script>
+
+  <footer>
+    <p>&copy; 2026 Eavesdropping Simulation Demo</p>
+  </footer>
+</body>
+</html>

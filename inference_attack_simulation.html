@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inference Attack Animation</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { font-family: Arial, Helvetica, sans-serif; margin: 24px; line-height: 1.6; }
+    header { margin-bottom: 20px; }
+    section { margin-bottom: 24px; }
+    .box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 170px;
+      height: 110px;
+      margin: 0 18px;
+      border: 2px solid #0066cc;
+      border-radius: 10px;
+      background: rgba(0, 102, 204, 0.08);
+      position: relative;
+    }
+    .box.attacker { border-color: #cc3300; background: rgba(204, 51, 0, 0.08); }
+    .box.data { border-color: #663399; background: rgba(102, 51, 153, 0.08); }
+    .box h3 { margin: 8px 0 4px; }
+    .stage {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 24px 0;
+      position: relative;
+      height: 240px;
+    }
+    .arrow {
+      position: absolute;
+      width: 4px;
+      height: 100px;
+      background: #333;
+      opacity: 0.2;
+      transform-origin: center;
+      border-radius: 2px;
+      transition: opacity 250ms ease, transform 300ms ease;
+    }
+    .arrow.active {
+      opacity: 0.95;
+      background: #009900;
+    }
+    .arrow.attack.active {
+      opacity: 0.95;
+      background: #cc3300;
+    }
+    .arrow::after {
+      content: '';
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 12px solid #333;
+      transform: translateY(-50%);
+      transition: border-left-color 250ms ease;
+    }
+    .arrow.active::after { border-left-color: #009900; }
+    .arrow.attack::after { border-left-color: #cc3300; }
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin: 12px 0;
+    }
+    .log {
+      background: #f7f7f7;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      min-height: 120px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      max-height: 220px;
+    }
+    button { padding: 8px 14px; cursor: pointer; }
+    .analysis {
+      font-family: monospace;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 12px;
+      max-width: 640px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Inference Attack Animation</h1>
+    <p>This demo shows how an attacker can infer sensitive information by querying an aggregate database and observing the answers.</p>
+  </header>
+
+  <section>
+    <h2>What is an Inference Attack?</h2>
+    <p>An inference attack uses seemingly harmless queries to a database to infer sensitive details about individuals. By combining results and making clever queries, an attacker can deduce hidden information.</p>
+    <ul>
+      <li><strong>Database:</strong> contains data that is meant to be protected (e.g., health records) and provides query answers.</li>
+      <li><strong>Attacker:</strong> submits queries and observes responses to infer sensitive values.</li>
+      <li><strong>Goal:</strong> deduce confidential information without directly accessing it.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Animation Simulation</h2>
+
+    <div class="stage">
+      <div class="box attacker" id="attackerBox">
+        <h3>Attacker</h3>
+        <p id="attackerState">Preparing queries</p>
+      </div>
+
+      <div class="arrow" id="queryArrow" style="top: 110px; left: 190px; height: 10px; width: 180px; transform: rotate(0deg);"></div>
+
+      <div class="box data" id="dbBox">
+        <h3>Database</h3>
+        <p id="dbState">Waiting for queries</p>
+      </div>
+
+      <div class="arrow" id="responseArrow" style="top: 110px; left: 370px; height: 10px; width: 170px; transform: rotate(180deg);"></div>
+
+      <div class="box" id="resultBox">
+        <h3>Inferred Info</h3>
+        <p id="resultState">None</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="startBtn">Start Simulation</button>
+      <button id="stepBtn">Step →</button>
+      <button id="resetBtn">Reset</button>
+      <label>
+        Speed:
+        <input id="speed" type="range" min="300" max="1800" value="900" step="100">
+        <span id="speedLabel">900ms</span>
+      </label>
+    </div>
+
+    <div>
+      <h3>Activity Log</h3>
+      <div id="log" class="log">Press "Start Simulation" to begin.</div>
+    </div>
+
+    <div>
+      <h3>Attack Analysis</h3>
+      <div class="analysis" id="analysisDisplay">(inferred data will appear here)</div>
+    </div>
+  </section>
+
+  <script>
+    const attackerState = document.getElementById('attackerState');
+    const dbState = document.getElementById('dbState');
+    const resultState = document.getElementById('resultState');
+    const analysisDisplay = document.getElementById('analysisDisplay');
+
+    const queryArrow = document.getElementById('queryArrow');
+    const responseArrow = document.getElementById('responseArrow');
+
+    const log = document.getElementById('log');
+    const startBtn = document.getElementById('startBtn');
+    const stepBtn = document.getElementById('stepBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const speedInput = document.getElementById('speed');
+    const speedLabel = document.getElementById('speedLabel');
+
+    const steps = [
+      {
+        title: 'Attacker submits first query',
+        action: () => {
+          attackerState.textContent = 'Querying aggregates';
+          dbState.textContent = 'Processing query';
+          resultState.textContent = 'None';
+          activateArrow(queryArrow, true);
+          logMessage('Attacker: asks "How many patients are over 60?"');
+        }
+      },
+      {
+        title: 'Database responds with aggregate result',
+        action: () => {
+          dbState.textContent = 'Returning result';
+          attackerState.textContent = 'Analyzing response';
+          deactivateArrow(queryArrow);
+          activateArrow(responseArrow);
+          logMessage('Database: returns "12" (patients over 60).');
+        }
+      },
+      {
+        title: 'Attacker submits second query',
+        action: () => {
+          attackerState.textContent = 'Refining query';
+          dbState.textContent = 'Processing query';
+          deactivateArrow(responseArrow);
+          activateArrow(queryArrow, true);
+          logMessage('Attacker: asks "How many patients over 60 have condition X?"');
+        }
+      },
+      {
+        title: 'Database responds again',
+        action: () => {
+          dbState.textContent = 'Returning result';
+          attackerState.textContent = 'Cross-referencing results';
+          deactivateArrow(queryArrow);
+          activateArrow(responseArrow);
+          logMessage('Database: returns "2" (patients over 60 with condition X).');
+        }
+      },
+      {
+        title: 'Inference completed',
+        action: () => {
+          attackerState.textContent = 'Inferred sensitive info';
+          resultState.textContent = 'Possible individuals identified';
+          analysisDisplay.textContent = 'Inference: Only 2 people meet both criteria. With additional queries, attacker can likely deduce their identities.';
+          deactivateArrow(responseArrow);
+          logMessage('Attacker: infers that only 2 people match both conditions.');
+        }
+      }
+    ];
+
+    let currentStep = 0;
+    let intervalId = null;
+
+    function logMessage(message) {
+      const time = new Date().toLocaleTimeString();
+      log.textContent += `\n[${time}] ${message}`;
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function activateArrow(arrowEl, highlight = true) {
+      arrowEl.classList.add('active');
+      arrowEl.classList.add('attack');
+      if (highlight) arrowEl.style.transform = 'scaleX(1.05)';
+    }
+
+    function deactivateArrow(arrowEl) {
+      arrowEl.classList.remove('active', 'attack');
+      arrowEl.style.transform = 'scaleX(1)';
+    }
+
+    function setSpeedLabel(ms) {
+      speedLabel.textContent = `${ms}ms`;
+    }
+
+    function resetSimulation() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+      currentStep = 0;
+      attackerState.textContent = 'Preparing queries';
+      dbState.textContent = 'Waiting for queries';
+      resultState.textContent = 'None';
+      analysisDisplay.textContent = '(inferred data will appear here)';
+      deactivateArrow(queryArrow);
+      deactivateArrow(responseArrow);
+      log.textContent = 'Press "Start Simulation" to begin.';
+      startBtn.textContent = 'Start Simulation';
+      stepBtn.disabled = false;
+    }
+
+    function runStep() {
+      if (currentStep >= steps.length) {
+        startBtn.textContent = 'Restart';
+        stepBtn.disabled = true;
+        return;
+      }
+      steps[currentStep].action();
+      currentStep += 1;
+    }
+
+    function startSimulation() {
+      if (intervalId) return;
+      if (currentStep >= steps.length) {
+        resetSimulation();
+      }
+      startBtn.textContent = 'Running...';
+      stepBtn.disabled = true;
+      intervalId = setInterval(() => {
+        runStep();
+        if (currentStep >= steps.length) {
+          clearInterval(intervalId);
+          intervalId = null;
+          startBtn.textContent = 'Restart';
+          stepBtn.disabled = true;
+        }
+      }, Number(speedInput.value));
+    }
+
+    startBtn.addEventListener('click', startSimulation);
+    stepBtn.addEventListener('click', () => {
+      if (intervalId) return;
+      runStep();
+      if (currentStep >= steps.length) {
+        stepBtn.disabled = true;
+        startBtn.textContent = 'Restart';
+      }
+    });
+
+    resetBtn.addEventListener('click', resetSimulation);
+
+    speedInput.addEventListener('input', (event) => {
+      setSpeedLabel(event.target.value);
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+        startBtn.textContent = 'Start Simulation';
+        stepBtn.disabled = false;
+      }
+    });
+
+    setSpeedLabel(speedInput.value);
+  </script>
+
+  <footer>
+    <p>&copy; 2026 Inference Attack Demo</p>
+  </footer>
+</body>
+</html>
