@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 5 - ID4D Initiative & Identity Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .breadcrumb {
+            background: #f4f4f4;
+            padding: 15px 40px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .nav-tabs {
+            background: #f9f9f9;
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 3px solid #667eea;
+            padding: 0;
+            margin: 0;
+            gap: 0;
+        }
+
+        .nav-tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            background: #f9f9f9;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .nav-tab:hover {
+            background: #efefef;
+            color: #667eea;
+        }
+
+        .nav-tab.active {
+            background: white;
+            border-bottom-color: #667eea;
+            color: #667eea;
+        }
+
+        main {
+            padding: 40px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.4em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .box {
+            background: #f9f9f9;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #17a2b8;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f5f5f5;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .back-btn {
+            background: #6c757d;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        .list-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: #f0f0f0;
+            border-left: 4px solid #764ba2;
+            border-radius: 3px;
+        }
+
+        @media (max-width: 968px) {
+            .nav-tab {
+                flex: 1;
+                min-width: 120px;
+                padding: 12px 10px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            main { padding: 20px; }
+            button { padding: 12px 30px; }
+            .nav-tab { min-width: 100px; padding: 10px 8px; }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 Unit 5: ID4D Initiative & Identity Management</h1>
+            <p>Digital Identity, Authentication & Security - AIDS Program Even Semester</p>
+        </header>
+
+        <div class="breadcrumb">
+            <a href="index.html">← Back to Overview</a>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('id4d')">1. ID4D Initiative</button>
+            <button class="nav-tab" onclick="showTab('lifecycle')">2. Identity Lifecycle</button>
+            <button class="nav-tab" onclick="showTab('assurance')">3. Assurance Levels</button>
+            <button class="nav-tab" onclick="showTab('continuous')">4. Continuous Auth</button>
+            <button class="nav-tab" onclick="showTab('cancellable')">5. Cancellable Auth</button>
+        </div>
+
+        <main>
+            <!-- Tab 1: ID4D Initiative -->
+            <div id="id4d" class="tab-content active">
+                <h2>1. ID4D Initiative</h2>
+
+                <div class="info-box">
+                    <h3>What is ID4D?</h3>
+                    <p><strong>ID4D (Identity for Development)</strong> is a World Bank Group initiative launched in 2014 to support countries in providing legal identity to all citizens, particularly those who lack formal identification. The initiative aims to help governments issue secure, inclusive, and sustainable digital identity systems that enable access to essential services and economic opportunities.</p>
+                </div>
+
+                <h3>Key Objectives</h3>
+                <ul>
+                    <li><strong>Legal Identity for All:</strong> Ensure every person has a legal identity that is recognized and accepted</li>
+                    <li><strong>Digital Transformation:</strong> Leverage technology to make identity systems more efficient and secure</li>
+                    <li><strong>Inclusive Development:</strong> Enable access to social protection, financial services, and economic opportunities</li>
+                    <li><strong>Privacy Protection:</strong> Implement robust data protection measures and privacy-by-design principles</li>
+                </ul>
+
+                <h3>Core Components</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>📋 Foundational ID Systems</h4>
+                        <p>Establishing comprehensive civil registration and vital statistics systems as the foundation for digital identity.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔐 Digital ID Infrastructure</h4>
+                        <p>Building secure, interoperable digital identity platforms that can be used across government and private sector services.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🤝 Public-Private Partnerships</h4>
+                        <p>Collaborating with technology companies, financial institutions, and other stakeholders to expand digital identity ecosystems.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📊 Data Analytics & Insights</h4>
+                        <p>Using identity data to inform policy decisions and improve service delivery while protecting individual privacy.</p>
+                    </div>
+                </div>
+
+                <h3>Impact Areas</h3>
+                <ul>
+                    <li><strong>Financial Inclusion:</strong> Enabling access to banking services and digital payments</li>
+                    <li><strong>Social Protection:</strong> Streamlining delivery of welfare programs and subsidies</li>
+                    <li><strong>Healthcare:</strong> Improving patient identification and health record management</li>
+                    <li><strong>Education:</strong> Tracking student enrollment and educational outcomes</li>
+                    <li><strong>Elections:</strong> Ensuring secure and transparent electoral processes</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <h3>Success Stories</h3>
+                    <p>The ID4D initiative has supported over 20 countries in implementing digital identity systems, reaching millions of people. Notable implementations include:</p>
+                    <ul>
+                        <li><strong>India's Aadhaar:</strong> World's largest biometric identity system with 1.3+ billion enrolled individuals</li>
+                        <li><strong>Philippines PhilSys:</strong> Comprehensive digital identity system for social protection programs</li>
+                        <li><strong>Peru's RENIEC:</strong> Modernized civil registry with digital capabilities</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab 2: Identity Lifecycle -->
+            <div id="lifecycle" class="tab-content">
+                <h2>2. Identity Lifecycle</h2>
+
+                <div class="info-box">
+                    <h3>Understanding Identity Lifecycle</h3>
+                    <p>The <strong>identity lifecycle</strong> refers to the complete journey of a digital identity from creation to termination. It encompasses all stages of identity management, ensuring that identities remain secure, up-to-date, and properly managed throughout their existence.</p>
+                </div>
+
+                <h3>Key Stages of Identity Lifecycle</h3>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>📝 Enrollment</h4>
+                        <p>Initial registration and verification of identity attributes. This includes collecting personal information, biometric data, and establishing the initial identity record.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>✅ Verification</h4>
+                        <p>Confirming the authenticity of identity claims and attributes. This may involve document verification, biometric matching, or third-party validation.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔐 Authentication</h4>
+                        <p>Confirming that a user is who they claim to be during access attempts. This includes various authentication methods and assurance levels.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔄 Maintenance</h4>
+                        <p>Ongoing management of identity attributes, including updates, renewals, and attribute modifications as life events occur.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🚫 Termination</h4>
+                        <p>Proper deactivation and archiving of identity records when no longer needed, ensuring data privacy and preventing unauthorized access.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📊 Auditing</h4>
+                        <p>Continuous monitoring and logging of identity-related activities for compliance, security, and forensic purposes.</p>
+                    </div>
+                </div>
+
+                <h3>Detailed Lifecycle Phases</h3>
+
+                <h4>1. Identity Planning & Design</h4>
+                <ul>
+                    <li>Define identity requirements and use cases</li>
+                    <li>Design identity schema and attribute sets</li>
+                    <li>Establish governance and policy frameworks</li>
+                    <li>Plan for scalability and interoperability</li>
+                </ul>
+
+                <h4>2. Identity Issuance</h4>
+                <ul>
+                    <li>Collect and verify identity information</li>
+                    <li>Generate unique identifiers</li>
+                    <li>Create digital credentials and certificates</li>
+                    <li>Issue physical and digital identity tokens</li>
+                </ul>
+
+                <h4>3. Identity Management</h4>
+                <ul>
+                    <li>Maintain current identity attributes</li>
+                    <li>Handle identity updates and modifications</li>
+                    <li>Manage identity relationships and roles</li>
+                    <li>Ensure data quality and consistency</li>
+                </ul>
+
+                <h4>4. Identity Usage & Authentication</h4>
+                <ul>
+                    <li>Enable secure access to services</li>
+                    <li>Support various authentication methods</li>
+                    <li>Implement authorization controls</li>
+                    <li>Monitor access patterns and anomalies</li>
+                </ul>
+
+                <h4>5. Identity Termination & Archival</h4>
+                <ul>
+                    <li>Revoke access and credentials</li>
+                    <li>Archive identity records securely</li>
+                    <li>Handle data retention requirements</li>
+                    <li>Ensure proper data disposal</li>
+                </ul>
+
+                <div class="box">
+                    <h3>Best Practices for Identity Lifecycle Management</h3>
+                    <ul>
+                        <li><strong>Privacy by Design:</strong> Incorporate privacy considerations at every stage</li>
+                        <li><strong>Security First:</strong> Implement strong security controls throughout the lifecycle</li>
+                        <li><strong>User-Centric:</strong> Design processes that are user-friendly and accessible</li>
+                        <li><strong>Auditable:</strong> Maintain comprehensive audit trails for compliance</li>
+                        <li><strong>Scalable:</strong> Build systems that can grow with user demands</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab 3: Assurance Levels of Authentication -->
+            <div id="assurance" class="tab-content">
+                <h2>3. Assurance Levels of Authentication</h2>
+
+                <div class="info-box">
+                    <h3>What are Assurance Levels?</h3>
+                    <p><strong>Assurance Levels of Authentication</strong> define the degree of confidence in the identity of a user during an authentication process. These levels help organizations determine appropriate authentication methods based on the sensitivity of the resources being accessed and the potential impact of unauthorized access.</p>
+                </div>
+
+                <h3>NIST Authentication Assurance Levels</h3>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Level</th>
+                            <th>Description</th>
+                            <th>Typical Methods</th>
+                            <th>Use Cases</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>LOA 1</strong></td>
+                            <td>Some confidence in the claimed identity</td>
+                            <td>Username/password, email verification</td>
+                            <td>Low-risk applications, public forums</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LOA 2</strong></td>
+                            <td>High confidence in the claimed identity</td>
+                            <td>Multi-factor authentication, digital certificates</td>
+                            <td>Financial transactions, healthcare records</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LOA 3</strong></td>
+                            <td>Very high confidence in the claimed identity</td>
+                            <td>Hardware tokens, biometric verification</td>
+                            <td>Government services, high-value transactions</td>
+                        </tr>
+                        <tr>
+                            <td><strong>LOA 4</strong></td>
+                            <td>Extremely high confidence in the claimed identity</td>
+                            <td>Multiple biometric factors, advanced cryptography</td>
+                            <td>National security, critical infrastructure</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Factors Considered in Assurance Levels</h3>
+
+                <h4>1. Identity Proofing</h4>
+                <ul>
+                    <li><strong>LOA 1:</strong> Self-assertion, minimal verification</li>
+                    <li><strong>LOA 2:</strong> Remote or in-person identity validation</li>
+                    <li><strong>LOA 3:</strong> In-person validation with biometric confirmation</li>
+                    <li><strong>LOA 4:</strong> Enhanced validation with multiple sources</li>
+                </ul>
+
+                <h4>2. Authentication Factors</h4>
+                <ul>
+                    <li><strong>Something you know:</strong> Passwords, PINs, security questions</li>
+                    <li><strong>Something you have:</strong> Smart cards, mobile devices, hardware tokens</li>
+                    <li><strong>Something you are:</strong> Biometrics (fingerprint, facial recognition, iris scan)</li>
+                    <li><strong>Somewhere you are:</strong> Location-based authentication</li>
+                </ul>
+
+                <h4>3. Session Management</h4>
+                <ul>
+                    <li>Session timeouts and re-authentication requirements</li>
+                    <li>Device recognition and risk-based authentication</li>
+                    <li>Continuous monitoring during sessions</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <h3>Key Considerations</h3>
+                    <ul>
+                        <li><strong>Risk Assessment:</strong> Match assurance levels to the potential impact of identity compromise</li>
+                        <li><strong>User Experience:</strong> Balance security requirements with usability</li>
+                        <li><strong>Technology Evolution:</strong> Regularly update authentication methods as threats evolve</li>
+                        <li><strong>Regulatory Compliance:</strong> Ensure compliance with relevant standards and regulations</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab 4: Continuous Authentication -->
+            <div id="continuous" class="tab-content">
+                <h2>4. Continuous Authentication</h2>
+
+                <div class="info-box">
+                    <h3>What is Continuous Authentication?</h3>
+                    <p><strong>Continuous Authentication</strong> is an authentication paradigm that verifies user identity throughout an entire session, rather than just at the initial login. It uses behavioral biometrics, device characteristics, and contextual information to continuously assess whether the current user is the legitimate account holder.</p>
+                </div>
+
+                <h3>Key Components</h3>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🖱️ Behavioral Biometrics</h4>
+                        <p>Analyzing typing patterns, mouse movements, scrolling behavior, and other user interactions to create a behavioral profile.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📱 Device Fingerprinting</h4>
+                        <p>Identifying devices based on hardware characteristics, browser fingerprints, and network information.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📍 Contextual Analysis</h4>
+                        <p>Evaluating location, time of access, network characteristics, and other environmental factors.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🤖 AI & Machine Learning</h4>
+                        <p>Using advanced algorithms to detect anomalies and predict potential security threats in real-time.</p>
+                    </div>
+                </div>
+
+                <h3>Types of Continuous Authentication</h3>
+
+                <h4>1. Active Continuous Authentication</h4>
+                <ul>
+                    <li>Requires explicit user interaction (e.g., periodic re-authentication)</li>
+                    <li>Uses challenge-response mechanisms</li>
+                    <li>More intrusive but highly secure</li>
+                </ul>
+
+                <h4>2. Passive Continuous Authentication</h4>
+                <ul>
+                    <li>Works in the background without user intervention</li>
+                    <li>Monitors behavioral patterns continuously</li>
+                    <li>Less intrusive, better user experience</li>
+                </ul>
+
+                <h4>3. Hybrid Approaches</h4>
+                <ul>
+                    <li>Combines active and passive methods</li>
+                    <li>Triggers active authentication when passive methods detect anomalies</li>
+                    <li>Balances security and usability</li>
+                </ul>
+
+                <h3>Behavioral Biometrics Features</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature Type</th>
+                            <th>Examples</th>
+                            <th>Applications</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Keystroke Dynamics</strong></td>
+                            <td>Typing speed, key press duration, typing rhythm</td>
+                            <td>Desktop applications, online forms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mouse Dynamics</strong></td>
+                            <td>Movement patterns, click pressure, scrolling behavior</td>
+                            <td>Web applications, desktop software</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Touch Dynamics</strong></td>
+                            <td>Touch pressure, swipe patterns, gesture recognition</td>
+                            <td>Mobile applications, touchscreens</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gait Analysis</strong></td>
+                            <td>Walking patterns, accelerometer data</td>
+                            <td>Mobile device authentication</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Voice Patterns</strong></td>
+                            <td>Speech characteristics, pronunciation patterns</td>
+                            <td>Voice assistants, phone authentication</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="box">
+                    <h3>Advantages of Continuous Authentication</h3>
+                    <ul>
+                        <li><strong>Enhanced Security:</strong> Detects session hijacking and unauthorized access in real-time</li>
+                        <li><strong>Reduced Friction:</strong> Eliminates the need for frequent password entry</li>
+                        <li><strong>Adaptive Security:</strong> Adjusts security levels based on risk assessment</li>
+                        <li><strong>Early Threat Detection:</strong> Identifies suspicious behavior before damage occurs</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h3>Challenges & Considerations</h3>
+                    <ul>
+                        <li><strong>Privacy Concerns:</strong> Continuous monitoring raises privacy issues</li>
+                        <li><strong>Accuracy:</strong> Behavioral patterns can change due to stress, injury, or environment</li>
+                        <li><strong>Resource Intensive:</strong> Requires significant computational resources</li>
+                        <li><strong>False Positives:</strong> May incorrectly flag legitimate users</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Tab 5: Cancellable Authentication -->
+            <div id="cancellable" class="tab-content">
+                <h2>5. Cancellable Authentication</h2>
+
+                <div class="info-box">
+                    <h3>What is Cancellable Authentication?</h3>
+                    <p><strong>Cancellable Authentication</strong> refers to authentication methods that can be revoked or changed if compromised, without affecting the underlying user identity. Unlike traditional passwords or biometrics that cannot be changed if stolen, cancellable methods allow for quick replacement while maintaining security.</p>
+                </div>
+
+                <h3>Key Principles</h3>
+                <ul>
+                    <li><strong>Revocability:</strong> Authentication credentials can be cancelled and replaced</li>
+                    <li><strong>Non-reversibility:</strong> Compromised credentials cannot be reverse-engineered to obtain original data</li>
+                    <li><strong>Diversity:</strong> Different applications can use different transformed versions</li>
+                    <li><strong>Renewability:</strong> New credentials can be generated from the same source</li>
+                </ul>
+
+                <h3>Types of Cancellable Authentication</h3>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🔄 Cancellable Biometrics</h4>
+                        <p>Transforming biometric data using non-invertible functions, allowing new templates to be generated if compromised.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🎭 Bio-cryptographic Methods</h4>
+                        <p>Combining biometrics with cryptography to create cancellable biometric templates.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔑 Token-based Systems</h4>
+                        <p>Using hardware tokens or software-based tokens that can be revoked and reissued.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📱 Mobile Authentication</h4>
+                        <p>Leveraging mobile devices with push notifications and app-based authentication that can be remotely disabled.</p>
+                    </div>
+                </div>
+
+                <h3>Cancellable Biometric Techniques</h3>
+
+                <h4>1. Feature Transformation</h4>
+                <ul>
+                    <li><strong>Geometric Transformation:</strong> Applying rotation, scaling, or translation to biometric features</li>
+                    <li><strong>Salting:</strong> Adding random data to biometric templates before hashing</li>
+                    <li><strong>BioHashing:</strong> Projecting biometric features onto random vectors</li>
+                </ul>
+
+                <h4>2. Bio-cryptographic Approaches</h4>
+                <ul>
+                    <li><strong>Fuzzy Extractors:</strong> Generate cryptographic keys from noisy biometric data</li>
+                    <li><strong>Helper Data:</strong> Public information that aids in key regeneration</li>
+                    <li><strong>Secure Sketching:</strong> Methods to correct errors in biometric measurements</li>
+                </ul>
+
+                <h4>3. Token-based Cancellable Methods</h4>
+                <ul>
+                    <li><strong>Hardware Security Modules (HSM):</strong> Dedicated hardware for key generation and storage</li>
+                    <li><strong>Trusted Platform Modules (TPM):</strong> Hardware-based security chips</li>
+                    <li><strong>Software Tokens:</strong> Cryptographic tokens stored in software</li>
+                </ul>
+
+                <h3>Advantages</h3>
+                <div class="success-box">
+                    <ul>
+                        <li><strong>Enhanced Security:</strong> Compromised credentials can be cancelled without identity loss</li>
+                        <li><strong>Privacy Protection:</strong> Original biometric data remains protected</li>
+                        <li><strong>Flexibility:</strong> Different applications can use different credential versions</li>
+                        <li><strong>Recovery:</strong> Easy recovery process when credentials are compromised</li>
+                    </ul>
+                </div>
+
+                <h3>Implementation Challenges</h3>
+                <div class="highlight-box">
+                    <ul>
+                        <li><strong>Performance Impact:</strong> Transformation processes may affect recognition accuracy</li>
+                        <li><strong>Storage Requirements:</strong> May require additional storage for transformation parameters</li>
+                        <li><strong>Compatibility:</strong> Ensuring transformed credentials work across different systems</li>
+                        <li><strong>User Acceptance:</strong> Additional complexity may affect user adoption</li>
+                    </ul>
+                </div>
+
+                <h3>Real-world Applications</h3>
+                <ul>
+                    <li><strong>Border Control:</strong> Cancellable biometric passports and visas</li>
+                    <li><strong>Financial Services:</strong> Revocable authentication for online banking</li>
+                    <li><strong>Healthcare:</strong> Protected patient biometric authentication</li>
+                    <li><strong>Government Services:</strong> Secure citizen authentication with revocation capabilities</li>
+                </ul>
+            </div>
+        </main>
+
+        <div class="button-container">
+            <a href="unit_4.html" class="back-btn">← Previous Unit</a>
+            <a href="index.html">🏠 Home</a>
+        </div>
+
+        <footer>
+            <p>&copy; 2025 AIDS Program - Data Privacy, Governance & Security Course Materials</p>
+            <p>Created for educational purposes</p>
+        </footer>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">/Users/sureshkumar/Desktop/AIDS/2025-26/Even-Sem/DPS/Data/Data/unit_5.html
