@@ -230,6 +230,27 @@
             margin: 8px 0;
         }
         
+        .page-nav {
+            margin: 25px 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .page-nav a {
+            display: inline-block;
+            padding: 10px 18px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+        
+        .page-nav a:hover {
+            background: #5561c5;
+        }
+        
         .process-flow {
             display: flex;
             flex-direction: column;
@@ -324,6 +345,15 @@
             <p>Cryptographic Techniques & Security Methods</p>
         </div>
         
+        <div class="page-nav">
+            <a href="index.html">Home</a>
+            <a href="unit_1.html">Unit 1</a>
+            <a href="unit_2.html">Unit 2</a>
+            <a href="unit_3.html">Unit 3</a>
+            <a href="unit_4.html">Unit 4</a>
+            <a href="unit_5.html">Unit 5</a>
+        </div>
+
         <div class="content">
             <!-- Table of Contents -->
             <div class="toc">
@@ -472,13 +502,12 @@
                 <h2><span class="section-icon">✍️</span> 2. Digital Signatures</h2>
                 
                 <h3>What is a Digital Signature?</h3>
-                <p>A digital signature is a cryptographic technique that proves:
+                <p>A digital signature is a cryptographic technique that proves:</p>
                 <ol style="margin-left: 20px; margin-top: 10px;">
                     <li><strong>Authentication:</strong> Message is from claimed sender</li>
                     <li><strong>Non-repudiation:</strong> Sender cannot deny sending message</li>
                     <li><strong>Integrity:</strong> Message hasn't been modified</li>
                 </ol>
-                </p>
                 
                 <h3>How Digital Signatures Work</h3>
                 <div class="process-flow">
